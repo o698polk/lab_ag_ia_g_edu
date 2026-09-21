@@ -95,4 +95,4 @@ def test_refresh_and_logout(client):
 def test_health_phase(client):
     res = client.get("/api/v1/health")
     assert res.status_code == 200
-    assert res.json()["phase"].startswith("F6")
+    assert res.json()["phase"].startswith("F8")

@@ -100,23 +100,23 @@ Skills **confirmadas** en F4 (ver matriz). Columna "Skill" = Skill primaria Assi
 
 | ID | Ítem | RF | Skill | P | Estado |
 |---|---|---|---|---|---|
-| BL-O6-001 | PAP loader policies/v1 | RF-PAP-001 | K-020 | P0 | Backlog |
-| BL-O6-002 | PDP ALLOW/DENY | RF-PDP-001 | K-020 | P0 | Backlog |
-| BL-O6-003 | Tool Registry | RF-AI-003/004 | K-019 | P0 | Backlog |
-| BL-O6-004 | Tool Gateway PEP | RF-GW-001 | K-019 | P0 | Backlog |
-| BL-O6-005 | AI service + CURRENT_USER binding | RF-AI-001/005 | K-018 | P0 | Backlog |
-| BL-O6-006 | Audit/security events | RF-AUD-* | K-021 | P0 | Backlog |
-| BL-O6-007 | Escenario DENY update_grade vía IA | RF-AI-002 | K-007 (+K-025) | P0 | Backlog |
-| BL-O6-008 | Policies YAML (auth, grades, attendance, ai…) | RF-PAP-001 | K-020 | P0 | Backlog |
+| BL-O6-001 | PAP loader policies/v1 | RF-PAP-001 | K-020 | P0 | Done (F6-O6) |
+| BL-O6-002 | PDP ALLOW/DENY | RF-PDP-001 | K-020 | P0 | Done (F6-O6) |
+| BL-O6-003 | Tool Registry | RF-AI-003/004 | K-019 | P0 | Done (F6-O6) |
+| BL-O6-004 | Tool Gateway PEP | RF-GW-001 | K-019 | P0 | Done (F6-O6) |
+| BL-O6-005 | AI service + CURRENT_USER binding | RF-AI-001/005 | K-018 | P0 | Done (F6-O6) |
+| BL-O6-006 | Audit/security events | RF-AUD-* | K-021 | P0 | Done (F6-O6) |
+| BL-O6-007 | Escenario DENY update_grade vía IA | RF-AI-002 | K-007 (+K-025) | P0 | Done (F6-O6) |
+| BL-O6-008 | Policies YAML (auth, grades, attendance, ai…) | RF-PAP-001 | K-020 | P0 | Done (F6-O6) |
 
 ### Transversal QA / Docs / Config
 
 | ID | Ítem | RF/RNF | Skill | P | Estado |
 |---|---|---|---|---|---|
 | BL-QA-001 | Scaffold proyecto + venv + .env.example | RNF-DEP/SEC | K-004 | P0 | Done (F5) |
-| BL-QA-002 | Suite unit/integration | RNF-QUA-001 | K-006 | P0 | Backlog |
-| BL-QA-003 | Suite security (IDOR, JWT, SQLi, XSS) | RNF-SEC-001 | K-007 | P0 | Backlog |
-| BL-QA-004 | E2E flujos críticos | — | K-006 | P1 | Backlog |
+| BL-QA-002 | Suite unit/integration | RNF-QUA-001 | K-006 | P0 | Done (F7) |
+| BL-QA-003 | Suite security (IDOR, JWT, SQLi, XSS) | RNF-SEC-001 | K-007 | P0 | Done (F7) |
+| BL-QA-004 | E2E flujos críticos | — | K-006 | P1 | Done (F7) |
 | BL-QA-005 | Documentación API/arquitectura/seguridad | — | K-008 | P1 | Backlog |
 | BL-QA-006 | Validación Gate F10 | — | K-009 | P0 | Backlog |
 

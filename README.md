@@ -11,8 +11,10 @@ Metodología **PolkDev**: `SPEC → SKILL → APP`.
 | F3 Arquitectura | ✅ |
 | F4 Skills | ✅ |
 | F5 Configuración | ✅ |
-| F6 Desarrollo | ⏳ O1–O5 ✅ · O6 pendiente |
-| F7+ | Pendiente |
+| F6 Desarrollo | ✅ O1–O6 |
+| F7 Tests | ✅ |
+| F8 Security | ✅ |
+| F9+ | Pendiente |
 
 ## Stack
 

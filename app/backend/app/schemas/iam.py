@@ -8,6 +8,8 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class LoginRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
     username: str = Field(min_length=1)
     password: str = Field(min_length=1)
 
@@ -19,14 +21,20 @@ class TokenResponse(BaseModel):
 
 
 class RefreshRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
     refresh_token: str
 
 
 class LogoutRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
     refresh_token: str
 
 
 class ChangePasswordRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
     current_password: str
     new_password: str = Field(min_length=8)
 
@@ -64,6 +72,8 @@ class UserOut(BaseModel):
 
 
 class UserCreate(BaseModel):
+    model_config = {"extra": "forbid"}
+
     username: str = Field(min_length=3, max_length=64)
     email: str = Field(min_length=5, max_length=255)
     password: str = Field(min_length=8)
@@ -78,14 +88,20 @@ class UserCreate(BaseModel):
 
 
 class UserStatusUpdate(BaseModel):
+    model_config = {"extra": "forbid"}
+
     status: str
 
 
 class AssignRolesRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
     role_codes: List[str]
 
 
 class AssignPermissionsRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
     permission_codes: List[str]
 
 

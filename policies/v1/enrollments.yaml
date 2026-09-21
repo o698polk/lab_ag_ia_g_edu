@@ -1,0 +1,21 @@
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
+policy_id: POL-ENR-001
+version: v1
+module: enrollments
+effect_default: DENY
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [enrollments.create, create_enrollment]
+    roles: [ADMINISTRATOR]
+    permissions: [enrollments.create]
+    conditions:
+      - user.status == ACTIVE
+      - term.status == ACTIVE
+  - id: R2
+    effect: ALLOW
+    actions: [enrollments.cancel, cancel_enrollment]
+    roles: [ADMINISTRATOR]
+    permissions: [enrollments.cancel]
+    conditions:
+      - user.status == ACTIVE

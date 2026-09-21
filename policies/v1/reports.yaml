@@ -1,6 +1,13 @@
-# Ref: RF-PAP-001 | K-020 | F5 scaffold
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
 policy_id: POL-REP-001
 version: v1
 module: reports
 effect_default: DENY
-rules: []
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [reports.view, reports.generate, generate_report, reports.export]
+    roles: [ADMINISTRATOR, TEACHER]
+    permissions: [reports.generate]
+    conditions:
+      - user.status == ACTIVE

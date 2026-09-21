@@ -1,4 +1,4 @@
-# Ref: BL-O1/O2/O3/O4/O5 | Skill: K-014 | Fase: F6
+# Ref: BL-O5/O6 | Skill: K-014 | Fase: F6
 """ORM models package."""
 
 from app.models.iam import (
@@ -41,6 +41,14 @@ from app.models.platform import (
     ReportLog,
     UserHistoryEvent,
 )
+from app.models.security import (
+    AiConversation,
+    AiMessage,
+    AuditEvent,
+    SecurityEvent,
+    ToolInvocation,
+    ToolRegistryEntry,
+)
 
 __all__ = [
     "User",
@@ -73,4 +81,10 @@ __all__ = [
     "ReportLog",
     "Notification",
     "UserHistoryEvent",
+    "AuditEvent",
+    "SecurityEvent",
+    "AiConversation",
+    "AiMessage",
+    "ToolRegistryEntry",
+    "ToolInvocation",
 ]

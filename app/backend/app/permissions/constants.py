@@ -72,3 +72,6 @@ NOTIFICATIONS_VIEW = "notifications.view"
 NOTIFICATIONS_CREATE = "notifications.create"
 
 HISTORY_VIEW = "history.view"
+
+AI_USE = "ai.use"
+AUDIT_VIEW = "audit.view"

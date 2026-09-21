@@ -1,6 +1,20 @@
-# Ref: RF-PAP-001 | K-020 | F5 scaffold
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
 policy_id: POL-AI-001
 version: v1
 module: ai
 effect_default: DENY
-rules: []
+description: AI may propose tools only; execution via Gateway/PDP
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [ai.use, ai.chat]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: [ai.use]
+    conditions:
+      - user.status == ACTIVE
+  - id: R2
+    effect: DENY
+    actions: [update_grade, update_attendance, create_enrollment, cancel_enrollment]
+    roles: [STUDENT]
+    permissions: []
+    conditions: []

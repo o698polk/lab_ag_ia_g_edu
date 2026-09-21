@@ -70,6 +70,8 @@ PERMISSIONS = [
     ("notifications.view", "notifications"),
     ("notifications.create", "notifications"),
     ("history.view", "history"),
+    ("ai.use", "ai"),
+    ("audit.view", "audit"),
 ]
 
 
@@ -102,6 +104,7 @@ def _reset_db():
                 "reports.generate",
                 "notifications.view",
                 "history.view",
+                "ai.use",
             ]
         ]
         student_role = Role(code="STUDENT", name="Student", is_active=True)
@@ -112,6 +115,8 @@ def _reset_db():
             perm_map["dashboard.view"],
             perm_map["notifications.view"],
             perm_map["history.view"],
+            perm_map["students.view"],
+            perm_map["ai.use"],
         ]
         db.add_all([admin_role, teacher_role, student_role])
 

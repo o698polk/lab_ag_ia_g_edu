@@ -1,4 +1,4 @@
-# Ref: BL-O1-002 | Skill: K-015 | Fase: F6
+# Ref: BL-O1-002 | Skill: K-015 | Fase: F6/F8
 """Auth API routes."""
 
 from typing import Annotated
@@ -6,6 +6,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
+from app.audit.service import AuditService
 from app.auth.deps import CurrentUser, get_current_user
 from app.db.session import get_db
 from app.schemas.iam import (
@@ -34,6 +35,13 @@ def login(body: LoginRequest, request: Request, db: Annotated[Session, Depends(g
         )
     except PermissionError as exc:
         code = str(exc)
+        AuditService(db).record_security(
+            request_id=AuditService.new_request_id(),
+            user_id=None,
+            event_type="LOGIN_FAILURE",
+            severity="MED",
+            details={"username": body.username, "reason": code},
+        )
         status_code = (
             status.HTTP_403_FORBIDDEN
             if code == "USER_INACTIVE"

@@ -118,3 +118,18 @@ Estados: **Accepted** | **Proposed** | **Superseded**
 **Contexto:** Identidad de proyecto.  
 **Decisión:** Nombre técnico `siga-polkdev`; carpeta de trabajo actual puede migrar/estructurarse hacia layout PromptMaster en F5 sin romper Spec.  
 **Consecuencias:** README y paths se alinean en F5/F9.
+
+---
+
+## ADR-013 — Residuales de seguridad F8 (lab localhost)
+
+**Estado:** Accepted  
+**Contexto:** Gate F8 en entorno local; no despliegue público.  
+**Decisión:**
+
+1. Rate limiting de login in-memory (no Redis) es suficiente para el laboratorio.
+2. Cobertura de ramas global &lt; 70% se acepta temporalmente si la **ruta crítica Zero Trust** ≥ 80% (Gate F7) y no hay hallazgos críticos abiertos.
+3. CSRF no aplica a API Bearer-only sin cookies de sesión.
+
+**Consecuencias:** Revisar residuales en F11/F12 antes de cualquier exposición no-localhost.
+

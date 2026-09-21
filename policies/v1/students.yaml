@@ -1,6 +1,27 @@
-# Ref: RF-PAP-001 | K-020 | F5 scaffold
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
 policy_id: POL-STU-001
 version: v1
 module: students
 effect_default: DENY
-rules: []
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [students.view, get_student_profile]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: [students.view]
+    conditions:
+      - user.status == ACTIVE
+  - id: R2
+    effect: ALLOW
+    actions: [kardex.view, get_kardex]
+    roles: [ADMINISTRATOR, STUDENT]
+    permissions: [kardex.view]
+    conditions:
+      - user.status == ACTIVE
+  - id: R3
+    effect: ALLOW
+    actions: [schedules.view, get_schedule]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: [schedules.view]
+    conditions:
+      - user.status == ACTIVE

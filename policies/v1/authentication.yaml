@@ -1,7 +1,21 @@
-# Ref: RF-PAP-001 | K-020 | F5 scaffold (active policies fleshed in F6)
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
 policy_id: POL-AUTH-001
 version: v1
 module: authentication
 effect_default: DENY
-description: Placeholder policy — F5 configuration only
-rules: []
+description: Authentication and identity revalidation
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [auth.login]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: []
+    conditions:
+      - user.status == ACTIVE
+  - id: R2
+    effect: ALLOW
+    actions: [auth.change_password]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: [auth.change_password]
+    conditions:
+      - user.status == ACTIVE

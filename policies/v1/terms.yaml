@@ -1,0 +1,20 @@
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
+policy_id: POL-TRM-001
+version: v1
+module: terms
+effect_default: DENY
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [terms.view]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: [terms.view]
+    conditions:
+      - user.status == ACTIVE
+  - id: R2
+    effect: ALLOW
+    actions: [terms.update]
+    roles: [ADMINISTRATOR]
+    permissions: [terms.update]
+    conditions:
+      - user.status == ACTIVE

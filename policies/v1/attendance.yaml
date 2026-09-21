@@ -1,6 +1,22 @@
-# Ref: RF-PAP-001 | K-020 | F5 scaffold
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
 policy_id: POL-ATT-001
 version: v1
 module: attendance
 effect_default: DENY
-rules: []
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [attendance.view, get_attendance]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: [attendance.view]
+    conditions:
+      - user.status == ACTIVE
+  - id: R2
+    effect: ALLOW
+    actions: [attendance.update, update_attendance]
+    roles: [TEACHER, ADMINISTRATOR]
+    permissions: [attendance.update]
+    conditions:
+      - user.status == ACTIVE
+      - teaching_assignment.exists
+      - term.status == ACTIVE

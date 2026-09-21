@@ -1,7 +1,23 @@
-# Ref: RF-PAP-001 | K-020 | F5 scaffold
-policy_id: POL-GRADE-001
+# Ref: RF-PAP-001 | BL-O6-008 | Skill: K-020 | Fase: F6
+policy_id: POL-GRADE-002
 version: v1
 module: grades
 effect_default: DENY
-description: Placeholder — rules implemented in F6
-rules: []
+description: Grade view/update with ABAC teaching_assignment
+rules:
+  - id: R1
+    effect: ALLOW
+    actions: [grades.view, get_grades]
+    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    permissions: [grades.view]
+    conditions:
+      - user.status == ACTIVE
+  - id: R2
+    effect: ALLOW
+    actions: [grades.update, update_grade]
+    roles: [TEACHER, ADMINISTRATOR]
+    permissions: [grades.update]
+    conditions:
+      - user.status == ACTIVE
+      - teaching_assignment.exists
+      - term.status == ACTIVE

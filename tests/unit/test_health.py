@@ -19,7 +19,7 @@ def test_health(client):
     assert res.status_code == 200
     body = res.json()
     assert body["status"] == "ok"
-    assert body["phase"].startswith("F6")
+    assert body["phase"].startswith("F8")
 
 
 @pytest.mark.unit

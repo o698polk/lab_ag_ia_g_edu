@@ -72,23 +72,23 @@ Estado post-F4: `Ready` solo tras Gate F4 + DoR; aquí se marca asignación = **
 
 | BL | Skill primaria | Skill apoyo | Estado Skill |
 |---|---|---|---|
-| BL-O6-001 | K-020 | K-005 | Assigned |
-| BL-O6-002 | K-020 | K-016 | Assigned |
-| BL-O6-003 | K-019 | K-018 | Assigned |
-| BL-O6-004 | K-019 | K-020 | Assigned |
-| BL-O6-005 | K-018 | K-019 | Assigned |
-| BL-O6-006 | K-021 | K-007 | Assigned |
-| BL-O6-007 | K-007 | K-025 | Assigned |
-| BL-O6-008 | K-020 | K-008 | Assigned |
+| BL-O6-001 | K-020 | K-005 | Done (F6-O6) |
+| BL-O6-002 | K-020 | K-016 | Done (F6-O6) |
+| BL-O6-003 | K-019 | K-018 | Done (F6-O6) |
+| BL-O6-004 | K-019 | K-020 | Done (F6-O6) |
+| BL-O6-005 | K-018 | K-019 | Done (F6-O6) |
+| BL-O6-006 | K-021 | K-007 | Done (F6-O6) |
+| BL-O6-007 | K-007 | K-025 | Done (F6-O6) |
+| BL-O6-008 | K-020 | K-008 | Done (F6-O6) |
 
 ## Transversal QA / Config / Docs
 
 | BL | Skill primaria | Skill apoyo | Estado Skill |
 |---|---|---|---|
-| BL-QA-001 | K-004 | K-005 | Assigned |
-| BL-QA-002 | K-006 | K-005 | Assigned |
-| BL-QA-003 | K-007 | K-006 | Assigned |
-| BL-QA-004 | K-006 | K-022 | Assigned |
+| BL-QA-001 | K-004 | K-005 | Done (F5) |
+| BL-QA-002 | K-006 | K-005 | Done (F7) |
+| BL-QA-003 | K-007 | K-006 | Done (F7) |
+| BL-QA-004 | K-006 | K-022 | Done (F7) |
 | BL-QA-005 | K-008 | K-009 | Assigned |
 | BL-QA-006 | K-009 | K-011 | Assigned |
 

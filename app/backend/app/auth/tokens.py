@@ -39,9 +39,26 @@ def create_access_token(
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 
-def decode_token(token: str) -> dict[str, Any]:
+def decode_token(token: str, *, expected_type: str = "access") -> dict[str, Any]:
+    """Decode JWT with algorithm whitelist and type check (F8)."""
     settings = get_settings()
-    return jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+    try:
+        header = jwt.get_unverified_header(token)
+    except jwt.PyJWTError as exc:
+        raise jwt.InvalidTokenError("INVALID_HEADER") from exc
+    alg = str(header.get("alg", ""))
+    allowed = {settings.jwt_algorithm}
+    if alg.lower() == "none" or alg not in allowed:
+        raise jwt.InvalidAlgorithmError("ALG_NOT_ALLOWED")
+    payload = jwt.decode(
+        token,
+        settings.jwt_secret,
+        algorithms=[settings.jwt_algorithm],
+        options={"require": ["exp", "sub", "type"]},
+    )
+    if payload.get("type") != expected_type:
+        raise jwt.InvalidTokenError("INVALID_TOKEN_TYPE")
+    return payload
 
 
 def new_refresh_token_value() -> str:

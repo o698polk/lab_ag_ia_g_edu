@@ -134,7 +134,7 @@ class AuthService:
 
     @staticmethod
     def decode_access(token: str) -> dict:
-        payload = decode_token(token)
+        payload = decode_token(token, expected_type="access")
         if payload.get("type") != "access":
             raise PermissionError("INVALID_TOKEN_TYPE")
         return payload
