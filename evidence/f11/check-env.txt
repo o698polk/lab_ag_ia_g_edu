@@ -1,0 +1,5 @@
+﻿OK: config loaded from .env
+  APP_HOST=127.0.0.1 APP_PORT=8000
+  DB=127.0.0.1:3306/siga
+  AI_PROVIDER=mock
+  POLICY_PATH=policies/v1

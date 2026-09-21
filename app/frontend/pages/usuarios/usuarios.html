@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Usuarios · SIGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/assets/css/base.css" />
+  <link rel="stylesheet" href="/ui/assets/css/layout.css" />
+  <link rel="stylesheet" href="/ui/assets/css/components.css" />
+  <link rel="stylesheet" href="/ui/assets/css/forms.css" />
+  <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
+</head>
+<body>
+  <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
+  <div class="app-frame">
+
+<aside class="app-sidebar" aria-label="Menú principal">
+  <a class="app-brand" href="/ui/pages/dashboard/dashboard.html">
+    <span class="app-brand-dot"></span><span>SIGA</span>
+  </a>
+  <p class="side-section">Módulos</p>
+  <nav class="side-nav">
+    <a class="side-link" href="/ui/pages/dashboard/dashboard.html">Dashboard</a>
+    <a class="side-link" href="/ui/pages/notas/notas.html">Notas</a>
+    <a class="side-link" href="/ui/pages/asistencia/asistencia.html" data-roles="TEACHER,ADMINISTRATOR">Asistencia</a>
+    <a class="side-link" href="/ui/pages/catalogos/catalogos.html" data-roles="ADMINISTRATOR">Catálogos</a>
+    <a class="side-link active" href="/ui/pages/usuarios/usuarios.html" data-roles="ADMINISTRATOR" data-nav="usuarios">Usuarios</a>
+    <a class="side-link" href="/ui/pages/reportes/reportes.html" data-roles="TEACHER,ADMINISTRATOR">Reportes</a>
+    <a class="side-link" href="/ui/pages/avisos/avisos.html">Avisos</a>
+    <a class="side-link" href="/ui/pages/asistente/asistente.html">Asistente</a>
+    <a class="side-link" href="/ui/pages/cuenta/perfil.html">Perfil</a>
+  </nav>
+  <p class="side-section" data-roles="ADMINISTRATOR">IAM</p>
+  <nav class="side-nav side-nav-sub" data-roles="ADMINISTRATOR">
+    <a class="side-link active" href="/ui/pages/usuarios/usuarios.html">Usuarios</a>
+    <a class="side-link" href="/ui/pages/usuarios/roles.html">Roles y permisos</a>
+  </nav>
+</aside>
+
+    <div class="app-main">
+      <header class="app-topbar">
+        <button type="button" id="btn-sidebar" class="btn-sidebar" aria-expanded="false" aria-label="Abrir menú">Menú</button>
+        <h1 class="topbar-title">Usuarios</h1>
+        <div class="topbar-actions">
+          <a href="/ui/pages/cuenta/perfil.html" id="session-chip" class="siga-chip muted">Sin sesión</a>
+          <a class="btn btn-outline-secondary btn-sm" href="/ui/pages/usuarios/roles.html">Roles</a>
+          <button type="button" id="btn-logout" class="btn btn-outline-secondary btn-sm">Cerrar sesión</button>
+        </div>
+      </header>
+      <nav class="breadcrumb" aria-label="Miga de pan">
+        <a href="/ui/pages/dashboard/dashboard.html">Dashboard</a>
+        <span class="sep">/</span>
+        <span>Usuarios</span>
+      </nav>
+      <main class="app-content">
+
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">IAM · administrador</p>
+            <p class="hint">GET/POST /users · PATCH status · PUT roles · DELETE soft. Estudiante recibe DENY.</p>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-users">Actualizar</button>
+        </div>
+
+        <section class="card-soft mb-3" aria-labelledby="create-user-title">
+          <h3 id="create-user-title">Alta de usuario</h3>
+          <form id="user-create-form" class="row g-2 align-items-end" novalidate>
+            <div class="col-md-3">
+              <label class="form-label" for="u-username">Usuario</label>
+              <input id="u-username" class="form-control" required minlength="3" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="u-email">Correo</label>
+              <input id="u-email" type="email" class="form-control" required />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="u-password">Contraseña</label>
+              <input id="u-password" type="password" class="form-control" required minlength="8" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="u-role">Rol</label>
+              <select id="u-role" class="form-select">
+                <option value="STUDENT">STUDENT</option>
+                <option value="TEACHER">TEACHER</option>
+                <option value="ADMINISTRATOR">ADMINISTRATOR</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-siga w-100">Registrar</button>
+            </div>
+          </form>
+          <p id="user-create-out" class="hint mt-2 mb-0"></p>
+        </section>
+
+        <section class="card-soft mb-3" aria-labelledby="manage-title">
+          <h3 id="manage-title">Gestionar usuario</h3>
+          <div class="row g-2 align-items-end">
+            <div class="col-md-2">
+              <label class="form-label" for="m-user-id">User id</label>
+              <input id="m-user-id" type="number" class="form-control" min="1" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="m-status">Estado</label>
+              <select id="m-status" class="form-select">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+                <option value="LOCKED">LOCKED</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="m-roles">Roles (coma)</label>
+              <input id="m-roles" class="form-control" placeholder="STUDENT,TEACHER" />
+            </div>
+            <div class="col-md-5 d-flex flex-wrap gap-2">
+              <button type="button" class="btn btn-outline-secondary" id="btn-user-status">Cambiar estado</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-user-roles">Asignar roles</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-user-delete">Baja lógica</button>
+            </div>
+          </div>
+          <p id="user-manage-out" class="hint mt-2 mb-0"></p>
+        </section>
+
+        <section class="table-wrap" aria-labelledby="users-table-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="users-table-title" class="section-title mb-0">Listado</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Cargando usuarios…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Roles</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/ui/assets/js/core/api.js"></script>
+  <script src="/ui/assets/js/components/toast.js"></script>
+  <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/core/navigation.js"></script>
+  <script src="/ui/assets/js/core/auth.js"></script>
+  <script src="/ui/assets/js/modules/usuarios/usuarios.js"></script>
+</body>
+</html>

@@ -95,6 +95,12 @@ def _reset_db():
             perm_map[c]
             for c in [
                 "students.view",
+                "careers.view",
+                "subjects.view",
+                "curriculum.view",
+                "terms.view",
+                "courses.view",
+                "enrollments.view",
                 "grades.view",
                 "grades.update",
                 "attendance.view",

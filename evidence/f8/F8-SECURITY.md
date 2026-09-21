@@ -14,6 +14,7 @@
 - `LOGIN_FAILURE` → `security_events`
 - ADR-013 residuales aceptados (lab localhost)
 - Tests: `tests/security/test_f8_hardening.py` + suite OWASP existente
+- Suite: **74 passed** (`evidence/f8/pytest-f8.txt`)
 
 ## Hallazgos críticos abiertos
 

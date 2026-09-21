@@ -1,0 +1,1 @@
+﻿OK: tables created on mysql+pymysql://root@127.0.0.1:3306/siga

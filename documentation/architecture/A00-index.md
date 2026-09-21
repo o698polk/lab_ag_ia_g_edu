@@ -26,5 +26,5 @@
 ## Regla
 
 ```text
-Ninguna implementación App hasta Gate F3 + F4 + F5 según PolkDev.
+Arquitectura F3 es vinculante para App. Documentación operativa F9: documentation/D00-index.md
 ```

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro · SIGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/assets/css/base.css" />
+  <link rel="stylesheet" href="/ui/assets/css/layout.css" />
+  <link rel="stylesheet" href="/ui/assets/css/components.css" />
+  <link rel="stylesheet" href="/ui/assets/css/forms.css" />
+  <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
+
+</head>
+<body>
+  <a class="skip-link" href="#gate-main">Saltar al contenido</a>
+  <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
+  <section class="gate" id="gate-main">
+    <nav class="public-nav" aria-label="Navegación pública">
+      <a class="public-nav-link" href="/ui/pages/home.html">Inicio</a>
+      <a class="public-nav-link" href="/ui/pages/auth/login.html">Login</a>
+      <a class="public-nav-link active" href="/ui/pages/auth/registro.html">Registro</a>
+    </nav>
+    <div class="gate-card">
+      <div class="gate-mark">SIGA</div>
+      <h1>Registro</h1>
+      <p class="gate-lead">No hay auto-registro público (RF-IAM-001). El administrador da de alta usuarios con <code>POST /users</code>.</p>
+      <p class="hint">Cuentas de laboratorio (seed IAM):</p>
+      <ul class="hint">
+        <li><code>admin</code> / <code>Admin123!</code></li>
+        <li><code>teacher1</code> / <code>Teacher123!</code></li>
+        <li><code>student1</code> / <code>Student123!</code></li>
+      </ul>
+      <p class="hint">Tras entrar como administrador, usa Catálogos → Usuarios.</p>
+      <a class="btn btn-siga w-100" href="/ui/pages/auth/login.html">Ir a Login</a>
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+﻿.\.venv\Scripts\python.exe : INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+En C:\Users\POLK\AppData\Local\Temp\ps-script-fa995961-0996-4188-9200-d63756e02176.ps1: 71 Carácter: 137
++ ... oding utf8; .\.venv\Scripts\python.exe -m alembic upgrade head 2>&1 | ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO  [alembic....impl MySQLImpl.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001_iam, IAM initial schema
+Traceback (most recent call last):
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in 
+_exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\cursors.py", line 335, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 581, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 857, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 1290, in read
+    first_packet = self.connection._read_packet()
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 810, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\err.py", line 154, in raise_mysql_exception
+    raise errorclass(errno, errval, sqlstate=sqlstate)
+pymysql.err.OperationalError: (1050, "Table 'users' already exists")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\__main__.py", line 4, in <module>
+    main(prog="alembic")
+    ~~~~^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\config.py", line 1039, in main
+    CommandLine(prog=prog).main(argv=argv)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\config.py", line 1029, in main
+    self.run_cmd(cfg, options)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\config.py", line 963, in run_cmd
+    fn(
+    ~~^
+        config,
+        ^^^^^^^
+        *[getattr(options, k, None) for k in positional],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **{k: getattr(options, k, None) for k in kwarg},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\command.py", line 487, in upgrade
+    script.run_env()
+    ~~~~~~~~~~~~~~^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\script\base.py", line 550, in run_env
+    util.load_python_file(self.dir, "env.py")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\util\pyfiles.py", line 114, in load_python_file
+    module = load_module_py(module_id, path)
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\util\pyfiles.py", line 132, in load_module_py
+    spec.loader.exec_module(module)  # type: ignore
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 759, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\app\backend\alembic\env.py", line 56, in <module>
+    run_migrations_online()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\app\backend\alembic\env.py", line 50, in run_migrations_online
+    context.run_migrations()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "<string>", line 8, in run_migrations
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\runtime\environment.py", line 970, in 
+run_migrations
+    self.get_context().run_migrations(**kw)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\runtime\migration.py", line 616, in run_migrations
+    step.migration_fn(**kw)
+    ~~~~~~~~~~~~~~~~~^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\app\backend\alembic\versions\0001_iam.py", line 22, in upgrade
+    op.create_table(
+    ~~~~~~~~~~~~~~~^
+        "users",
+        ^^^^^^^^
+    ...<11 lines>...
+        sa.UniqueConstraint("email"),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "<string>", line 8, in create_table
+  File "<string>", line 3, in create_table
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\operations\ops.py", line 1323, in create_table
+    return operations.invoke(op)
+           ~~~~~~~~~~~~~~~~~^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\operations\base.py", line 448, in invoke
+    return fn(self, operation)
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\operations\toimpl.py", line 139, in create_table
+    operations.impl.create_table(table, **kw)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\ddl\impl.py", line 434, in create_table
+    self._exec(schema.CreateTable(table, **kw))
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\alembic\ddl\impl.py", line 252, in _exec
+    return conn.execute(construct, params)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\sql\ddl.py", line 188, in 
+_execute_on_connection
+    return connection._execute_ddl(
+           ~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1532, in _execute_ddl
+    ret = self._execute_context(
+        dialect,
+    ...<4 lines>...
+        compiled,
+    )
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in 
+_exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in 
+_handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in 
+_exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\cursors.py", line 335, in _query
+    conn.query(q)
+    ~~~~~~~~~~^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 581, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+                          ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 857, in _read_query_result
+    result.read()
+    ~~~~~~~~~~~^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 1290, in read
+    first_packet = self.connection._read_packet()
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\connections.py", line 810, in _read_packet
+    packet.raise_for_error()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "D:\PROYECTOS\lab_ag_ia_g_edu\.venv\Lib\site-packages\pymysql\err.py", line 154, in raise_mysql_exception
+    raise errorclass(errno, errval, sqlstate=sqlstate)
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1050, "Table 'users' already exists")
+[SQL: 
+CREATE TABLE users (
+	id INTEGER NOT NULL AUTO_INCREMENT, 
+	username VARCHAR(64) NOT NULL, 
+	email VARCHAR(255) NOT NULL, 
+	password_hash VARCHAR(255) NOT NULL, 
+	status VARCHAR(32) NOT NULL, 
+	last_login DATETIME, 
+	deleted_at DATETIME, 
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+	PRIMARY KEY (id), 
+	UNIQUE (username), 
+	UNIQUE (email)
+)
+
+]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)

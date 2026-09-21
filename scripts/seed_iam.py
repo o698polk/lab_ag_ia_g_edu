@@ -73,6 +73,12 @@ PERMISSIONS = [
 ADMIN_PERMS = [p[0] for p in PERMISSIONS]
 TEACHER_PERMS = [
     "students.view",
+    "careers.view",
+    "subjects.view",
+    "curriculum.view",
+    "terms.view",
+    "courses.view",
+    "enrollments.view",
     "grades.view",
     "grades.update",
     "attendance.view",
@@ -133,6 +139,12 @@ def seed() -> None:
             )
             admin.roles.append(admin_role)
             db.add(admin)
+        else:
+            # Lab: always restore known demo password so UI login stays predictable.
+            admin.password_hash = hash_password("Admin123!")
+            admin.status = "ACTIVE"
+            if admin_role not in admin.roles:
+                admin.roles.append(admin_role)
 
         teacher = db.scalar(select(User).where(User.username == "teacher1"))
         if teacher is None:
@@ -146,6 +158,9 @@ def seed() -> None:
             if t_role:
                 teacher.roles.append(t_role)
             db.add(teacher)
+        else:
+            teacher.password_hash = hash_password("Teacher123!")
+            teacher.status = "ACTIVE"
 
         student = db.scalar(select(User).where(User.username == "student1"))
         if student is None:
@@ -159,6 +174,9 @@ def seed() -> None:
             if s_role:
                 student.roles.append(s_role)
             db.add(student)
+        else:
+            student.password_hash = hash_password("Student123!")
+            student.status = "ACTIVE"
 
         db.commit()
         print("OK: IAM seed completed")

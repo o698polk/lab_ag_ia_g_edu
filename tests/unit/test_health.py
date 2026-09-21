@@ -6,11 +6,9 @@ import pytest
 
 @pytest.mark.unit
 def test_root(client):
-    res = client.get("/")
-    assert res.status_code == 200
-    body = res.json()
-    assert body["name"] == "SIGA"
-    assert "health" in body
+    res = client.get("/", follow_redirects=False)
+    assert res.status_code in (307, 302)
+    assert res.headers.get("location", "").endswith("/ui/")
 
 
 @pytest.mark.unit
@@ -19,7 +17,7 @@ def test_health(client):
     assert res.status_code == 200
     body = res.json()
     assert body["status"] == "ok"
-    assert body["phase"].startswith("F8")
+    assert body["phase"].startswith("F12")
 
 
 @pytest.mark.unit

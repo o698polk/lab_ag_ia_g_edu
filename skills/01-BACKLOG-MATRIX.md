@@ -62,7 +62,7 @@ Estado post-F4: `Ready` solo tras Gate F4 + DoR; aquí se marca asignación = **
 
 | BL | Skill primaria | Skill apoyo | Estado Skill |
 |---|---|---|---|
-| BL-O5-001 | K-022 | K-013 | Done (F6-O5) |
+| BL-O5-001 | K-022 | K-013 | Done (F6-O5 + UI módulos post-F12) |
 | BL-O5-002 | K-023 | K-021 | Done (F6-O5) |
 | BL-O5-003 | K-013 | K-022 | Done (F6-O5) |
 | BL-O5-004 | K-021 | K-013 | Done (F6-O5) |
@@ -89,8 +89,8 @@ Estado post-F4: `Ready` solo tras Gate F4 + DoR; aquí se marca asignación = **
 | BL-QA-002 | K-006 | K-005 | Done (F7) |
 | BL-QA-003 | K-007 | K-006 | Done (F7) |
 | BL-QA-004 | K-006 | K-022 | Done (F7) |
-| BL-QA-005 | K-008 | K-009 | Assigned |
-| BL-QA-006 | K-009 | K-011 | Assigned |
+| BL-QA-005 | K-008 | K-009 | Done (F9) |
+| BL-QA-006 | K-009 | K-011 | Done (F10 GO CONDICIONADO) |
 
 ---
 
@@ -108,8 +108,8 @@ Estado post-F4: `Ready` solo tras Gate F4 + DoR; aquí se marca asignación = **
 | F8 Security | K-007 |
 | F9 Docs | K-008 |
 | F10 Validation | K-009 |
-| F11 Deploy | K-010 |
-| F12 Evaluation | K-011 |
+| F11 Deploy | K-010 · Done (localhost) · Gate humano |
+| F12 Evaluation | K-011 · **CERRADO CONDICIONADO** |
 | Mediciones laboratorio | K-025 |
 
 ---

@@ -18,7 +18,7 @@ def health() -> dict:
         "service": settings.app_name,
         "version": __version__,
         "env": settings.app_env,
-        "phase": "F8",
+        "phase": "F12",
     }
 
 

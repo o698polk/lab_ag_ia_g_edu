@@ -1,0 +1,90 @@
+/* Responsive + a11y polish (PromptMaster FASE 10) */
+
+/* Focus visible — keyboard users */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.side-link:focus-visible,
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible {
+  outline: 3px solid #3dcec4;
+  outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3.5rem;
+  z-index: 100;
+  padding: 0.55rem 0.9rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 0.75rem;
+  color: #fff;
+}
+
+/* Mobile nav backdrop */
+.nav-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 26, 43, 0.45);
+  z-index: 15;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.app-frame.nav-open .nav-backdrop { display: block; }
+
+@media (max-width: 900px) {
+  .app-frame { grid-template-columns: 1fr; }
+  .app-sidebar {
+    position: fixed; left: 0; top: 0; z-index: 20; width: min(280px, 86vw);
+    transform: translateX(-105%); transition: transform 0.2s ease;
+  }
+  .app-frame.nav-open .app-sidebar { transform: translateX(0); }
+  .btn-sidebar { display: inline-flex; min-height: 44px; min-width: 44px; align-items: center; justify-content: center; }
+  .composer { flex-direction: column; }
+  .topbar-actions .siga-chip { display: none; }
+  .app-content { padding: 0.85rem 1rem 1.75rem; }
+  .panel-head { flex-direction: column; align-items: stretch; }
+  .table-wrap { -webkit-overflow-scrolling: touch; }
+  .data-table { min-width: 560px; }
+  .dash-shortcuts { grid-template-columns: 1fr 1fr; }
+  .siga-metric .value { font-size: 1.35rem; }
+}
+
+@media (max-width: 560px) {
+  .dash-shortcuts { grid-template-columns: 1fr; }
+  .topbar-title { font-size: 0.95rem; }
+  .gate-card { padding: 1.4rem 1.1rem 1.1rem; }
+  .public-nav { flex-wrap: wrap; justify-content: center; width: calc(100% - 1rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --line: #9aa8b8;
+    --muted: #3d4a5a;
+  }
+  .siga-metric, .card-soft, .empty-state {
+    border-width: 2px;
+  }
+}

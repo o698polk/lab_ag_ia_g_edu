@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil · SIGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/assets/css/base.css" />
+  <link rel="stylesheet" href="/ui/assets/css/layout.css" />
+  <link rel="stylesheet" href="/ui/assets/css/components.css" />
+  <link rel="stylesheet" href="/ui/assets/css/forms.css" />
+  <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
+</head>
+<body>
+  <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
+  <div class="app-frame">
+
+<aside class="app-sidebar" aria-label="Menú principal">
+  <a class="app-brand" href="/ui/pages/dashboard/dashboard.html">
+    <span class="app-brand-dot"></span><span>SIGA</span>
+  </a>
+  <p class="side-section">Módulos</p>
+  <nav class="side-nav">
+    <a class="side-link" href="/ui/pages/dashboard/dashboard.html">Dashboard</a>
+    <a class="side-link" href="/ui/pages/notas/notas.html">Notas</a>
+    <a class="side-link" href="/ui/pages/asistencia/asistencia.html" data-roles="TEACHER,ADMINISTRATOR">Asistencia</a>
+    <a class="side-link" href="/ui/pages/catalogos/catalogos.html" data-roles="ADMINISTRATOR">Catálogos</a>
+    <a class="side-link" href="/ui/pages/reportes/reportes.html" data-roles="TEACHER,ADMINISTRATOR">Reportes</a>
+    <a class="side-link" href="/ui/pages/avisos/avisos.html">Avisos</a>
+    <a class="side-link" href="/ui/pages/asistente/asistente.html">Asistente</a>
+    <a class="side-link active" href="/ui/pages/cuenta/perfil.html">Perfil</a>
+  </nav>
+</aside>
+
+    <div class="app-main">
+      <header class="app-topbar">
+        <button type="button" id="btn-sidebar" class="btn-sidebar" aria-expanded="false" aria-label="Abrir menú">Menú</button>
+        <h1 class="topbar-title">Perfil</h1>
+        <div class="topbar-actions">
+          <a href="/ui/pages/cuenta/perfil.html" id="session-chip" class="siga-chip muted">Sin sesión</a>
+          <button type="button" id="btn-logout" class="btn btn-outline-secondary btn-sm">Cerrar sesión</button>
+        </div>
+      </header>
+      <nav class="breadcrumb" aria-label="Miga de pan">
+        <a href="/ui/pages/dashboard/dashboard.html">Dashboard</a><span class="sep">/</span><span>Perfil</span>
+      </nav>
+      <main class="app-content">
+
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Sesión</p>
+            <p class="hint">Datos de /auth/me. La UI no autoriza.</p>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-logout-profile">Cerrar sesión</button>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6"><div class="siga-metric"><div class="label">Usuario</div><div class="value" style="font-size:1.1rem" id="pf-username">—</div></div></div>
+          <div class="col-md-6"><div class="siga-metric"><div class="label">Correo</div><div class="value" style="font-size:1.1rem" id="pf-email">—</div></div></div>
+          <div class="col-md-6"><div class="siga-metric"><div class="label">Estado</div><div class="value" style="font-size:1.1rem" id="pf-status">—</div></div></div>
+          <div class="col-md-6"><div class="siga-metric"><div class="label">Roles</div><div class="value" style="font-size:1.1rem" id="pf-roles">—</div></div></div>
+        </div>
+
+        <section class="card-soft mt-3" aria-labelledby="perms-title">
+          <h3 id="perms-title">Permisos efectivos</h3>
+          <div class="chip-row" id="pf-permissions">
+            <span class="role-chip">Cargando…</span>
+          </div>
+        </section>
+
+        <section class="card-soft mt-3" aria-labelledby="pwd-title">
+          <h3 id="pwd-title">Cambiar contraseña</h3>
+          <form id="change-password-form" class="row g-2 align-items-end" novalidate>
+            <div class="col-md-4">
+              <label class="form-label" for="pwd-current">Actual</label>
+              <input id="pwd-current" type="password" class="form-control" required autocomplete="current-password" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="pwd-new">Nueva (mín. 8)</label>
+              <input id="pwd-new" type="password" class="form-control" required minlength="8" autocomplete="new-password" />
+            </div>
+            <div class="col-md-4">
+              <button type="submit" class="btn btn-siga w-100">Actualizar</button>
+            </div>
+          </form>
+          <p id="pwd-out" class="hint mt-2 mb-0"></p>
+        </section>
+
+        <p class="hint mt-3 mb-0" data-roles="ADMINISTRATOR">
+          Administración IAM:
+          <a href="/ui/pages/usuarios/usuarios.html">Usuarios</a>
+          ·
+          <a href="/ui/pages/usuarios/roles.html">Roles y permisos</a>
+        </p>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/ui/assets/js/core/api.js"></script>
+  <script src="/ui/assets/js/components/toast.js"></script>
+  <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/core/navigation.js"></script>
+  <script src="/ui/assets/js/core/auth.js"></script>
+  <script src="/ui/assets/js/modules/cuenta/perfil.js"></script>
+</body>
+</html>

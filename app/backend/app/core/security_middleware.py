@@ -54,6 +54,7 @@ class LoginRateLimitMiddleware(BaseHTTPMiddleware):
             key = f"{client}:{path}"
             now = time.time()
             window = [t for t in self._hits[key] if now - t < self.window_seconds]
+            self._hits[key] = window
             if len(window) >= self.max_attempts:
                 return JSONResponse(
                     status_code=429,
@@ -64,6 +65,10 @@ class LoginRateLimitMiddleware(BaseHTTPMiddleware):
                         }
                     },
                 )
-            window.append(now)
-            self._hits[key] = window
+            response = await call_next(request)
+            # Count only failed logins so smoke/UI retries do not lock the lab.
+            if response.status_code in (401, 403):
+                window.append(now)
+                self._hits[key] = window
+            return response
         return await call_next(request)

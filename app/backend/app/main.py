@@ -7,6 +7,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api import api_router
@@ -44,14 +45,21 @@ app.include_router(api_router, prefix=settings.app_api_prefix)
 
 
 @app.get("/")
-def root() -> dict:
-    return {
-        "name": settings.app_name,
-        "message": "SIGA PolkDev — F8 Security",
-        "docs": "/docs" if settings.app_debug else None,
-        "health": f"{settings.app_api_prefix}/health",
-        "auth_login": f"{settings.app_api_prefix}/auth/login",
-    }
+def root() -> RedirectResponse:
+    """UI entrypoint — multi-page HTML under /ui/pages/."""
+    return RedirectResponse(url="/ui/pages/home.html", status_code=307)
+
+
+@app.get("/ui", include_in_schema=False)
+def ui_redirect() -> RedirectResponse:
+    return RedirectResponse(url="/ui/pages/home.html", status_code=307)
+
+
+@app.post("/ui", include_in_schema=False)
+@app.post("/ui/", include_in_schema=False)
+def ui_post_guard() -> RedirectResponse:
+    """If a form posts natively to /ui, send users to login page."""
+    return RedirectResponse(url="/ui/pages/auth/login.html", status_code=303)
 
 
 _frontend = Path(__file__).resolve().parents[2] / "frontend"

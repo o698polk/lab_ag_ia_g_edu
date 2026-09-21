@@ -1,2 +1,7 @@
-/* Ref: K-022 | F5 scaffold */
-body { font-family: system-ui, sans-serif; }
+/* Bridge → assets/css (F2). Prefer linking assets directly. */
+@import url("/ui/assets/css/base.css");
+@import url("/ui/assets/css/layout.css");
+@import url("/ui/assets/css/components.css");
+@import url("/ui/assets/css/forms.css");
+@import url("/ui/assets/css/tables.css");
+@import url("/ui/assets/css/responsive.css");

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard · SIGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/assets/css/base.css" />
+  <link rel="stylesheet" href="/ui/assets/css/layout.css" />
+  <link rel="stylesheet" href="/ui/assets/css/components.css" />
+  <link rel="stylesheet" href="/ui/assets/css/forms.css" />
+  <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
+</head>
+<body>
+  <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
+  <div class="app-frame">
+
+<aside class="app-sidebar" aria-label="Menú principal">
+  <a class="app-brand" href="/ui/pages/dashboard/dashboard.html">
+    <span class="app-brand-dot"></span><span>SIGA</span>
+  </a>
+  <p class="side-section">Módulos</p>
+  <nav class="side-nav">
+    <a class="side-link active" href="/ui/pages/dashboard/dashboard.html">Dashboard</a>
+    <a class="side-link" href="/ui/pages/notas/notas.html">Notas</a>
+    <a class="side-link" href="/ui/pages/asistencia/asistencia.html" data-roles="TEACHER,ADMINISTRATOR">Asistencia</a>
+    <a class="side-link" href="/ui/pages/catalogos/catalogos.html" data-roles="ADMINISTRATOR">Catálogos</a>
+    <a class="side-link" href="/ui/pages/reportes/reportes.html" data-roles="TEACHER,ADMINISTRATOR">Reportes</a>
+    <a class="side-link" href="/ui/pages/avisos/avisos.html">Avisos</a>
+    <a class="side-link" href="/ui/pages/asistente/asistente.html">Asistente</a>
+    <a class="side-link" href="/ui/pages/cuenta/perfil.html">Perfil</a>
+  </nav>
+</aside>
+
+    <div class="app-main">
+      <header class="app-topbar">
+        <button type="button" id="btn-sidebar" class="btn-sidebar" aria-expanded="false" aria-label="Abrir menú">Menú</button>
+        <h1 class="topbar-title">Dashboard</h1>
+        <div class="topbar-actions">
+          <a href="/ui/pages/cuenta/perfil.html" id="session-chip" class="siga-chip muted">Sin sesión</a>
+          <a class="btn btn-outline-secondary btn-sm" href="/ui/pages/cuenta/perfil.html">Perfil</a>
+          <button type="button" id="btn-logout" class="btn btn-outline-secondary btn-sm">Cerrar sesión</button>
+        </div>
+      </header>
+      <nav class="breadcrumb" aria-label="Miga de pan">
+        <a href="/ui/pages/home.html">Inicio</a><span class="sep">/</span><span>Dashboard</span>
+      </nav>
+      <main class="app-content">
+
+        <section class="dash-welcome" aria-labelledby="welcome-title">
+          <div>
+            <p class="eyebrow" id="role-badge">Vista según tu rol</p>
+            <h2 id="welcome-title">Bienvenido</h2>
+            <p class="hint" id="welcome-hint">Indicadores calculados en el servidor según tu rol.</p>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-dash">Actualizar</button>
+        </section>
+
+        <section class="mt-3" aria-labelledby="metrics-title">
+          <h3 id="metrics-title" class="section-title">Indicadores</h3>
+          <div id="indicators" class="row g-3">
+            <div class="col-6 col-md-3 d-none" data-metric="students">
+              <div class="siga-metric"><div class="label">Estudiantes</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="teachers">
+              <div class="siga-metric"><div class="label">Docentes</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="courses">
+              <div class="siga-metric"><div class="label">Cursos</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="enrollments">
+              <div class="siga-metric"><div class="label">Matrículas</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="users">
+              <div class="siga-metric"><div class="label">Usuarios</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="grades">
+              <div class="siga-metric"><div class="label">Notas</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="attendance_sessions">
+              <div class="siga-metric"><div class="label">Sesiones asistencia</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="careers">
+              <div class="siga-metric"><div class="label">Carreras</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="assigned_courses">
+              <div class="siga-metric"><div class="label">Cursos asignados</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="grades_recorded">
+              <div class="siga-metric"><div class="label">Notas registradas</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="my_courses">
+              <div class="siga-metric"><div class="label">Mis cursos</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="my_grades">
+              <div class="siga-metric"><div class="label">Mis notas</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="my_kardex">
+              <div class="siga-metric"><div class="label">Mi kardex</div><div class="value" data-value>—</div></div>
+            </div>
+            <div class="col-6 col-md-3 d-none" data-metric="unread_notifications">
+              <div class="siga-metric accent"><div class="label">Avisos sin leer</div><div class="value" data-value>—</div></div>
+            </div>
+          </div>
+          <p id="dash-empty" class="empty-state mt-3 d-none">Sin indicadores para este rol.</p>
+          <p id="dash-loading" class="hint mt-2">Cargando indicadores…</p>
+        </section>
+
+        <section class="mt-4" aria-labelledby="shortcuts-title">
+          <h3 id="shortcuts-title" class="section-title">Accesos rápidos</h3>
+          <div class="dash-shortcuts">
+            <a class="dash-shortcut" href="/ui/pages/notas/notas.html">
+              <strong>Notas</strong>
+              <span>Consulta e ingreso de calificaciones</span>
+            </a>
+            <a class="dash-shortcut" href="/ui/pages/asistencia/asistencia.html" data-roles="TEACHER,ADMINISTRATOR">
+              <strong>Asistencia</strong>
+              <span>Sesiones y registro diario</span>
+            </a>
+            <a class="dash-shortcut" href="/ui/pages/catalogos/catalogos.html" data-roles="ADMINISTRATOR">
+              <strong>Catálogos</strong>
+              <span>Carreras, periodos y personal</span>
+            </a>
+            <a class="dash-shortcut" href="/ui/pages/reportes/reportes.html" data-roles="TEACHER,ADMINISTRATOR">
+              <strong>Reportes</strong>
+              <span>Generar y consultar historial</span>
+            </a>
+            <a class="dash-shortcut" href="/ui/pages/avisos/avisos.html">
+              <strong>Avisos</strong>
+              <span>Bandeja de notificaciones</span>
+            </a>
+            <a class="dash-shortcut" href="/ui/pages/asistente/asistente.html">
+              <strong>Asistente</strong>
+              <span>Consultas con gateway Zero Trust</span>
+            </a>
+          </div>
+        </section>
+
+        <div class="row g-3 mt-1">
+          <div class="col-lg-5">
+            <section class="card-soft h-100" aria-labelledby="avisos-title">
+              <div class="panel-head mb-2">
+                <h3 id="avisos-title" class="section-title mb-0">Avisos recientes</h3>
+                <a class="btn btn-sm btn-outline-secondary" href="/ui/pages/avisos/avisos.html">Ver todos</a>
+              </div>
+              <div id="dash-notif-list">
+                <p class="empty-state mb-0" id="dash-notif-empty">Cargando avisos…</p>
+                <template id="dash-notif-tpl">
+                  <div class="notif-item">
+                    <div class="d-flex justify-content-between gap-2">
+                      <strong data-field="title"></strong>
+                      <span class="small text-secondary" data-field="type"></span>
+                    </div>
+                    <div class="small mt-1" data-field="body"></div>
+                  </div>
+                </template>
+              </div>
+            </section>
+          </div>
+          <div class="col-lg-7">
+            <section class="card-soft h-100" aria-labelledby="history-title">
+              <div class="panel-head mb-2">
+                <h3 id="history-title" class="section-title mb-0">Actividad reciente</h3>
+              </div>
+              <div class="table-wrap">
+                <table class="table table-sm siga-table mb-0" aria-describedby="history-title">
+                  <thead>
+                    <tr>
+                      <th scope="col">Acción</th>
+                      <th scope="col">Módulo</th>
+                      <th scope="col">Resumen</th>
+                      <th scope="col">Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody id="history-tbody"></tbody>
+                </table>
+                <p class="empty-state mt-2 mb-0 d-none" data-empty>Sin actividad registrada.</p>
+              </div>
+            </section>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/ui/assets/js/core/api.js"></script>
+  <script src="/ui/assets/js/components/toast.js"></script>
+  <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/core/navigation.js"></script>
+  <script src="/ui/assets/js/core/auth.js"></script>
+  <script src="/ui/assets/js/modules/dashboard/dashboard.js"></script>
+</body>
+</html>

@@ -117,7 +117,7 @@ Skills **confirmadas** en F4 (ver matriz). Columna "Skill" = Skill primaria Assi
 | BL-QA-002 | Suite unit/integration | RNF-QUA-001 | K-006 | P0 | Done (F7) |
 | BL-QA-003 | Suite security (IDOR, JWT, SQLi, XSS) | RNF-SEC-001 | K-007 | P0 | Done (F7) |
 | BL-QA-004 | E2E flujos críticos | — | K-006 | P1 | Done (F7) |
-| BL-QA-005 | Documentación API/arquitectura/seguridad | — | K-008 | P1 | Backlog |
+| BL-QA-005 | Documentación API/arquitectura/seguridad | — | K-008 | P1 | Done (F9) |
 | BL-QA-006 | Validación Gate F10 | — | K-009 | P0 | Backlog |
 
 ---

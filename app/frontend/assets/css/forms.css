@@ -1,0 +1,22 @@
+/* Forms */
+.form-control, .form-select {
+  border-radius: 12px; border-color: #d5dee8; min-height: 44px;
+}
+.form-label { font-weight: 600; font-size: 0.9rem; }
+.gate-health { color: var(--muted); text-decoration: none; margin-top: 0.4rem; }
+.filter-cascade {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+.cascade-path {
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  background: #eef6f5;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+@media (max-width: 900px) {
+  .filter-cascade { grid-template-columns: 1fr; }
+}

@@ -2,36 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SIGA — Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/main.css" />
+  <meta http-equiv="refresh" content="0; url=/ui/pages/home.html" />
+  <title>SIGA</title>
+  <script>location.replace("/ui/pages/home.html");</script>
 </head>
-<body class="bg-light">
-  <main class="container py-4">
-    <h1 class="h3 mb-1">SIGA</h1>
-    <p class="text-muted mb-4">Dashboard por rol · F6-O5 (UI sin autoridad)</p>
-
-    <div class="row g-3 mb-4">
-      <div class="col-md-4">
-        <label class="form-label">Usuario</label>
-        <input id="username" class="form-control" value="admin" />
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">Contraseña</label>
-        <input id="password" type="password" class="form-control" value="Admin123!" />
-      </div>
-      <div class="col-md-4 d-flex align-items-end gap-2">
-        <button id="btn-login" class="btn btn-primary">Entrar</button>
-        <button id="btn-dashboard" class="btn btn-outline-secondary" disabled>Dashboard</button>
-        <button id="btn-health" class="btn btn-outline-dark">Health</button>
-      </div>
-    </div>
-
-    <div id="role-badge" class="mb-3"></div>
-    <div id="indicators" class="row g-3"></div>
-    <pre id="out" class="mt-4 p-3 bg-white border rounded small"></pre>
-  </main>
-  <script src="js/api.js"></script>
-</body>
+<body><p><a href="/ui/pages/home.html">Ir a SIGA</a></p></body>
 </html>

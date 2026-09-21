@@ -4,6 +4,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
 from app.audit.service import AuditService
@@ -21,6 +22,12 @@ from app.schemas.iam import (
 from app.services.auth_service import AuthService
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.get("/login", include_in_schema=False)
+def login_get() -> RedirectResponse:
+    """Browsers open this URL with GET → would be 405; send them to the UI."""
+    return RedirectResponse(url="/ui/pages/auth/login.html", status_code=307)
 
 
 @router.post("/login", response_model=TokenResponse)

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asistencia · SIGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/assets/css/base.css" />
+  <link rel="stylesheet" href="/ui/assets/css/layout.css" />
+  <link rel="stylesheet" href="/ui/assets/css/components.css" />
+  <link rel="stylesheet" href="/ui/assets/css/forms.css" />
+  <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
+</head>
+<body>
+  <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
+  <div class="app-frame">
+
+<aside class="app-sidebar" aria-label="Menú principal">
+  <a class="app-brand" href="/ui/pages/dashboard/dashboard.html">
+    <span class="app-brand-dot"></span><span>SIGA</span>
+  </a>
+  <p class="side-section">Módulos</p>
+  <nav class="side-nav">
+    <a class="side-link" href="/ui/pages/dashboard/dashboard.html">Dashboard</a>
+    <a class="side-link" href="/ui/pages/notas/notas.html">Notas</a>
+    <a class="side-link active" href="/ui/pages/asistencia/asistencia.html" data-roles="TEACHER,ADMINISTRATOR">Asistencia</a>
+    <a class="side-link" href="/ui/pages/catalogos/catalogos.html" data-roles="ADMINISTRATOR">Catálogos</a>
+    <a class="side-link" href="/ui/pages/reportes/reportes.html" data-roles="TEACHER,ADMINISTRATOR">Reportes</a>
+    <a class="side-link" href="/ui/pages/avisos/avisos.html">Avisos</a>
+    <a class="side-link" href="/ui/pages/asistente/asistente.html">Asistente</a>
+    <a class="side-link" href="/ui/pages/cuenta/perfil.html">Perfil</a>
+  </nav>
+</aside>
+
+    <div class="app-main">
+      <header class="app-topbar">
+        <button type="button" id="btn-sidebar" class="btn-sidebar" aria-expanded="false" aria-label="Abrir menú">Menú</button>
+        <h1 class="topbar-title">Asistencia</h1>
+        <div class="topbar-actions">
+          <a href="/ui/pages/cuenta/perfil.html" id="session-chip" class="siga-chip muted">Sin sesión</a>
+          <a class="btn btn-outline-secondary btn-sm" href="/ui/pages/cuenta/perfil.html">Perfil</a>
+          <button type="button" id="btn-logout" class="btn btn-outline-secondary btn-sm">Cerrar sesión</button>
+        </div>
+      </header>
+      <nav class="breadcrumb" aria-label="Miga de pan">
+        <a href="/ui/pages/dashboard/dashboard.html">Dashboard</a><span class="sep">/</span><span>Asistencia</span>
+      </nav>
+      <main class="app-content">
+
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Clase</p>
+            <p class="hint">Carrera → periodo → paralelo → sesión → marca. Solo docente/admin.</p>
+          </div>
+          <a class="btn btn-sm btn-outline-secondary" href="/ui/pages/asistencia/registro.html">Registro rápido</a>
+        </div>
+
+        <section class="card-soft mb-3" aria-labelledby="att-cascade-title">
+          <h3 id="att-cascade-title">Seleccionar curso</h3>
+          <div class="filter-cascade">
+            <div>
+              <label class="form-label" for="filter-career">1. Carrera</label>
+              <select id="filter-career" class="form-select">
+                <option value="">Todas / sin filtrar</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" for="filter-term">2. Periodo</label>
+              <select id="filter-term" class="form-select" disabled>
+                <option value="">Selecciona periodo</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" for="filter-parallel">3. Paralelo</label>
+              <select id="filter-parallel" class="form-select" disabled>
+                <option value="">Selecciona paralelo</option>
+              </select>
+            </div>
+          </div>
+          <p class="cascade-path mt-3 mb-0" id="cascade-path" aria-live="polite">Sin curso seleccionado.</p>
+        </section>
+
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <section class="card-soft h-100" aria-labelledby="session-title">
+              <h3 id="session-title">Nueva sesión</h3>
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <label class="form-label" for="att-date">Fecha</label>
+                  <input id="att-date" type="date" class="form-control" />
+                </div>
+                <div class="col-sm-6">
+                  <label class="form-label" for="att-topic">Tema</label>
+                  <input id="att-topic" class="form-control" placeholder="Clase" />
+                </div>
+                <div class="col-12">
+                  <button type="button" class="btn btn-siga" id="btn-create-session" disabled>Crear sesión</button>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="col-lg-6">
+            <section class="card-soft h-100" aria-labelledby="mark-title">
+              <h3 id="mark-title">Marcar asistencia</h3>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label" for="att-session-id">Sesión</label>
+                  <select id="att-session-id" class="form-select" disabled>
+                    <option value="">Crea o elige sesión</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label" for="att-student-id">Estudiante</label>
+                  <select id="att-student-id" class="form-select" disabled>
+                    <option value="">Selecciona curso</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label" for="att-status">Estado</label>
+                  <select id="att-status" class="form-select">
+                    <option value="PRESENT">Presente</option>
+                    <option value="ABSENT">Ausente</option>
+                    <option value="LATE">Atraso</option>
+                    <option value="JUSTIFIED">Justificado</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <button type="button" class="btn btn-siga" id="btn-mark-att" disabled>Guardar asistencia</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <section class="card-soft mt-3" aria-labelledby="pct-title">
+          <h3 id="pct-title">Porcentaje de asistencia</h3>
+          <div class="row g-2 align-items-end">
+            <div class="col-sm-5">
+              <label class="form-label" for="pct-student-id">Estudiante del paralelo</label>
+              <select id="pct-student-id" class="form-select" disabled>
+                <option value="">Selecciona curso</option>
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <button type="button" class="btn btn-outline-secondary w-100" id="btn-att-pct" disabled>Consultar %</button>
+            </div>
+            <div class="col-sm-4">
+              <p class="cascade-path mb-0" id="pct-result" aria-live="polite">Sin consulta.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="table-wrap mt-3" aria-labelledby="sessions-log-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="sessions-log-title" class="section-title mb-0">Sesiones de esta pantalla</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Aún no creaste sesiones en esta sesión de navegador.</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Tema</th>
+              </tr>
+            </thead>
+            <tbody id="sessions-tbody"></tbody>
+          </table>
+        </section>
+
+        <section class="table-wrap mt-3" aria-labelledby="marks-log-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="marks-log-title" class="section-title mb-0">Marcas recientes</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Sin marcas en esta pantalla.</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Sesión</th>
+                <th scope="col">Estudiante</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Notas</th>
+              </tr>
+            </thead>
+            <tbody id="marks-tbody"></tbody>
+          </table>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/ui/assets/js/core/api.js"></script>
+  <script src="/ui/assets/js/components/toast.js"></script>
+  <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/core/navigation.js"></script>
+  <script src="/ui/assets/js/core/auth.js"></script>
+  <script src="/ui/assets/js/modules/asistencia/asistencia.js"></script>
+</body>
+</html>

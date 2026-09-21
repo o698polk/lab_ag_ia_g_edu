@@ -1,0 +1,59 @@
+{
+  "login_samples": [
+    {
+      "code": 200,
+      "ms": 431.87
+    },
+    {
+      "code": 200,
+      "ms": 72.54
+    },
+    {
+      "code": 200,
+      "ms": 67.0
+    },
+    {
+      "code": 200,
+      "ms": 79.37
+    },
+    {
+      "code": 200,
+      "ms": 86.47
+    },
+    {
+      "code": 200,
+      "ms": 73.97
+    },
+    {
+      "code": 200,
+      "ms": 90.94
+    },
+    {
+      "code": 200,
+      "ms": 121.13
+    }
+  ],
+  "login_ok_n": 8,
+  "login_p50_ms": 82.92,
+  "login_p95_ms": 431.87,
+  "grades_probes": [
+    {
+      "path": "/students/1/grades",
+      "probe_code": 200,
+      "probe_ms": 66.1
+    },
+    {
+      "path": "/courses/1/grades",
+      "probe_code": 200,
+      "probe_ms": 29.5
+    }
+  ],
+  "grades_path": "/students/1/grades",
+  "grades_n": 30,
+  "grades_codes": {
+    "200": 30
+  },
+  "grades_p50_ms": 17.68,
+  "grades_p95_ms": 33.61,
+  "note": "Login sample stays under 10/60s rate limit. p95 uses HTTP < 500."
+}

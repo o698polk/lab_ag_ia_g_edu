@@ -1,0 +1,129 @@
+/* Shared UI components */
+.btn-siga {
+  background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600;
+}
+.btn-siga:hover { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
+.siga-chip {
+  background: #eef6f5; color: var(--accent);
+  border-radius: 999px; padding: 0.35rem 0.8rem;
+  font-size: 0.85rem; font-weight: 600; text-decoration: none;
+}
+.siga-toast {
+  position: fixed; top: 16px; right: 16px; z-index: 40;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 0.85rem 1rem; border-radius: 14px;
+  background: #142033; color: #fff; box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(-8px); pointer-events: none; transition: 0.2s ease;
+}
+.siga-toast.show { opacity: 1; transform: none; }
+.siga-toast.ok { background: var(--allow); }
+.siga-toast.bad { background: var(--deny); }
+.panel-head { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+.eyebrow { margin: 0; font-weight: 700; }
+.hint { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.92rem; }
+.card-soft, .siga-metric, .notif-item, .empty-state {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: 0 8px 24px rgba(16, 26, 43, 0.04);
+}
+.card-soft { padding: 1.1rem 1.15rem; }
+.card-soft h3 { font-size: 1rem; margin: 0 0 0.9rem; }
+.siga-metric { padding: 1rem 1.1rem; height: 100%; }
+.siga-metric .label { color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.siga-metric .value { font-size: 1.6rem; font-weight: 700; margin-top: 0.25rem; }
+.siga-metric.accent { border-color: rgba(12, 110, 106, 0.35); background: linear-gradient(180deg, #f3fbfa 0%, #fff 70%); }
+.section-title { font-size: 1rem; font-weight: 700; margin: 0 0 0.75rem; }
+.dash-welcome {
+  display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start;
+  padding: 1.15rem 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(12, 110, 106, 0.1), transparent 55%),
+    var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.dash-welcome h2 { margin: 0.15rem 0 0; font-size: 1.45rem; }
+.dash-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+.dash-shortcut {
+  display: flex; flex-direction: column; gap: 0.25rem;
+  text-decoration: none; color: inherit;
+  padding: 0.95rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.dash-shortcut:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  color: inherit;
+}
+.dash-shortcut strong { font-size: 0.95rem; }
+.dash-shortcut span { color: var(--muted); font-size: 0.82rem; }
+.report-categories {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+.report-categories .card-soft { margin: 0; }
+.report-type-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.report-preview-html {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  max-height: 28rem;
+  overflow: auto;
+}
+.report-preview-html table { width: 100%; border-collapse: collapse; }
+.report-preview-html th, .report-preview-html td {
+  border: 1px solid var(--line); padding: 0.35rem 0.5rem; font-size: 0.88rem;
+}
+@media (max-width: 900px) {
+  .report-categories { grid-template-columns: 1fr; }
+}
+.empty-state { padding: 1.4rem; color: var(--muted); }
+.notif-item { padding: 0.9rem 1rem; margin-bottom: 0.6rem; }
+.notif-item.read { opacity: 0.62; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.role-chip {
+  border: 1px solid var(--line); background: #f7fafc; border-radius: 999px;
+  padding: 0.35rem 0.75rem; font-size: 0.85rem;
+}
+.role-chip:hover, .role-chip.active { border-color: var(--accent); color: var(--accent); }
+.gate-roles { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+.login-error {
+  margin: 0.9rem 0 0; padding: 0.7rem 0.85rem; border-radius: 12px;
+  background: #fdecec; color: var(--deny); font-size: 0.9rem; font-weight: 600;
+}
+.login-status {
+  margin: 0 0 1rem; padding: 0.65rem 0.85rem; border-radius: 12px;
+  background: #eef6f5; color: var(--accent); font-size: 0.9rem; font-weight: 600;
+}
+.siga-thread {
+  min-height: 16rem; max-height: 28rem; overflow: auto;
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem;
+}
+.siga-bubble {
+  border-radius: 14px; padding: 0.7rem 0.85rem; margin-bottom: 0.65rem;
+  max-width: 85%; white-space: pre-wrap; word-break: break-word;
+}
+.siga-bubble.user { background: #142033; color: #fff; margin-left: auto; }
+.siga-bubble.bot { background: #f4f7fb; }
+.siga-bubble .meta { font-size: 0.75rem; margin-top: 0.35rem; }
+.siga-bubble.deny .meta { color: var(--deny); font-weight: 700; }
+.siga-bubble.allow .meta { color: var(--allow); font-weight: 700; }
+.composer { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+.composer .form-control { flex: 1; }
+.siga-log {
+  background: #101a2b; color: #d7e6f0; border-radius: 12px;
+  padding: 0.9rem 1rem; font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.78rem; white-space: pre-wrap; max-height: 14rem; overflow: auto; margin-top: 0.5rem;
+}

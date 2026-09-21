@@ -1,0 +1,9 @@
+﻿.\.venv\Scripts\python.exe : INFO  [alembic.runtime.migration] Context impl MySQLImpl.
+En C:\Users\POLK\AppData\Local\Temp\ps-script-5d80ca9a-fe6f-43fd-90a0-cc4a50f79369.ps1: 55 Carácter: 34
++ ... g_ia_g_edu; .\.venv\Scripts\python.exe -m alembic stamp head 2>&1 | O ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO  [alembic....impl MySQLImpl.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running stamp_revision  -> 0006_zero_trust
