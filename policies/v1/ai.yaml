@@ -1,0 +1,6 @@
+# Ref: RF-PAP-001 | K-020 | F5 scaffold
+policy_id: POL-AI-001
+version: v1
+module: ai
+effect_default: DENY
+rules: []

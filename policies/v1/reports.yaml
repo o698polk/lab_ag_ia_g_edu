@@ -1,0 +1,6 @@
+# Ref: RF-PAP-001 | K-020 | F5 scaffold
+policy_id: POL-REP-001
+version: v1
+module: reports
+effect_default: DENY
+rules: []

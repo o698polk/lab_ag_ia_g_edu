@@ -1,0 +1,7 @@
+# Ref: RF-PAP-001 | K-020 | F5 scaffold
+policy_id: POL-GRADE-001
+version: v1
+module: grades
+effect_default: DENY
+description: Placeholder — rules implemented in F6
+rules: []

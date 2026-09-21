@@ -1,0 +1,42 @@
+# SIGA / siga-polkdev — Git ignore
+# Ref: RNF-SEC-002 | K-004 | F5
+
+# Entorno y secretos
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Logs y evidencia sensible local
+logs/*.log
+logs/*.jsonl
+!logs/.gitkeep
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+~$*
+
+# Alembic local overrides
+alembic.ini.local
+
+# Node (si se agrega tooling frontend)
+node_modules/

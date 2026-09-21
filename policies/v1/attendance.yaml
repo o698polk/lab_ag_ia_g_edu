@@ -1,0 +1,6 @@
+# Ref: RF-PAP-001 | K-020 | F5 scaffold
+policy_id: POL-ATT-001
+version: v1
+module: attendance
+effect_default: DENY
+rules: []

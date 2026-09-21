@@ -1,0 +1,7 @@
+# Ref: RF-PAP-001 | K-020 | F5 scaffold (active policies fleshed in F6)
+policy_id: POL-AUTH-001
+version: v1
+module: authentication
+effect_default: DENY
+description: Placeholder policy — F5 configuration only
+rules: []
