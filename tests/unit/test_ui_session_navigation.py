@@ -448,3 +448,62 @@ def test_ui_f10_a11y_responsive():
     dash = (PAGES / "dashboard" / "dashboard.html").read_text(encoding="utf-8")
     assert "responsive.css" in dash
     assert 'lang="es"' in dash
+
+
+@pytest.mark.unit
+def test_ui_f10_avisos_asistente_polish():
+    """Cierre deuda post-F10: avisos (filtro + alta admin) y asistente a11y."""
+    avisos = (PAGES / "avisos" / "avisos.html").read_text(encoding="utf-8")
+    assert 'id="filt-unread"' in avisos
+    assert 'id="notif-create-form"' in avisos
+    assert 'id="ntf-user"' in avisos
+    assert 'data-roles="ADMINISTRATOR"' in avisos
+
+    ajs = (ASSETS / "js" / "modules" / "avisos" / "avisos.js").read_text(encoding="utf-8")
+    assert 'api("GET", "/notifications"' in ajs
+    assert 'api("POST", "/notifications"' in ajs
+    assert "unread_only" in ajs
+    assert 'api("GET", "/users")' in ajs
+
+    asi = (PAGES / "asistente" / "asistente.html").read_text(encoding="utf-8")
+    assert 'for="ai-message"' in asi
+    assert 'id="ai-status"' in asi
+    assert 'id="ai-empty"' in asi
+
+    aijs = (ASSETS / "js" / "modules" / "asistente" / "asistente.js").read_text(
+        encoding="utf-8"
+    )
+    assert 'api("POST", "/ai/chat"' in aijs
+    assert "textContent" in aijs
+    assert "setBusy" in aijs
+
+    # Legacy stubs still redirect
+    assert "asistente/asistente.html" in (PAGES / "ai.html").read_text(encoding="utf-8")
+    assert "avisos/avisos.html" in (PAGES / "notifications.html").read_text(
+        encoding="utf-8"
+    )
+
+
+@pytest.mark.unit
+def test_ui_legacy_js_css_shims():
+    """Legacy /ui/js and /ui/css are shims → assets (no dual implementation)."""
+    legacy_js = FRONTEND / "js"
+    assert "DEPRECATED" in (legacy_js / "app.js").read_text(encoding="utf-8")
+    assert "/ui/assets/js/core/api.js" in (legacy_js / "api.js").read_text(
+        encoding="utf-8"
+    )
+    assert "/ui/assets/js/core/auth.js" in (legacy_js / "auth-guard.js").read_text(
+        encoding="utf-8"
+    )
+    ai = (legacy_js / "pages" / "ai.js").read_text(encoding="utf-8")
+    assert "DEPRECATED" in ai
+    assert "/ui/pages/asistente/asistente.html" in ai
+
+    css = (FRONTEND / "css" / "main.css").read_text(encoding="utf-8")
+    assert "@import" in css
+    assert "/ui/assets/css/base.css" in css
+
+    # Live pages must not reference legacy /ui/js
+    dash = (PAGES / "dashboard" / "dashboard.html").read_text(encoding="utf-8")
+    assert "/ui/assets/js/" in dash
+    assert "/ui/js/" not in dash

@@ -1,1 +1,2 @@
-// SPA hash-router removed. Use independent pages under /ui/pages/*.html (A01).
+/* DEPRECATED — SPA router removed (A01 / PromptMaster). */
+console.warn("[SIGA] Use /ui/pages/*.html — no hash router.");

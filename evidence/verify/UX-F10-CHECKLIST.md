@@ -61,5 +61,16 @@ Incluye `test_ui_f10_a11y_responsive`.
 
 1. Ctrl+F5 en http://127.0.0.1:8000/ui/pages/home.html — Tab muestra skip link.
 2. Login → Dashboard — Tab muestra skip al contenido.
-3. Reducir ventana &lt;900px — Menú abre drawer + backdrop; Escape cierra.
+3. Reducir ventana <900px — Menú abre drawer + backdrop; Escape cierra.
 4. Generar error de login — toast con `role=alert`.
+
+## Cierre deuda (post-F10, 2026-09-21)
+
+| Ítem | Estado |
+|---|---|
+| Asistente: label, busy, textContent bubbles, toast DENY | ✅ |
+| Avisos: filtro no leídos + alta admin (`POST /notifications`) | ✅ |
+| Legacy `ai.html` / `notifications.html` → redirects | ✅ |
+| Test `test_ui_f10_avisos_asistente_polish` | ✅ |
+| Legacy `/ui/js` + `/ui/css` → shims a `assets/` | ✅ |
+| Test `test_ui_legacy_js_css_shims` | ✅ |

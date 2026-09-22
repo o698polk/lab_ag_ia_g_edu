@@ -1,4 +1,4 @@
-/* Bridge → assets/css (F2). Prefer linking assets directly. */
+/* DEPRECATED — use /ui/assets/css/*.css */
 @import url("/ui/assets/css/base.css");
 @import url("/ui/assets/css/layout.css");
 @import url("/ui/assets/css/components.css");

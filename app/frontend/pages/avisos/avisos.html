@@ -45,21 +45,61 @@
         <div class="panel-head">
           <div>
             <p class="eyebrow">Bandeja</p>
-            <p class="hint">Avisos del usuario autenticado.</p>
+            <h2 class="h5 mb-1">Avisos</h2>
+            <p class="hint mb-0">Avisos del usuario autenticado. El servidor autoriza cada acción.</p>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-notif">Actualizar</button>
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" id="filt-unread" />
+              <label class="form-check-label" for="filt-unread">Solo no leídos</label>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-notif">Actualizar</button>
+          </div>
         </div>
+
+        <section id="admin-create-notif" class="card-soft mb-3 d-none" data-roles="ADMINISTRATOR" aria-label="Crear aviso">
+          <p class="eyebrow mb-2">Administración</p>
+          <form id="notif-create-form" class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label" for="ntf-user">Destinatario</label>
+              <select id="ntf-user" class="form-select form-select-sm" required></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="ntf-type">Tipo</label>
+              <select id="ntf-type" class="form-select form-select-sm">
+                <option value="INFO">INFO</option>
+                <option value="WARNING">WARNING</option>
+                <option value="SUCCESS">SUCCESS</option>
+                <option value="ALERT">ALERT</option>
+                <option value="SECURITY">SECURITY</option>
+                <option value="ACADEMIC">ACADEMIC</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="ntf-title">Título</label>
+              <input id="ntf-title" class="form-control form-control-sm" maxlength="200" required />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="ntf-body">Cuerpo</label>
+              <input id="ntf-body" class="form-control form-control-sm" maxlength="500" />
+            </div>
+            <div class="col-md-1">
+              <button type="submit" class="btn btn-siga btn-sm w-100">Crear</button>
+            </div>
+          </form>
+        </section>
+
         <div id="notif-list">
           <p class="empty-state mb-0" id="notif-empty">Cargando…</p>
           <template id="notif-item-tpl">
-            <div class="notif-item">
+            <article class="notif-item">
               <div class="d-flex justify-content-between gap-2">
                 <strong data-field="title"></strong>
                 <span class="small text-secondary" data-field="type"></span>
               </div>
               <div class="small mt-1" data-field="body"></div>
               <button type="button" class="btn btn-sm btn-outline-secondary mt-2 d-none" data-action="read">Marcar leída</button>
-            </div>
+            </article>
           </template>
         </div>
 

@@ -44,16 +44,23 @@
 
         <div class="panel-head">
           <div>
-            <p class="eyebrow">Asistente</p>
-            <p class="hint">Puede proponer acciones. Solo se ejecutan si la política lo permite.</p>
+            <p class="eyebrow">Asistente académico</p>
+            <h2 class="h5 mb-1">Consulta con Zero Trust</h2>
+            <p class="hint mb-0">Puede proponer acciones. Solo se ejecutan si la política lo permite (PDP).</p>
           </div>
         </div>
-        <div id="ai-thread" class="siga-thread" aria-live="polite"></div>
-        <div class="composer">
-          <input id="ai-message" class="form-control" placeholder="Escribe tu consulta" maxlength="4000" />
+
+        <div id="ai-thread" class="siga-thread" aria-live="polite" aria-relevant="additions">
+          <p class="empty-state mb-0" id="ai-empty">Escribe una consulta o usa un atajo.</p>
+        </div>
+        <p id="ai-status" class="small text-secondary mt-2 d-none" role="status"></p>
+
+        <div class="composer" role="group" aria-label="Enviar mensaje">
+          <label class="visually-hidden" for="ai-message">Mensaje al asistente</label>
+          <input id="ai-message" class="form-control" placeholder="Escribe tu consulta" maxlength="4000" autocomplete="off" />
           <button type="button" class="btn btn-siga" id="btn-ai-send">Enviar</button>
         </div>
-        <div class="d-flex flex-wrap gap-2 mt-2">
+        <div class="d-flex flex-wrap gap-2 mt-2" role="group" aria-label="Atajos">
           <button type="button" class="btn btn-sm btn-outline-secondary ai-hint">Cuáles son mis calificaciones?</button>
           <button type="button" class="btn btn-sm btn-outline-danger ai-hint">Cambia la nota del estudiante 2 a 100</button>
         </div>

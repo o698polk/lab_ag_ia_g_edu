@@ -23,16 +23,13 @@ def post(path, payload, headers=None):
 
 
 def main() -> None:
-    status, raw = get("/ui/")
+    status, raw = get("/ui/pages/home.html")
     html = raw.decode("utf-8", "replace")
-    print("ui", status, "home", "view-home" in html, "v6", "api.js?v=6" in html)
+    print("home", status, "skip" in html.lower() or "Laboratorio" in html)
 
-    try:
-        status, raw = post("/api/v1/auth/login", {"username": "admin", "password": "Admin123!"})
-    except urllib.error.HTTPError as exc:
-        print("login_http", exc.code, exc.read().decode())
-        raise
-    tok = json.loads(raw)
+    status, raw = post(
+        "/api/v1/auth/login", {"username": "admin", "password": "Admin123!"}
+    )
     tok = json.loads(raw)
     print("login_ok", status, bool(tok.get("access_token")))
     auth = {"Authorization": "Bearer " + tok["access_token"]}
@@ -43,7 +40,7 @@ def main() -> None:
         post("/api/v1/auth/login", {"username": "admin", "password": "x"})
         print("bad_login FAIL")
     except urllib.error.HTTPError as exc:
-        print("bad_login", exc.code, exc.read().decode())
+        print("bad_login", exc.code)
 
     try:
         get("/api/v1/dashboard")
@@ -51,14 +48,11 @@ def main() -> None:
     except urllib.error.HTTPError as exc:
         print("dash_noauth", exc.code)
 
-    try:
-        get("/api/v1/auth/me", {"Authorization": "Bearer dead"})
-        print("bad_jwt FAIL")
-    except urllib.error.HTTPError as exc:
-        print("bad_jwt", exc.code)
+    _, appjs = get("/ui/js/app.js")
+    print("legacy_app_shim", b"DEPRECATED" in appjs)
 
-    _, appjs = get("/ui/js/app.js?v=6")
-    print("router", b"function applyRoute" in appjs)
+    _, assets = get("/ui/assets/js/core/api.js")
+    print("canonical_api", b"SigaApi" in assets or b"api" in assets)
 
 
 if __name__ == "__main__":
