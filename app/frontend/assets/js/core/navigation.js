@@ -100,6 +100,46 @@ function ensureSeguridadNav(user) {
   else nav.appendChild(link);
 }
 
+function ensureIamNav(user) {
+  const roles = (user && user.roles) || [];
+  if (!roles.includes("ADMINISTRATOR")) return;
+  const sidebar = document.querySelector(".app-sidebar");
+  if (!sidebar) return;
+  let sub = sidebar.querySelector('.side-nav-sub a[href*="/usuarios/roles"]')?.closest(".side-nav-sub");
+  if (!sub) {
+    const title = document.createElement("p");
+    title.className = "side-section";
+    title.setAttribute("data-roles", "ADMINISTRATOR");
+    title.textContent = "Administración";
+    sub = document.createElement("nav");
+    sub.className = "side-nav side-nav-sub";
+    sub.setAttribute("data-roles", "ADMINISTRATOR");
+    const lastNav = sidebar.querySelector(".side-nav:last-of-type");
+    if (lastNav) lastNav.insertAdjacentElement("afterend", title);
+    else sidebar.appendChild(title);
+    title.insertAdjacentElement("afterend", sub);
+  }
+  const extras = [
+    ["/ui/pages/usuarios/usuarios.html", "Usuarios", "usuarios"],
+    ["/ui/pages/usuarios/roles.html", "Roles", "roles"],
+    ["/ui/pages/usuarios/permisos.html", "Permisos", "permisos"],
+    ["/ui/pages/catalogos/cursos.html", "Cursos", "cursos"],
+    ["/ui/pages/catalogos/matriculas.html", "Matrículas", "matriculas"],
+  ];
+  extras.forEach(([href, label, key]) => {
+    if (sub.querySelector('a[href="' + href + '"]')) return;
+    const a = document.createElement("a");
+    a.className = "side-link";
+    a.href = href;
+    a.dataset.nav = key;
+    a.textContent = label;
+    if (String(location.pathname || "").includes(href.split("/").pop())) {
+      a.classList.add("active");
+    }
+    sub.appendChild(a);
+  });
+}
+
 function ensureAdminNav(user) {
   const roles = (user && user.roles) || [];
   if (!roles.includes("ADMINISTRATOR")) return;
@@ -124,4 +164,11 @@ function ensureAdminNav(user) {
   }
 }
 
-window.SigaNav = { wire, ensureAdminNav, ensureSkipLink, ensureCatalogExtras, ensureSeguridadNav };
+window.SigaNav = {
+  wire,
+  ensureAdminNav,
+  ensureIamNav,
+  ensureSkipLink,
+  ensureCatalogExtras,
+  ensureSeguridadNav,
+};

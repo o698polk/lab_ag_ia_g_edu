@@ -25,8 +25,8 @@
     courseStudents: [],
   });
 
-  const GRADE_COLS = ["id", "evaluation_id", "student_id", "score", "comment", "graded_at"];
-  const KARDEX_COLS = ["id", "term_id", "subject_id", "final_grade", "academic_status", "credits"];
+  const GRADE_COLS = ["id", "evaluation", "student", "score", "comment", "graded_at"];
+  const KARDEX_COLS = ["id", "term", "subject", "final_grade", "academic_status", "credits"];
 
   const el = (id) => document.getElementById(id);
   const gradesTable = SigaAdminTable.bind({
@@ -86,29 +86,61 @@
 
   function subjectName(id) {
     const s = state.context.subjects.find((x) => x.id === id);
-    return s ? `${s.code} — ${s.name}` : `Materia ${id}`;
+    return s ? SigaTable.formatRef(s.id, (s.code || "") + " — " + (s.name || "")) : SigaTable.formatRef(id, "Asignatura");
   }
 
   function careerName(id) {
     const c = state.context.careers.find((x) => x.id === id);
-    return c ? `${c.code} — ${c.name}` : `Carrera ${id}`;
+    return c ? SigaTable.formatRef(c.id, (c.code || "") + " — " + (c.name || "")) : SigaTable.formatRef(id, "Carrera");
   }
 
   function termName(id) {
     const t = state.context.terms.find((x) => x.id === id);
-    return t ? `${t.code} — ${t.name}` : `Periodo ${id}`;
+    return t ? SigaTable.formatRef(t.id, (t.code || "") + " — " + (t.name || "")) : SigaTable.formatRef(id, "Periodo");
   }
 
   function studentLabel(s) {
-    return `${s.student_code || "EST"} (id ${s.id})`;
+    const id = s.id || s.student_id;
+    const name = s.name || s.full_name || s.student_code || "Estudiante";
+    return SigaTable.formatRef(id, name);
+  }
+
+  function findStudent(id) {
+    return (
+      state.context.courseStudents.find((s) => Number(s.id) === Number(id) || Number(s.student_id) === Number(id)) ||
+      state.context.students.find((s) => Number(s.id) === Number(id)) ||
+      null
+    );
+  }
+
+  function mapGradeRow(row) {
+    const ev = state.context.evaluations.find((e) => Number(e.id) === Number(row.evaluation_id));
+    const st = findStudent(row.student_id);
+    return {
+      ...row,
+      evaluation: ev ? evaluationLabel(ev) : SigaTable.formatRef(row.evaluation_id, "Evaluación"),
+      student: st ? studentLabel(st) : SigaTable.formatRef(row.student_id, "Estudiante"),
+      graded_at: row.graded_at ? String(row.graded_at).replace("T", " ").slice(0, 16) : "",
+    };
+  }
+
+  function mapKardexRow(row) {
+    return {
+      ...row,
+      term: termName(row.term_id),
+      subject: subjectName(row.subject_id),
+    };
   }
 
   function evaluationLabel(e) {
-    return `${e.name} (${e.weight_percent}%) · id ${e.id}`;
+    return SigaTable.formatRef(e.id, `${e.name} (${e.weight_percent}%)`);
   }
 
   function parallelLabel(c) {
-    return `${c.parallel_code} · ${subjectName(c.subject_id)} · curso ${c.id}`;
+    const sub = state.context.subjects.find((x) => x.id === c.subject_id);
+    const title = sub ? (sub.name || sub.code) : "Curso";
+    const par = c.parallel_code ? " · " + c.parallel_code : "";
+    return SigaTable.formatRef(c.id, title + par);
   }
 
   function subjectIdsForCareer(careerId) {
@@ -142,7 +174,7 @@
 
   function showGradeRows(rows) {
     showGradesPanel();
-    gradesTable.setRows(Array.isArray(rows) ? rows : []);
+    gradesTable.setRows((Array.isArray(rows) ? rows : []).map(mapGradeRow));
   }
 
   function updateCascadePath() {
@@ -176,7 +208,7 @@
     fillSelect(
       termSel,
       state.context.terms,
-      (t) => `${t.code} — ${t.name}${t.is_current ? " (actual)" : ""}`,
+      (t) => SigaTable.formatRef(t.id, (t.code || "") + " — " + (t.name || "") + (t.is_current ? " (actual)" : "")),
       (t) => t.id
     );
     termSel.disabled = !state.context.terms.length;
@@ -234,8 +266,11 @@
       }));
     }
     fillSelect(el("grade-eval-id"), state.context.evaluations, evaluationLabel, (e) => e.id);
+    fillSelect(el("filter-eval"), state.context.evaluations, evaluationLabel, (e) => e.id);
     fillSelect(el("grade-student-id"), state.context.courseStudents, studentLabel, (s) => s.id);
+    fillSelect(el("kx-student"), state.context.courseStudents, studentLabel, (s) => s.id);
     setCourseActionsEnabled(true);
+    if (state.context.evaluations.length) await loadGradebook();
   }
 
   async function onParallelChange() {
@@ -247,7 +282,7 @@
   async function loadContext() {
     if (!canTeach) return;
 
-    const [careers, terms, courses, subjects, students, curricula, enrollments] = await Promise.all([
+    const [careers, terms, courses, subjects, students, curricula, enrollments, users] = await Promise.all([
       api("GET", "/careers"),
       api("GET", "/terms"),
       api("GET", "/courses"),
@@ -255,13 +290,21 @@
       api("GET", "/students"),
       api("GET", "/curricula"),
       api("GET", "/enrollments"),
+      api("GET", "/users"),
     ]);
 
     state.context.careers = careers.ok && Array.isArray(careers.data) ? careers.data : [];
     state.context.terms = terms.ok && Array.isArray(terms.data) ? terms.data : [];
     state.context.courses = courses.ok && Array.isArray(courses.data) ? courses.data : [];
     state.context.subjects = subjects.ok && Array.isArray(subjects.data) ? subjects.data : [];
-    state.context.students = students.ok && Array.isArray(students.data) ? students.data : [];
+    const userList = users.ok && Array.isArray(users.data) ? users.data : [];
+    state.context.students = (students.ok && Array.isArray(students.data) ? students.data : []).map((s) => {
+      const user = userList.find((u) => Number(u.id) === Number(s.user_id));
+      const name = user
+        ? [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || user.full_name || user.username
+        : "";
+      return { ...s, name };
+    });
     state.context.curricula = curricula.ok && Array.isArray(curricula.data) ? curricula.data : [];
     state.context.enrollments =
       enrollments.ok && Array.isArray(enrollments.data) ? enrollments.data : [];
@@ -272,12 +315,15 @@
       state.context.careers.forEach((c) => {
         const opt = document.createElement("option");
         opt.value = String(c.id);
-        opt.textContent = `${c.code} — ${c.name}`;
+        opt.textContent = SigaTable.formatRef(c.id, (c.code || "") + " — " + (c.name || ""));
         careerSel.appendChild(opt);
       });
+      SigaTable.makeSearchable(careerSel);
     }
     fillTerms();
     fillParallels();
+    fillSelect(el("kx-term"), state.context.terms, (t) => SigaTable.formatRef(t.id, (t.code || "") + " — " + (t.name || "")), (t) => t.id);
+    fillSelect(el("kx-subject"), state.context.subjects, (s) => SigaTable.formatRef(s.id, (s.code || "") + " — " + (s.name || "")), (s) => s.id);
 
     if (![careers, terms, courses].every((r) => r.ok)) {
       toast("No se pudieron cargar todos los catálogos del flujo de notas.", "bad");
@@ -304,7 +350,7 @@
       return;
     }
     showKardexPanel();
-    kardexTable.setRows(Array.isArray(data) ? data : [data]);
+    kardexTable.setRows((Array.isArray(data) ? data : [data]).map(mapKardexRow));
     toast("Kardex cargado.", "ok");
   }
 
@@ -322,6 +368,90 @@
     }
     showGradeRows(Array.isArray(data) ? data : [data]);
     toast("Notas del curso cargadas.", "ok");
+  }
+
+  function paintGradebook(data) {
+    const tbody = el("gradebook-tbody");
+    if (!tbody) return;
+    const students = (data && data.students) || [];
+    const empty = tbody.closest(".table-wrap")?.querySelector("[data-empty]");
+    if (!students.length) {
+      tbody.innerHTML = "";
+      if (empty) empty.classList.remove("d-none");
+      if (el("btn-save-gradebook")) el("btn-save-gradebook").disabled = true;
+      return;
+    }
+    if (empty) empty.classList.add("d-none");
+    tbody.innerHTML = students
+      .map((s) => {
+        const score = s.score == null ? "" : s.score;
+        return (
+          "<tr><td>" +
+          SigaModal.escapeHtml(String(s.student_id || s.id || "")) +
+          "</td><td>" +
+          SigaModal.escapeHtml(s.name || s.student_code || "") +
+          "</td><td>" +
+          SigaModal.escapeHtml((s.attendance_pct ?? 0) + "%") +
+          '</td><td><input type="number" class="form-control grade-input" min="0" max="100" step="0.01" data-student="' +
+          s.student_id +
+          '" value="' +
+          score +
+          '" /></td></tr>'
+        );
+      })
+      .join("");
+    if (el("btn-save-gradebook")) el("btn-save-gradebook").disabled = false;
+  }
+
+  async function loadGradebook() {
+    const courseId = Number(el("filter-parallel")?.value || 0);
+    const evaluationId = Number(el("filter-eval")?.value || el("grade-eval-id")?.value || 0);
+    if (!courseId) {
+      paintGradebook({ students: [] });
+      return;
+    }
+    if (el("grade-eval-id") && evaluationId) el("grade-eval-id").value = String(evaluationId);
+    const qs = evaluationId ? "?evaluation_id=" + evaluationId : "";
+    const { ok, data } = await api("GET", "/courses/" + courseId + "/gradebook" + qs);
+    if (!ok) {
+      toast(formatError(data), "bad");
+      paintGradebook({ students: [] });
+      return;
+    }
+    paintGradebook(data);
+  }
+
+  async function saveGradebook() {
+    const evaluationId = Number(el("filter-eval")?.value || el("grade-eval-id")?.value || 0);
+    if (!evaluationId) {
+      toast("Seleccione un componente evaluativo.", "bad");
+      return;
+    }
+    const inputs = [...document.querySelectorAll("#gradebook-tbody .grade-input")];
+    let okAll = true;
+    for (const input of inputs) {
+      if (input.value === "") continue;
+      const score = Number(input.value);
+      if (Number.isNaN(score) || score < 0 || score > 100) {
+        toast("La calificación debe estar entre 0 y 100.", "bad");
+        okAll = false;
+        break;
+      }
+      const { ok, data } = await api("PUT", "/grades", {
+        evaluation_id: evaluationId,
+        student_id: Number(input.getAttribute("data-student")),
+        score,
+      });
+      if (!ok) {
+        toast(formatError(data), "bad");
+        okAll = false;
+        break;
+      }
+    }
+    if (okAll) {
+      toast("Calificaciones guardadas.", "ok");
+      await loadCourseGrades();
+    }
   }
 
   async function upsertGrade() {
@@ -392,6 +522,12 @@
   el("filter-parallel")?.addEventListener("change", () => {
     onParallelChange().catch(() => toast("No se pudo cargar el curso", "bad"));
   });
+  el("filter-eval")?.addEventListener("change", () => {
+    if (el("grade-eval-id")) el("grade-eval-id").value = el("filter-eval").value;
+    loadGradebook();
+  });
+  el("btn-load-gradebook")?.addEventListener("click", () => loadGradebook());
+  el("btn-save-gradebook")?.addEventListener("click", () => saveGradebook());
 
   await loadContext();
 })();

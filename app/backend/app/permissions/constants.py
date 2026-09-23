@@ -13,6 +13,9 @@ ROLES_DELETE = "roles.delete"
 
 PERMISSIONS_VIEW = "permissions.view"
 PERMISSIONS_ASSIGN = "permissions.assign"
+PERMISSIONS_CREATE = "permissions.create"
+PERMISSIONS_UPDATE = "permissions.update"
+PERMISSIONS_DELETE = "permissions.delete"
 
 AUTH_CHANGE_PASSWORD = "auth.change_password"
 
@@ -52,6 +55,7 @@ ENROLLMENTS_CANCEL = "enrollments.cancel"
 
 SCHEDULES_VIEW = "schedules.view"
 SCHEDULES_CREATE = "schedules.create"
+SCHEDULES_DELETE = "schedules.delete"
 
 GRADES_VIEW = "grades.view"
 GRADES_UPDATE = "grades.update"

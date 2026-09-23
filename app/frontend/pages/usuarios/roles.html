@@ -41,7 +41,8 @@
   <p class="side-section" data-roles="ADMINISTRATOR">IAM</p>
   <nav class="side-nav side-nav-sub" data-roles="ADMINISTRATOR">
     <a class="side-link" href="/ui/pages/usuarios/usuarios.html">Usuarios</a>
-    <a class="side-link active" href="/ui/pages/usuarios/roles.html">Roles y permisos</a>
+    <a class="side-link active" href="/ui/pages/usuarios/roles.html">Roles</a>
+    <a class="side-link" href="/ui/pages/usuarios/permisos.html">Permisos</a>
   </nav>
 </aside>
 
@@ -65,8 +66,8 @@
       <main class="app-content">
 
         <div class="module-head">
-          <h2>Roles y permisos</h2>
-          <p>Alta de rol, asignación de permisos y desactivación.</p>
+          <h2>Roles</h2>
+          <p>Tabla de roles. Los permisos se asignan con casillas agrupadas por módulo.</p>
         </div>
         <div class="admin-toolbar">
           <button type="button" class="btn btn-siga" id="btn-new-record">+ Nuevo</button>
@@ -79,11 +80,15 @@
           <form id="role-create-form" class="row g-2 align-items-end">
             <div class="col-md-3">
               <label class="form-label" for="new-role-code">Código</label>
-              <input id="new-role-code" class="form-control" required minlength="2" />
+              <input id="new-role-code" class="form-control" minlength="2" placeholder="Se genera del nombre" />
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
               <label class="form-label" for="new-role-name">Nombre</label>
               <input id="new-role-name" class="form-control" required minlength="2" />
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="new-role-desc">Descripción</label>
+              <input id="new-role-desc" class="form-control" />
             </div>
             <div class="col-md-2">
               <button type="submit" class="btn btn-siga w-100">Crear</button>
@@ -102,9 +107,18 @@
               <label class="form-label" for="role-code">Rol</label>
               <select id="role-code" class="form-select"></select>
             </div>
-            <div class="col-md-6">
-              <label class="form-label" for="perm-codes">Permisos (códigos separados por coma)</label>
-              <input id="perm-codes" class="form-control" placeholder="grades.view,dashboard.view" />
+            <div class="col-md-4">
+              <label class="form-label" for="edit-role-name">Nombre</label>
+              <input id="edit-role-name" class="form-control" />
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="edit-role-desc">Descripción</label>
+              <input id="edit-role-desc" class="form-control" />
+            </div>
+            <div class="col-md-9">
+              <label class="form-label" for="perm-codes">Permisos</label>
+              <input id="perm-codes" class="form-control d-none" placeholder="grades.view,dashboard.view" />
+              <div id="perm-boxes" class="perm-boxes"></div>
             </div>
             <div class="col-md-3">
               <button type="button" class="btn btn-siga w-100" id="btn-assign-perms">Guardar permisos</button>
@@ -122,10 +136,10 @@
             <thead>
               <tr>
                 <th scope="col">Id</th>
-                <th scope="col">Código</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Activo</th>
-                <th scope="col">Permisos</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Usuarios</th>
+                <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
@@ -143,9 +157,11 @@
             <thead>
               <tr>
                 <th scope="col">Id</th>
+                <th scope="col">Nombre</th>
                 <th scope="col">Código</th>
                 <th scope="col">Módulo</th>
                 <th scope="col">Descripción</th>
+                <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>

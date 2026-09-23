@@ -190,6 +190,9 @@ function formatError(data) {
     if (detail === "Method Not Allowed") {
       return "Método incorrecto. Use la pantalla /ui/ (login es POST JSON).";
     }
+    if (detail === "Not Found") {
+      return "No se encontró el registro.";
+    }
     return detail;
   }
   return JSON.stringify(data, null, 2);

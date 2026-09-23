@@ -12,6 +12,19 @@ class CourseCreate(BaseModel):
     term_id: int
     parallel_code: str = "A"
     capacity: int = Field(default=40, ge=1)
+    hours_theory: int = Field(default=0, ge=0)
+    hours_practical: int = Field(default=0, ge=0)
+    hours_autonomous: int = Field(default=0, ge=0)
+
+
+class CourseUpdate(BaseModel):
+    parallel_code: Optional[str] = None
+    capacity: Optional[int] = Field(default=None, ge=1)
+    hours_theory: Optional[int] = Field(default=None, ge=0)
+    hours_practical: Optional[int] = Field(default=None, ge=0)
+    hours_autonomous: Optional[int] = Field(default=None, ge=0)
+    status: Optional[str] = None
+    teacher_id: Optional[int] = None
 
 
 class CourseOut(BaseModel):
@@ -20,9 +33,23 @@ class CourseOut(BaseModel):
     term_id: int
     parallel_code: str
     capacity: int
+    hours_theory: int = 0
+    hours_practical: int = 0
+    hours_autonomous: int = 0
     status: str
+    teacher_id: Optional[int] = None
+    hours_total: int = 0
+    hours_attendable: int = 0
 
     model_config = {"from_attributes": True}
+
+
+class CourseRosterStudent(BaseModel):
+    student_id: int
+    student_code: str
+    name: str
+    enrollment_id: int
+    status: str
 
 
 class AssignmentCreate(BaseModel):

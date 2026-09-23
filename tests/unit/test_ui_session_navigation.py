@@ -574,6 +574,34 @@ def test_ui_complete_missing_functions():
 
     reportes = (PAGES / "reportes" / "reportes.html").read_text(encoding="utf-8")
     assert 'value="PDF"' in reportes
+    assert 'value="XLSX"' in reportes
+
+    permisos = PAGES / "usuarios" / "permisos.html"
+    assert permisos.is_file()
+    ph = permisos.read_text(encoding="utf-8")
+    assert 'id="perms-page-tbody"' in ph
+    assert 'id="perm-create-form"' in ph
+
+    roles_html = (PAGES / "usuarios" / "roles.html").read_text(encoding="utf-8")
+    assert 'id="perm-boxes"' in roles_html
+    assert 'id="btn-assign-perms"' in roles_html
+
+    asistencia = (PAGES / "asistencia" / "asistencia.html").read_text(encoding="utf-8")
+    assert 'id="roster-tbody"' in asistencia
+    assert 'id="att-hour"' in asistencia
+    assert 'id="btn-create-session"' in asistencia
+
+    notas_html = (PAGES / "notas" / "notas.html").read_text(encoding="utf-8")
+    assert 'id="gradebook-tbody"' in notas_html
+
+    ejs_lookup = (ASSETS / "js" / "modules" / "catalogos" / "entity.js").read_text(
+        encoding="utf-8"
+    )
+    assert "LOOKUPS" in ejs_lookup
+    assert "hours_theory" in ejs_lookup
+    table_js = (ASSETS / "js" / "components" / "table.js").read_text(encoding="utf-8")
+    assert "formatRef" in table_js
+    assert "makeSearchable" in table_js
 
     rjs_rep = (ASSETS / "js" / "modules" / "reportes" / "reportes.js").read_text(
         encoding="utf-8"

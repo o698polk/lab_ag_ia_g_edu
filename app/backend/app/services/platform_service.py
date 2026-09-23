@@ -45,7 +45,7 @@ REPORT_TYPES = {
     "career": "Reporte por carrera",
 }
 
-VALID_FORMATS = {"HTML", "CSV", "JSON", "PDF"}
+VALID_FORMATS = {"HTML", "CSV", "JSON", "PDF", "XLSX"}
 VALID_NTF_TYPES = {"INFO", "WARNING", "SUCCESS", "ALERT", "SECURITY", "ACADEMIC"}
 
 
@@ -481,6 +481,27 @@ class PlatformService:
             writer.writeheader()
             writer.writerows(rows)
             return buf.getvalue()
+        if format_ == "XLSX":
+            title = REPORT_TYPES.get(report_type, report_type)
+            if not rows:
+                rows = [{"mensaje": "Sin datos"}]
+            headers = list(rows[0].keys())
+
+            def cell(v: object) -> str:
+                text = str(v if v is not None else "").replace("&", "&amp;").replace("<", "&lt;")
+                return f'<Cell><Data ss:Type="String">{text}</Data></Cell>'
+
+            header_row = "<Row>" + "".join(cell(h) for h in headers) + "</Row>"
+            data_rows = "".join(
+                "<Row>" + "".join(cell(row.get(h, "")) for h in headers) + "</Row>" for row in rows
+            )
+            return (
+                '<?xml version="1.0"?>'
+                '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"'
+                ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
+                f"<Worksheet ss:Name=\"{title[:31]}\"><Table>"
+                f"{header_row}{data_rows}</Table></Worksheet></Workbook>"
+            )
         if format_ == "PDF":
             return _render_pdf(rows, REPORT_TYPES.get(report_type, report_type))
         # HTML

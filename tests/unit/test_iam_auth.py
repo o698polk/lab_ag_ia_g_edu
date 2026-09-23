@@ -17,6 +17,50 @@ def test_login_success(client):
 
 
 @pytest.mark.unit
+def test_user_patch_and_permission_crud(client, auth_header):
+    users = client.get("/api/v1/users", headers=auth_header)
+    assert users.status_code == 200
+    admin = next(u for u in users.json() if u["username"] == "admin")
+    patched = client.patch(
+        f"/api/v1/users/{admin['id']}",
+        headers=auth_header,
+        json={"first_name": "Ada", "last_name": "Lovelace", "phone": "099000111"},
+    )
+    assert patched.status_code == 200, patched.text
+    assert patched.json()["first_name"] == "Ada"
+    assert patched.json()["id"] == admin["id"]
+
+    created = client.post(
+        "/api/v1/permissions",
+        headers=auth_header,
+        json={"code": "demo.view", "module": "demo", "description": "Ver demo"},
+    )
+    assert created.status_code == 201, created.text
+    pid = created.json()["id"]
+    upd = client.patch(
+        f"/api/v1/permissions/{pid}",
+        headers=auth_header,
+        json={"description": "Ver demo actualizado"},
+    )
+    assert upd.status_code == 200
+    assert upd.json()["description"] == "Ver demo actualizado"
+
+    role = client.post(
+        "/api/v1/roles",
+        headers=auth_header,
+        json={"code": "COORD", "name": "Coordinador", "description": "Coordina"},
+    )
+    assert role.status_code == 201, role.text
+    meta = client.patch(
+        "/api/v1/roles/COORD",
+        headers=auth_header,
+        json={"description": "Coordinación académica"},
+    )
+    assert meta.status_code == 200
+    assert meta.json()["description"] == "Coordinación académica"
+
+
+@pytest.mark.unit
 def test_login_invalid(client):
     res = client.post(
         "/api/v1/auth/login",

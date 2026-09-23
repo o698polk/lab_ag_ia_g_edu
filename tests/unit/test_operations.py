@@ -178,6 +178,17 @@ def test_schedule_teacher_conflict(client, auth_header):
     assert conflict.status_code == 409
     assert conflict.json()["detail"] == "TEACHER_BUSY"
 
+    deleted = client.delete(
+        f"/api/v1/schedules/{first.json()['id']}",
+        headers=auth_header,
+    )
+    assert deleted.status_code == 204, deleted.text
+    gone = client.delete(
+        f"/api/v1/schedules/{first.json()['id']}",
+        headers=auth_header,
+    )
+    assert gone.status_code == 404
+
 
 @pytest.mark.unit
 def test_closed_term_blocks_course(client, auth_header):

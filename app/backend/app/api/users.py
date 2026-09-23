@@ -15,6 +15,7 @@ from app.schemas.iam import (
     UserCreate,
     UserOut,
     UserStatusUpdate,
+    UserUpdate,
     user_to_out,
 )
 from app.services.auth_service import AuthService
@@ -43,6 +44,9 @@ def create_user(
             email=body.email,
             password=body.password,
             role_codes=body.role_codes,
+            first_name=body.first_name,
+            last_name=body.last_name,
+            phone=body.phone,
         )
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
@@ -59,6 +63,21 @@ def get_user(
         return user_to_out(UserService(db).get_user(user_id))
     except LookupError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+
+
+@router.patch("/{user_id}", response_model=UserOut)
+def update_user(
+    user_id: int,
+    body: UserUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.USERS_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return user_to_out(UserService(db).update_user(user_id, **body.model_dump(exclude_unset=True)))
+    except LookupError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
 
 @router.patch("/{user_id}/status", response_model=UserOut)

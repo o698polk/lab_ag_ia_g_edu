@@ -21,6 +21,7 @@ from app.models import (
     KardexEntry,
     Student,
     Teacher,
+    User,
 )
 from app.services.catalog_service import CatalogService, TermClosedError
 from app.services.operations_service import OperationsService
@@ -214,39 +215,183 @@ class EvaluationService:
             .order_by(Grade.id)
         ).all()
 
+    def gradebook(self, course_id: int, evaluation_id: Optional[int] = None) -> dict:
+        self._course(course_id)
+        grades = {}
+        if evaluation_id:
+            for g in self.db.scalars(
+                select(Grade).where(Grade.evaluation_id == evaluation_id)
+            ).all():
+                grades[g.student_id] = g
+        students = []
+        for row in self.ops.course_roster(course_id):
+            g = grades.get(row["student_id"])
+            students.append(
+                {
+                    "student_id": row["student_id"],
+                    "student_code": row["student_code"],
+                    "name": row["name"],
+                    "attendance_pct": self.attendance_percentage(
+                        course_id=course_id, student_id=row["student_id"]
+                    ),
+                    "score": g.score if g else None,
+                    "grade_id": g.id if g else None,
+                }
+            )
+        return {
+            "course_id": course_id,
+            "evaluation_id": evaluation_id,
+            "students": students,
+        }
+
     # --- Attendance ---
+    def _student_label(self, student_id: int) -> tuple[str, str]:
+        student = self.db.get(Student, student_id)
+        if student is None:
+            return "", f"Estudiante {student_id}"
+        user = self.db.get(User, student.user_id)
+        return student.student_code, (user.full_name if user else student.student_code)
+
+    def _hours_available(self, course: Course) -> list[int]:
+        n = (course.hours_theory or 0) + (course.hours_practical or 0)
+        if n < 1:
+            n = 1
+        return list(range(1, n + 1))
+
+    def _authorize_course_write(
+        self, *, teacher: Optional[Teacher], course: Course, as_admin: bool
+    ) -> None:
+        if as_admin:
+            self.catalog.assert_term_writable(course.term_id)
+            return
+        if teacher is None:
+            raise AuthorizationError("TEACHER_PROFILE_REQUIRED")
+        self._require_teacher_assignment(teacher, course)
+
     def create_attendance_session(
         self,
         *,
-        teacher: Teacher,
+        teacher: Optional[Teacher] = None,
         course_id: int,
         session_date: date,
         topic: Optional[str] = None,
+        hour_slot: int = 1,
+        as_admin: bool = False,
     ) -> AttendanceSession:
         course = self._course(course_id)
-        self._require_teacher_assignment(teacher, course)
+        self._authorize_course_write(teacher=teacher, course=course, as_admin=as_admin)
+        existing = self.db.scalar(
+            select(AttendanceSession).where(
+                AttendanceSession.course_id == course_id,
+                AttendanceSession.session_date == session_date,
+                AttendanceSession.hour_slot == hour_slot,
+            )
+        )
+        if existing:
+            if topic:
+                existing.topic = topic
+                self.db.commit()
+                self.db.refresh(existing)
+            return existing
         session = AttendanceSession(
-            course_id=course_id, session_date=session_date, topic=topic
+            course_id=course_id,
+            session_date=session_date,
+            hour_slot=hour_slot,
+            topic=topic,
         )
         self.db.add(session)
         self.db.commit()
         self.db.refresh(session)
         return session
 
+    def attendance_roster(
+        self, *, course_id: int, session_date: date, hour_slot: int = 1
+    ) -> dict:
+        course = self._course(course_id)
+        session = self.db.scalar(
+            select(AttendanceSession).where(
+                AttendanceSession.course_id == course_id,
+                AttendanceSession.session_date == session_date,
+                AttendanceSession.hour_slot == hour_slot,
+            )
+        )
+        records = {}
+        if session:
+            for rec in self.db.scalars(
+                select(AttendanceRecord).where(AttendanceRecord.session_id == session.id)
+            ).all():
+                records[rec.student_id] = rec
+        students = []
+        for row in self.ops.course_roster(course_id):
+            rec = records.get(row["student_id"])
+            status = rec.status if rec else None
+            students.append(
+                {
+                    "student_id": row["student_id"],
+                    "student_code": row["student_code"],
+                    "name": row["name"],
+                    "status": status,
+                    "notes": rec.notes if rec else None,
+                    "present": status in {"PRESENT", "LATE", "JUSTIFIED"} if status else False,
+                }
+            )
+        return {
+            "course_id": course_id,
+            "session_id": session.id if session else None,
+            "session_date": session_date,
+            "hour_slot": hour_slot,
+            "hours_available": self._hours_available(course),
+            "students": students,
+        }
+
+    def save_attendance_bulk(
+        self,
+        *,
+        teacher: Optional[Teacher] = None,
+        course_id: int,
+        session_date: date,
+        hour_slot: int,
+        records: list[dict],
+        as_admin: bool = False,
+    ) -> dict:
+        session = self.create_attendance_session(
+            teacher=teacher,
+            course_id=course_id,
+            session_date=session_date,
+            hour_slot=hour_slot,
+            as_admin=as_admin,
+        )
+        saved = []
+        for item in records:
+            saved.append(
+                self.mark_attendance(
+                    teacher=teacher,
+                    session_id=session.id,
+                    student_id=item["student_id"],
+                    status=item.get("status") or "PRESENT",
+                    notes=item.get("notes"),
+                    as_admin=as_admin,
+                )
+            )
+        return self.attendance_roster(
+            course_id=course_id, session_date=session_date, hour_slot=hour_slot
+        )
+
     def mark_attendance(
         self,
         *,
-        teacher: Teacher,
+        teacher: Optional[Teacher] = None,
         session_id: int,
         student_id: int,
         status: str,
         notes: Optional[str] = None,
+        as_admin: bool = False,
     ) -> AttendanceRecord:
         session = self.db.get(AttendanceSession, session_id)
         if session is None:
             raise LookupError("ATTENDANCE_SESSION_NOT_FOUND")
         course = self._course(session.course_id)
-        self._require_teacher_assignment(teacher, course)
+        self._authorize_course_write(teacher=teacher, course=course, as_admin=as_admin)
         if status not in self.VALID_ATTENDANCE:
             raise ValueError("INVALID_ATTENDANCE_STATUS")
         enrolled = self.db.scalar(

@@ -18,6 +18,8 @@ from app.schemas.operations import (
     ClassroomOut,
     CourseCreate,
     CourseOut,
+    CourseRosterStudent,
+    CourseUpdate,
     EnrollmentCreate,
     EnrollmentOut,
     ScheduleCreate,
@@ -31,6 +33,27 @@ from app.services.operations_service import (
 )
 
 router = APIRouter(tags=["operations"])
+
+
+def _course_out(svc: OperationsService, course) -> CourseOut:
+    theory = getattr(course, "hours_theory", 0) or 0
+    practical = getattr(course, "hours_practical", 0) or 0
+    autonomous = getattr(course, "hours_autonomous", 0) or 0
+    attendable = theory + practical
+    return CourseOut(
+        id=course.id,
+        subject_id=course.subject_id,
+        term_id=course.term_id,
+        parallel_code=course.parallel_code,
+        capacity=course.capacity,
+        hours_theory=theory,
+        hours_practical=practical,
+        hours_autonomous=autonomous,
+        status=course.status,
+        teacher_id=svc.course_teacher_id(course.id),
+        hours_total=theory + practical + autonomous,
+        hours_attendable=attendable if attendable > 0 else 1,
+    )
 
 
 def _map_err(exc: Exception) -> HTTPException:
@@ -56,7 +79,8 @@ def list_courses(
     db: Annotated[Session, Depends(get_db)],
     term_id: Optional[int] = Query(default=None),
 ):
-    return OperationsService(db).list_courses(term_id=term_id)
+    svc = OperationsService(db)
+    return [_course_out(svc, c) for c in svc.list_courses(term_id=term_id)]
 
 
 @router.post("/courses", response_model=CourseOut, status_code=201)
@@ -66,7 +90,8 @@ def create_course(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        return OperationsService(db).create_course(**body.model_dump())
+        svc = OperationsService(db)
+        return _course_out(svc, svc.create_course(**body.model_dump()))
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -79,7 +104,34 @@ def set_course_status(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        return OperationsService(db).set_course_status(course_id, body.status)
+        svc = OperationsService(db)
+        return _course_out(svc, svc.set_course_status(course_id, body.status))
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.patch("/courses/{course_id}", response_model=CourseOut)
+def update_course(
+    course_id: int,
+    body: CourseUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.COURSES_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        svc = OperationsService(db)
+        return _course_out(svc, svc.update_course(course_id, **body.model_dump(exclude_unset=True)))
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.get("/courses/{course_id}/roster", response_model=List[CourseRosterStudent])
+def course_roster(
+    course_id: int,
+    _: Annotated[CurrentUser, Depends(require_permission(P.ENROLLMENTS_VIEW))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return OperationsService(db).course_roster(course_id)
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -209,3 +261,16 @@ def create_schedule(
         return OperationsService(db).create_schedule(**body.model_dump())
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
+
+
+@router.delete("/schedules/{schedule_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_schedule(
+    schedule_id: int,
+    _: Annotated[CurrentUser, Depends(require_permission(P.SCHEDULES_DELETE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        OperationsService(db).delete_schedule(schedule_id)
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+    return None

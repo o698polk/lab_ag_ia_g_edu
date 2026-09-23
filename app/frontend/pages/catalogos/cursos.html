@@ -99,13 +99,13 @@
           <form id="catalog-create-form" class="row g-2 align-items-end" novalidate>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-subject_id">Subject id</label>
-              <input id="f-subject_id" name="subject_id" type="number" class="form-control" data-field="subject_id" required />
+              <label class="form-label" for="f-subject_id">Asignatura</label>
+              <select id="f-subject_id" name="subject_id" class="form-select" data-field="subject_id" required></select>
             </div>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-term_id">Term id</label>
-              <input id="f-term_id" name="term_id" type="number" class="form-control" data-field="term_id" required />
+              <label class="form-label" for="f-term_id">Periodo</label>
+              <select id="f-term_id" name="term_id" class="form-select" data-field="term_id" required></select>
             </div>
 
             <div class="col-md-3">
@@ -118,6 +118,30 @@
               <input id="f-capacity" name="capacity" type="number" class="form-control" data-field="capacity" />
             </div>
             <div class="col-md-3">
+              <label class="form-label" for="f-teacher_id">Docente</label>
+              <select id="f-teacher_id" name="teacher_id" class="form-select" data-field="teacher_id"></select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-hours_theory">Horas teoría-práctica</label>
+              <input id="f-hours_theory" name="hours_theory" type="number" min="0" class="form-control" data-field="hours_theory" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-hours_practical">Horas práctico-experimental</label>
+              <input id="f-hours_practical" name="hours_practical" type="number" min="0" class="form-control" data-field="hours_practical" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-hours_autonomous">Horas trabajo autónomo</label>
+              <input id="f-hours_autonomous" name="hours_autonomous" type="number" min="0" class="form-control" data-field="hours_autonomous" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="f-status">Estado</label>
+              <select id="f-status" name="status" class="form-select" data-field="status">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+                <option value="PLANNED">PLANNED</option>
+              </select>
+            </div>
+            <div class="col-md-3">
               <button type="submit" class="btn btn-siga w-100">Crear</button>
             </div>
           </form>
@@ -128,7 +152,7 @@
           <p class="empty-state mb-0" data-empty>Cargando…</p>
           <table class="table table-sm table-hover align-middle data-table">
             <thead>
-              <tr><th scope="col">Id</th><th scope="col">Materia</th><th scope="col">Periodo</th><th scope="col">Paralelo</th><th scope="col">Cupo</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr>
+              <tr><th scope="col">Id</th><th scope="col">Código</th><th scope="col">Curso</th><th scope="col">Docente</th><th scope="col">Periodo</th><th scope="col">Carga horaria</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr>
             </thead>
             <tbody id="catalog-tbody"></tbody>
           </table>

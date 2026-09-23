@@ -30,16 +30,91 @@ class RoleService:
 
     PROTECTED = {"ADMINISTRATOR", "TEACHER", "STUDENT"}
 
-    def create_role(self, code: str, name: str) -> Role:
+    def create_role(self, code: str, name: str, description: str = "") -> Role:
         code = code.strip().upper()
         existing = self.roles.get_by_code(code)
         if existing is not None:
             raise ValueError("ROLE_EXISTS")
-        role = Role(code=code, name=name.strip(), is_active=True)
+        role = Role(
+            code=code,
+            name=name.strip(),
+            description=(description or "").strip(),
+            is_active=True,
+        )
         self.db.add(role)
         self.db.commit()
         self.db.refresh(role)
         return role
+
+    def update_role(
+        self,
+        role_code: str,
+        *,
+        name: str | None = None,
+        description: str | None = None,
+        is_active: bool | None = None,
+    ) -> Role:
+        role = self.roles.get_by_code(role_code)
+        if role is None:
+            raise LookupError("ROLE_NOT_FOUND")
+        if name is not None:
+            role.name = name.strip()
+        if description is not None:
+            role.description = description.strip()
+        if is_active is not None:
+            if role.code in self.PROTECTED and not is_active:
+                raise ValueError("ROLE_PROTECTED")
+            role.is_active = is_active
+        self.db.commit()
+        self.db.refresh(role)
+        return role
+
+    def create_permission(self, code: str, description: str = "", module: str = "general") -> Permission:
+        code = code.strip().lower()
+        if self.roles.get_permission_by_code(code):
+            raise ValueError("PERMISSION_EXISTS")
+        perm = Permission(
+            code=code,
+            description=(description or "").strip(),
+            module=(module or "general").strip().lower(),
+            is_active=True,
+        )
+        self.db.add(perm)
+        self.db.commit()
+        self.db.refresh(perm)
+        return perm
+
+    def update_permission(
+        self,
+        permission_id: int,
+        *,
+        description: str | None = None,
+        module: str | None = None,
+        is_active: bool | None = None,
+    ) -> Permission:
+        perm = self.db.get(Permission, permission_id)
+        if perm is None:
+            raise LookupError("PERMISSION_NOT_FOUND")
+        if description is not None:
+            perm.description = description.strip()
+        if module is not None:
+            perm.module = module.strip().lower()
+        if is_active is not None:
+            perm.is_active = is_active
+        self.db.commit()
+        self.db.refresh(perm)
+        return perm
+
+    def deactivate_permission(self, permission_id: int) -> Permission:
+        perm = self.db.get(Permission, permission_id)
+        if perm is None:
+            raise LookupError("PERMISSION_NOT_FOUND")
+        if perm.code.endswith(".view") and perm.module in {"users", "roles", "permissions"}:
+            raise ValueError("PERMISSION_PROTECTED")
+        perm.is_active = False
+        self.db.commit()
+        self.db.refresh(perm)
+        return perm
 
     def deactivate_role(self, role_code: str) -> Role:
         role = self.roles.get_by_code(role_code)

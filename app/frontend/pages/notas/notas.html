@@ -90,8 +90,38 @@
             </div>
           </div>
           <p class="cascade-path mt-3 mb-0" id="cascade-path" aria-live="polite">Sin curso seleccionado.</p>
-          <div class="d-flex flex-wrap gap-2 mt-3">
-            <button type="button" class="btn btn-siga" id="btn-course-grades" disabled>Ver notas del curso</button>
+          <div class="row g-2 mt-3">
+            <div class="col-md-4">
+              <label class="form-label" for="filter-eval">Componente / actividad</label>
+              <select id="filter-eval" class="form-select">
+                <option value="">Selecciona evaluación</option>
+              </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end gap-2">
+              <button type="button" class="btn btn-siga" id="btn-course-grades" disabled>Ver notas del curso</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-load-gradebook">Cargar acta</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="table-wrap mb-3" id="gradebook-wrap" data-roles="TEACHER,ADMINISTRATOR" aria-labelledby="gradebook-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="gradebook-title" class="section-title mb-0">Acta de calificaciones</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Seleccione curso y componente para editar notas en la tabla.</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Estudiante</th>
+                <th scope="col">Asistencia</th>
+                <th scope="col">Calificación</th>
+              </tr>
+            </thead>
+            <tbody id="gradebook-tbody"></tbody>
+          </table>
+          <div class="admin-pager px-3 py-2">
+            <button type="button" class="btn btn-siga" id="btn-save-gradebook" disabled>Guardar calificaciones</button>
           </div>
         </section>
 
@@ -150,16 +180,16 @@
           <h3 id="kx-title">Registrar kardex</h3>
           <div class="row g-2 align-items-end">
             <div class="col-md-2">
-              <label class="form-label" for="kx-student">Estudiante (id)</label>
-              <input id="kx-student" type="number" class="form-control" min="1" />
+              <label class="form-label" for="kx-student">Estudiante</label>
+              <select id="kx-student" class="form-select"></select>
             </div>
             <div class="col-md-2">
-              <label class="form-label" for="kx-term">Periodo (id)</label>
-              <input id="kx-term" type="number" class="form-control" min="1" />
+              <label class="form-label" for="kx-term">Periodo</label>
+              <select id="kx-term" class="form-select"></select>
             </div>
             <div class="col-md-2">
-              <label class="form-label" for="kx-subject">Asignatura (id)</label>
-              <input id="kx-subject" type="number" class="form-control" min="1" />
+              <label class="form-label" for="kx-subject">Asignatura</label>
+              <select id="kx-subject" class="form-select"></select>
             </div>
             <div class="col-md-2">
               <label class="form-label" for="kx-grade">Nota final</label>

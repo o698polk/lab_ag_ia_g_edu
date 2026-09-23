@@ -50,15 +50,63 @@ class AttendanceSessionCreate(BaseModel):
     course_id: int
     session_date: date
     topic: Optional[str] = None
+    hour_slot: int = Field(default=1, ge=1)
 
 
 class AttendanceSessionOut(BaseModel):
     id: int
     course_id: int
     session_date: date
+    hour_slot: int = 1
     topic: Optional[str] = None
 
     model_config = {"from_attributes": True}
+
+
+class AttendanceRosterStudent(BaseModel):
+    student_id: int
+    student_code: str
+    name: str
+    status: Optional[str] = None
+    notes: Optional[str] = None
+    present: bool = False
+
+
+class AttendanceRosterOut(BaseModel):
+    course_id: int
+    session_id: Optional[int] = None
+    session_date: date
+    hour_slot: int
+    hours_available: list[int]
+    students: list[AttendanceRosterStudent]
+
+
+class AttendanceBulkItem(BaseModel):
+    student_id: int
+    status: str = "PRESENT"
+    notes: Optional[str] = None
+
+
+class AttendanceBulkRequest(BaseModel):
+    course_id: int
+    session_date: date
+    hour_slot: int = Field(default=1, ge=1)
+    records: list[AttendanceBulkItem]
+
+
+class GradebookRow(BaseModel):
+    student_id: int
+    student_code: str
+    name: str
+    attendance_pct: float
+    score: Optional[Decimal] = None
+    grade_id: Optional[int] = None
+
+
+class GradebookOut(BaseModel):
+    course_id: int
+    evaluation_id: Optional[int] = None
+    students: list[GradebookRow]
 
 
 class AttendanceMark(BaseModel):

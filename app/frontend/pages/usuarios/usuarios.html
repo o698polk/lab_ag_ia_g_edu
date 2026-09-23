@@ -41,7 +41,8 @@
   <p class="side-section" data-roles="ADMINISTRATOR">IAM</p>
   <nav class="side-nav side-nav-sub" data-roles="ADMINISTRATOR">
     <a class="side-link active" href="/ui/pages/usuarios/usuarios.html">Usuarios</a>
-    <a class="side-link" href="/ui/pages/usuarios/roles.html">Roles y permisos</a>
+    <a class="side-link" href="/ui/pages/usuarios/roles.html">Roles</a>
+    <a class="side-link" href="/ui/pages/usuarios/permisos.html">Permisos</a>
   </nav>
 </aside>
 
@@ -81,28 +82,33 @@
         <section class="card-soft mb-3 d-none" aria-labelledby="create-user-title">
           <h3 id="create-user-title">Alta de usuario</h3>
           <form id="user-create-form" class="row g-2 align-items-end" novalidate>
-            <div class="col-md-3">
-              <label class="form-label" for="u-username">Usuario</label>
+            <div class="col-md-4">
+              <label class="form-label req" for="u-first-name">Nombres</label>
+              <input id="u-first-name" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label req" for="u-last-name">Apellidos</label>
+              <input id="u-last-name" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label req" for="u-username">Usuario</label>
               <input id="u-username" class="form-control" required minlength="3" />
             </div>
-            <div class="col-md-3">
-              <label class="form-label" for="u-email">Correo</label>
+            <div class="col-md-4">
+              <label class="form-label req" for="u-email">Correo</label>
               <input id="u-email" type="email" class="form-control" required />
             </div>
-            <div class="col-md-2">
-              <label class="form-label" for="u-password">Contraseña</label>
+            <div class="col-md-4">
+              <label class="form-label" for="u-phone">Teléfono</label>
+              <input id="u-phone" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label req" for="u-password">Contraseña</label>
               <input id="u-password" type="password" class="form-control" required minlength="8" />
             </div>
-            <div class="col-md-2">
-              <label class="form-label" for="u-role">Rol</label>
-              <select id="u-role" class="form-select">
-                <option value="STUDENT">STUDENT</option>
-                <option value="TEACHER">TEACHER</option>
-                <option value="ADMINISTRATOR">ADMINISTRATOR</option>
-              </select>
-            </div>
-            <div class="col-md-2">
-              <button type="submit" class="btn btn-siga w-100">Registrar</button>
+            <div class="col-md-4">
+              <label class="form-label req" for="u-role">Rol</label>
+              <select id="u-role" class="form-select"></select>
             </div>
           </form>
           <p id="user-create-out" class="hint mt-2 mb-0"></p>
@@ -112,10 +118,30 @@
           <h3 id="manage-title">Gestionar usuario</h3>
           <div class="row g-2 align-items-end">
             <div class="col-md-2">
-              <label class="form-label" for="m-user-id">User id</label>
-              <input id="m-user-id" type="number" class="form-control" min="1" />
+              <label class="form-label" for="m-user-id">ID</label>
+              <input id="m-user-id" type="number" class="form-control" min="1" readonly />
             </div>
-            <div class="col-md-2">
+            <div class="col-md-5">
+              <label class="form-label" for="m-first-name">Nombres</label>
+              <input id="m-first-name" class="form-control" />
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="m-last-name">Apellidos</label>
+              <input id="m-last-name" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="m-username">Usuario</label>
+              <input id="m-username" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="m-email">Correo</label>
+              <input id="m-email" type="email" class="form-control" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="m-phone">Teléfono</label>
+              <input id="m-phone" class="form-control" />
+            </div>
+            <div class="col-md-3">
               <label class="form-label" for="m-status">Estado</label>
               <select id="m-status" class="form-select">
                 <option value="ACTIVE">ACTIVE</option>
@@ -123,11 +149,12 @@
                 <option value="LOCKED">LOCKED</option>
               </select>
             </div>
-            <div class="col-md-3">
-              <label class="form-label" for="m-roles">Roles (coma)</label>
-              <input id="m-roles" class="form-control" placeholder="STUDENT,TEACHER" />
+            <div class="col-md-5">
+              <label class="form-label" for="m-roles">Rol</label>
+              <select id="m-roles" class="form-select"></select>
             </div>
-            <div class="col-md-5 d-flex flex-wrap gap-2">
+            <div class="col-md-4 d-flex flex-wrap gap-2">
+              <button type="button" class="btn btn-siga" id="btn-user-save">Guardar cambios</button>
               <button type="button" class="btn btn-outline-secondary" id="btn-user-status">Cambiar estado</button>
               <button type="button" class="btn btn-outline-secondary" id="btn-user-roles">Asignar roles</button>
               <button type="button" class="btn btn-outline-secondary" id="btn-user-delete">Baja lógica</button>
@@ -146,10 +173,14 @@
             <thead>
               <tr>
                 <th scope="col">Id</th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Apellidos</th>
                 <th scope="col">Usuario</th>
                 <th scope="col">Correo</th>
+                <th scope="col">Teléfono</th>
                 <th scope="col">Estado</th>
-                <th scope="col">Roles</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Creación</th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>

@@ -11,10 +11,58 @@
     return;
   }
 
-  const ROLE_COLS = ["id", "code", "name", "is_active", "permissions"];
-  const PERM_COLS = ["id", "code", "module", "description"];
+  const ROLE_COLS = ["id", "name", "description", "users_count", "is_active"];
+  const PERM_COLS = ["id", "name", "code", "module", "description", "is_active"];
   const el = (id) => document.getElementById(id);
   let rolesCache = [];
+  let allPerms = [];
+
+  function paintPermBoxes(selected) {
+    const host = el("perm-boxes");
+    if (!host) return;
+    const sel = new Set(selected || []);
+    const groups = {};
+    allPerms.forEach((p) => {
+      const mod = p.module || "general";
+      if (!groups[mod]) groups[mod] = [];
+      groups[mod].push(p);
+    });
+    host.innerHTML = Object.keys(groups)
+      .sort()
+      .map((mod) => {
+        const items = groups[mod]
+          .map((p) => {
+            const checked = sel.has(p.code) ? " checked" : "";
+            return (
+              '<div class="form-check"><input class="form-check-input" type="checkbox" data-perm="' +
+              SigaModal.escapeHtml(p.code) +
+              '" id="perm-' +
+              p.id +
+              '"' +
+              checked +
+              ' /><label class="form-check-label" for="perm-' +
+              p.id +
+              '">' +
+              SigaModal.escapeHtml(SigaTable.formatRef(p.id, p.description || p.name || p.code)) +
+              "</label></div>"
+            );
+          })
+          .join("");
+        return '<p class="perm-mod">' + SigaModal.escapeHtml(mod) + "</p>" + items;
+      })
+      .join("");
+    host.querySelectorAll("[data-perm]").forEach((box) => {
+      box.addEventListener("change", syncPermCodes);
+    });
+    syncPermCodes();
+  }
+
+  function syncPermCodes() {
+    const codes = [...document.querySelectorAll("#perm-boxes [data-perm]:checked")].map((b) =>
+      b.getAttribute("data-perm")
+    );
+    if (el("perm-codes")) el("perm-codes").value = codes.join(", ");
+  }
   const permsTable = SigaAdminTable.bind({
     tbody: el("perms-tbody"),
     columns: PERM_COLS,
@@ -35,7 +83,7 @@
     columns: ROLE_COLS,
     searchInput: el("admin-search"),
     pager: el("admin-pager"),
-    actions: () => SigaAdminTable.actionButtons(["view", "edit", "del"]),
+    actions: () => SigaAdminTable.actionButtons(["view", "edit", "perms", "del"]),
     onAction: (act, row) => {
       if (!row) return;
       if (el("role-code")) el("role-code").value = row.code;
@@ -85,15 +133,20 @@
       id: r.id,
       code: r.code,
       name: r.name,
-      is_active: r.is_active ? "sí" : "no",
+      description: r.description || "",
+      users_count: r.users_count ?? 0,
+      is_active: r.is_active ? "ACTIVE" : "INACTIVE",
       permissions: (r.permissions || []).join(", "),
     }));
     table.setRows(rows);
-    fillSelect(el("role-code"), rolesCache, (r) => r.code + " — " + r.name, (r) => r.code);
+    fillSelect(el("role-code"), rolesCache, (r) => SigaTable.formatRef(r.id, r.name || r.code), (r) => r.id);
     const selected = el("role-code")?.value;
-    const role = rolesCache.find((r) => r.code === selected);
-    if (role && el("perm-codes")) {
-      el("perm-codes").value = (role.permissions || []).join(", ");
+    const role = rolesCache.find((r) => String(r.id) === String(selected) || r.code === selected);
+    if (role) {
+      if (el("perm-codes")) el("perm-codes").value = (role.permissions || []).join(", ");
+      if (el("edit-role-name")) el("edit-role-name").value = role.name || "";
+      if (el("edit-role-desc")) el("edit-role-desc").value = role.description || "";
+      paintPermBoxes(role.permissions || []);
     }
   }
 
@@ -104,11 +157,24 @@
       permsTable.setRows([]);
       return;
     }
-    permsTable.setRows(Array.isArray(data) ? data : []);
+    allPerms = Array.isArray(data) ? data : [];
+    permsTable.setRows(
+      allPerms.map((p) => ({
+        ...p,
+        name: p.description || p.code,
+        is_active: p.is_active === false ? "INACTIVE" : "ACTIVE",
+      }))
+    );
+    const selected = el("role-code")
+      ? (rolesCache.find((r) => String(r.id) === String(el("role-code").value) || r.code === el("role-code").value) || {}).permissions || []
+      : [];
+    paintPermBoxes(selected);
   }
 
   async function assignPermissions() {
-    const role_code = el("role-code")?.value;
+    const picked = rolesCache.find((r) => String(r.id) === String(el("role-code")?.value) || r.code === el("role-code")?.value);
+    const role_code = picked ? picked.code : el("role-code")?.value;
+    syncPermCodes();
     const permission_codes = (el("perm-codes")?.value || "")
       .split(",")
       .map((c) => c.trim())
@@ -129,11 +195,36 @@
     if (ok) await loadRoles();
   }
 
+  function slugCode(name) {
+    return String(name || "")
+      .toUpperCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^A-Z0-9]+/g, "_")
+      .replace(/^_|_$/g, "")
+      .slice(0, 64);
+  }
+
+  async function saveRoleMeta() {
+    const picked = rolesCache.find((r) => String(r.id) === String(el("role-code")?.value) || r.code === el("role-code")?.value);
+    const code = picked ? picked.code : el("role-code")?.value;
+    if (!code) return;
+    const { ok, data } = await api("PATCH", "/roles/" + encodeURIComponent(code), {
+      name: (el("edit-role-name")?.value || "").trim() || undefined,
+      description: (el("edit-role-desc")?.value || "").trim(),
+    });
+    if (!ok) toast(formatError(data), "bad");
+  }
+
   async function createRole(ev) {
     ev.preventDefault();
+    const name = (el("new-role-name")?.value || "").trim();
+    const code = (el("new-role-code")?.value || "").trim() || slugCode(name);
+    if (el("new-role-code")) el("new-role-code").value = code;
     const body = {
-      code: (el("new-role-code")?.value || "").trim(),
-      name: (el("new-role-name")?.value || "").trim(),
+      code,
+      name,
+      description: (el("new-role-desc")?.value || "").trim(),
     };
     const { ok, data } = await api("POST", "/roles", body);
     const msg = ok ? "Registro creado correctamente." : formatError(data);
@@ -147,7 +238,8 @@
   }
 
   async function deactivateRole() {
-    const code = el("role-code")?.value || (el("new-role-code")?.value || "").trim();
+    const picked = rolesCache.find((r) => String(r.id) === String(el("role-code")?.value) || r.code === el("role-code")?.value);
+    const code = (picked && picked.code) || el("role-code")?.value || (el("new-role-code")?.value || "").trim();
     if (!code) {
       toast("Selecciona un rol.", "bad");
       return;
@@ -180,8 +272,16 @@
   });
   el("btn-assign-perms")?.addEventListener("click", () => assignPermissions());
   el("role-code")?.addEventListener("change", () => {
-    const role = rolesCache.find((r) => r.code === el("role-code").value);
-    if (role && el("perm-codes")) el("perm-codes").value = (role.permissions || []).join(", ");
+    const role = rolesCache.find((r) => String(r.id) === String(el("role-code").value) || r.code === el("role-code").value);
+    if (role) {
+      if (el("edit-role-name")) el("edit-role-name").value = role.name || "";
+      if (el("edit-role-desc")) el("edit-role-desc").value = role.description || "";
+      paintPermBoxes(role.permissions || []);
+    }
+  });
+  el("new-role-name")?.addEventListener("input", () => {
+    if (!el("new-role-code") || el("new-role-code").dataset.locked === "1") return;
+    el("new-role-code").value = slugCode(el("new-role-name").value);
   });
 
   await Promise.all([loadRoles(), loadPermissions()]);

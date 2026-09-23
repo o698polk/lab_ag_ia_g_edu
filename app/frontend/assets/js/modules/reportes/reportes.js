@@ -3,7 +3,7 @@
 (async function () {
   if (!(await SigaAuth.requireAuth())) return;
   const { api, formatError, state } = SigaApi;
-  const { fillTbody, escapeHtml, COL_LABEL } = SigaTable;
+  const { fillTbody, escapeHtml, COL_LABEL, formatRef } = SigaTable;
   const toast = SigaToast.toast;
   const roles = (state.user && state.user.roles) || [];
   if (!roles.includes("TEACHER") && !roles.includes("ADMINISTRATOR")) {
@@ -17,7 +17,8 @@
     ops: ["enrollments", "teacher_load"],
   };
 
-  const LOG_COLS = ["id", "user_id", "report_type", "format", "result_status", "row_count", "created_at"];
+  const LOG_COLS = ["id", "user", "report_type", "format", "result_status", "row_count", "created_at"];
+  const userIndex = {};
   const el = (id) => document.getElementById(id);
   let catalog = [];
   const catalogTable = SigaAdminTable.bind({
@@ -187,6 +188,31 @@
       return;
     }
 
+    if (format === "XLSX") {
+      if (pre) pre.textContent = "Excel generado (" + (content ? content.length : 0) + " bytes). Use Descargar.";
+      let btn = document.getElementById("btn-download-xlsx");
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.id = "btn-download-xlsx";
+        btn.type = "button";
+        btn.className = "btn btn-sm btn-outline-secondary mt-2";
+        btn.textContent = "Descargar Excel";
+        pre?.insertAdjacentElement("afterend", btn);
+      }
+      btn.onclick = () => {
+        const bytes = new Uint8Array(content.length);
+        for (let i = 0; i < content.length; i += 1) bytes[i] = content.charCodeAt(i) & 0xff;
+        const blob = new Blob([bytes], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "reporte-siga.xlsx";
+        a.click();
+      };
+      return;
+    }
+
     if (format === "PDF") {
       if (pre) pre.textContent = "PDF generado (" + (content ? content.length : 0) + " bytes). Usa Descargar.";
       let btn = document.getElementById("btn-download-pdf");
@@ -278,6 +304,7 @@
     const rows = (Array.isArray(data) ? data : []).map((r) => ({
       id: r.id,
       user_id: r.user_id,
+      user: userIndex[r.user_id] || formatRef(r.user_id, "Usuario"),
       report_type: r.report_type,
       format: r.format,
       result_status: r.result_status,
@@ -292,6 +319,48 @@
   el("btn-report-logs")?.addEventListener("click", () => loadReportLogs());
   el("report-type")?.addEventListener("change", () => selectType(el("report-type").value));
 
+  async function fillReportLookups() {
+    const [terms, students, users] = await Promise.all([
+      api("GET", "/terms"),
+      api("GET", "/students"),
+      api("GET", "/users"),
+    ]);
+    const termItems = terms.ok && Array.isArray(terms.data) ? terms.data : [];
+    const studentItems = students.ok && Array.isArray(students.data) ? students.data : [];
+    const userItems = users.ok && Array.isArray(users.data) ? users.data : [];
+    userItems.forEach((u) => {
+      const name =
+        [u.first_name, u.last_name].filter(Boolean).join(" ").trim() || u.full_name || u.username || "Usuario";
+      userIndex[u.id] = formatRef(u.id, name);
+    });
+    const termSel = el("param-term-id");
+    const studentSel = el("param-student-id");
+    if (termSel && termSel.tagName === "SELECT") {
+      termSel.innerHTML =
+        '<option value="">Opcional</option>' +
+        termItems
+          .map((t) => '<option value="' + t.id + '">' + escapeHtml(formatRef(t.id, (t.code || "") + " — " + (t.name || ""))) + "</option>")
+          .join("");
+    }
+    if (studentSel && studentSel.tagName === "SELECT") {
+      studentSel.innerHTML =
+        '<option value="">Opcional</option>' +
+        studentItems
+          .map((s) => {
+            const user = userItems.find((u) => Number(u.id) === Number(s.user_id));
+            const name = user
+              ? [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || user.full_name || user.username
+              : "";
+            const label = formatRef(s.id, name || s.student_code || "Estudiante");
+            return '<option value="' + s.id + '">' + escapeHtml(label) + "</option>";
+          })
+          .join("");
+    }
+    SigaTable.makeSearchable(termSel);
+    SigaTable.makeSearchable(studentSel);
+  }
+
   await loadCatalog();
+  await fillReportLookups();
   await loadReportLogs();
 })();

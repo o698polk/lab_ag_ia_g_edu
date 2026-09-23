@@ -118,3 +118,18 @@
 .side-link { border-radius: 4px; }
 .btn-danger-admin { background: #9b2c2c; border-color: #9b2c2c; color: #fff; }
 .btn-danger-admin:hover { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }
+.perm-boxes { max-height: 280px; overflow: auto; border: 1px solid var(--line); padding: 0.6rem 0.75rem; background: #fff; }
+.perm-mod { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; margin: 0.45rem 0 0.2rem; color: #334155; }
+.perm-boxes .form-check { margin-bottom: 0.15rem; }
+.grade-input { width: 5.5rem; min-height: 30px; }
+.day-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.day-boxes .form-check { margin: 0; }
+.siga-lookup { display: flex; flex-direction: column; gap: 0.3rem; }
+.siga-lookup-search { font-size: 0.8rem; }

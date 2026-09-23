@@ -99,8 +99,8 @@
           <form id="catalog-create-form" class="row g-2 align-items-end" novalidate>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-career_id">Carrera (id)</label>
-              <input id="f-career_id" name="career_id" type="number" class="form-control" data-field="career_id" required />
+              <label class="form-label" for="f-career_id">Carrera</label>
+              <select id="f-career_id" name="career_id" class="form-select" data-field="career_id" required></select>
             </div>
 
             <div class="col-md-3">
@@ -118,8 +118,8 @@
           <div class="card-soft mt-3 d-none admin-extra">
             <h3>Agregar asignatura a malla</h3>
             <div class="row g-2 align-items-end">
-              <div class="col-md-2"><label class="form-label" for="cur-id">Malla (id)</label><input id="cur-id" type="number" class="form-control" min="1" /></div>
-              <div class="col-md-2"><label class="form-label" for="cur-subject-id">Asignatura (id)</label><input id="cur-subject-id" type="number" class="form-control" min="1" /></div>
+              <div class="col-md-2"><label class="form-label" for="cur-id">Malla</label><select id="cur-id" class="form-select"></select></div>
+              <div class="col-md-2"><label class="form-label" for="cur-subject-id">Asignatura</label><select id="cur-subject-id" class="form-select"></select></div>
               <div class="col-md-2"><label class="form-label" for="cur-level">Nivel</label><input id="cur-level" type="number" class="form-control" value="1" /></div>
               <div class="col-md-2"><label class="form-label" for="cur-semester">Semestre</label><input id="cur-semester" type="number" class="form-control" value="1" /></div>
               <div class="col-md-3"><button type="button" class="btn btn-outline-secondary" id="btn-cur-subject">Agregar</button></div>

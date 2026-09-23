@@ -22,6 +22,9 @@ async function requireAuth() {
   if (window.SigaNav && typeof SigaNav.ensureAdminNav === "function") {
     SigaNav.ensureAdminNav(me.data);
   }
+  if (window.SigaNav && typeof SigaNav.ensureIamNav === "function") {
+    SigaNav.ensureIamNav(me.data);
+  }
   if (window.SigaNav && typeof SigaNav.ensureSeguridadNav === "function") {
     SigaNav.ensureSeguridadNav(me.data);
   }

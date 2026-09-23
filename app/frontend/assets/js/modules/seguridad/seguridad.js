@@ -1,4 +1,4 @@
-/* global SigaApi, SigaAuth, SigaToast, SigaModal, SigaAdminTable */
+/* global SigaApi, SigaAuth, SigaToast, SigaModal, SigaAdminTable, SigaTable */
 (async function () {
   if (!(await SigaAuth.requireAuth())) return;
   const { api, formatError, state } = SigaApi;
@@ -52,16 +52,21 @@
   );
   const auditTable = bindView(
     el("audit-tbody"),
-    ["id", "request_id", "user_id", "action", "module", "status", "reason", "created_at"],
+    ["id", "request_id", "user", "action", "module", "status", "reason", "created_at"],
     el("pager-audit"),
     "id"
   );
   const secTable = bindView(
     el("security-tbody"),
-    ["id", "request_id", "user_id", "event_type", "severity", "created_at"],
+    ["id", "request_id", "user", "event_type", "severity", "created_at"],
     el("pager-security"),
     "id"
   );
+  let userIndex = {};
+
+  function userLabel(id) {
+    return userIndex[id] || SigaTable.formatRef(id, "Usuario");
+  }
 
   function fmtDate(v) {
     return v ? String(v).replace("T", " ").slice(0, 19) : "";
@@ -105,6 +110,7 @@
       id: r.id,
       request_id: r.request_id,
       user_id: r.user_id,
+      user: userLabel(r.user_id),
       action: r.action,
       module: r.module,
       status: r.status,
@@ -125,6 +131,7 @@
       id: r.id,
       request_id: r.request_id,
       user_id: r.user_id,
+      user: userLabel(r.user_id),
       event_type: r.event_type,
       severity: r.severity,
       created_at: fmtDate(r.created_at),
@@ -132,7 +139,19 @@
     secTable.setRows(rows);
   }
 
+  async function loadUsers() {
+    const { ok, data } = await api("GET", "/users");
+    userIndex = {};
+    if (!ok || !Array.isArray(data)) return;
+    data.forEach((u) => {
+      const name =
+        [u.first_name, u.last_name].filter(Boolean).join(" ").trim() || u.full_name || u.username || "Usuario";
+      userIndex[u.id] = SigaTable.formatRef(u.id, name);
+    });
+  }
+
   async function refreshAll() {
+    await loadUsers();
     await Promise.all([loadPolicies(), loadTools(), loadAudit(), loadSecurity()]);
   }
 

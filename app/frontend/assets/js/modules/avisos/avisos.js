@@ -1,4 +1,4 @@
-/* global SigaApi, SigaAuth, SigaToast, SigaModal, SigaAdminTable */
+/* global SigaApi, SigaAuth, SigaToast, SigaModal, SigaAdminTable, SigaTable */
 (async function () {
   if (!(await SigaAuth.requireAuth())) return;
   const { api, formatError, state } = SigaApi;
@@ -83,17 +83,17 @@
     const sel = el("ntf-user");
     const { ok, data } = await api("GET", "/users");
     if (ok && Array.isArray(data) && sel) {
-      sel.innerHTML = "";
-      const opt0 = document.createElement("option");
-      opt0.value = "";
-      opt0.textContent = "Selecciona usuario…";
-      sel.appendChild(opt0);
-      data.forEach((u) => {
-        const o = document.createElement("option");
-        o.value = String(u.id);
-        o.textContent = (u.username || "") + " (#" + u.id + ")";
-        sel.appendChild(o);
-      });
+      SigaTable.fillSelect(
+        sel,
+        data,
+        (u) =>
+          SigaTable.formatRef(
+            u.id,
+            [u.first_name, u.last_name].filter(Boolean).join(" ").trim() || u.full_name || u.username
+          ),
+        (u) => u.id,
+        "Seleccionar usuario…"
+      );
     }
 
     el("notif-create-form")?.addEventListener("submit", async (ev) => {

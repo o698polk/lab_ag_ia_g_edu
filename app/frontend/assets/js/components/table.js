@@ -8,10 +8,32 @@ const COL_LABEL = {
   title: "Título", body: "Mensaje", type: "Tipo", student_code: "Código estudiante",
   teacher_code: "Código docente", specialty: "Especialidad", level: "Nivel",
   username: "Usuario", email: "Correo",
+  user: "Usuario", course: "Curso", teacher: "Docente", classroom: "Aula",
+  term: "Periodo", student: "Estudiante", career: "Carrera", subjects: "Asignaturas",
+  evaluation: "Evaluación", session: "Sesión", enrolled_at: "Fecha matrícula",
 };
 
 function escapeHtml(s) {
   return String(s).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function personName(item) {
+  if (!item) return "";
+  return (
+    [item.first_name, item.last_name].filter(Boolean).join(" ").trim() ||
+    item.full_name ||
+    item.name ||
+    item.username ||
+    item.student_code ||
+    item.teacher_code ||
+    ""
+  );
+}
+
+function formatRef(id, text) {
+  if (id == null || id === "") return text || "—";
+  const name = String(text || "").trim();
+  return name ? id + " - " + name : String(id);
 }
 
 function fillTbody(tbody, rows, columns) {
@@ -30,17 +52,67 @@ function fillTbody(tbody, rows, columns) {
     .join("");
 }
 
-function fillSelect(el, items, labelFn, valueFn) {
-  if (!el) return;
-  const current = el.value;
-  if (!items || !items.length) {
-    el.innerHTML = '<option value="">Sin datos</option>';
-    return;
+function makeSearchable(select) {
+  if (!select || select.tagName !== "SELECT") return select;
+  if (select.dataset.searchable === "1") {
+    const box = select.parentElement?.querySelector(".siga-lookup-search");
+    if (box) box.classList.toggle("d-none", select.options.length < 8);
+    return select;
   }
-  el.innerHTML = items
-    .map((item) => `<option value="${valueFn(item)}">${escapeHtml(labelFn(item))}</option>`)
-    .join("");
-  if (current && [...el.options].some((o) => o.value === current)) el.value = current;
+  const parent = select.parentNode;
+  if (!parent) return select;
+  const wrap = document.createElement("div");
+  wrap.className = "siga-lookup";
+  parent.insertBefore(wrap, select);
+  const search = document.createElement("input");
+  search.type = "search";
+  search.className = "form-control form-control-sm siga-lookup-search";
+  search.placeholder = "Buscar…";
+  search.setAttribute("aria-label", "Buscar opción");
+  wrap.appendChild(search);
+  wrap.appendChild(select);
+  select.dataset.searchable = "1";
+  search.addEventListener("input", () => {
+    const q = search.value.trim().toLowerCase();
+    [...select.options].forEach((opt) => {
+      if (!opt.value) {
+        opt.hidden = false;
+        return;
+      }
+      opt.hidden = q ? !String(opt.textContent || "").toLowerCase().includes(q) : false;
+    });
+  });
+  search.classList.toggle("d-none", select.options.length < 8);
+  return select;
 }
 
-window.SigaTable = { fillTbody, fillSelect, escapeHtml, COL_LABEL };
+function fillSelect(node, items, labelFn, valueFn, emptyLabel) {
+  if (!node) return;
+  const current = node.value;
+  const empty = emptyLabel == null ? "Seleccionar…" : emptyLabel;
+  if (!items || !items.length) {
+    node.innerHTML = '<option value="">' + escapeHtml(empty === "" ? "Sin datos" : empty) + "</option>";
+    makeSearchable(node);
+    return;
+  }
+  const opts = ['<option value="">' + escapeHtml(empty) + "</option>"].concat(
+    items.map((item) => {
+      const value = valueFn ? valueFn(item) : item.id;
+      const label = labelFn ? labelFn(item) : formatRef(item.id, personName(item) || item.code || item.name);
+      return '<option value="' + escapeHtml(value) + '">' + escapeHtml(label) + "</option>";
+    })
+  );
+  node.innerHTML = opts.join("");
+  if (current && [...node.options].some((o) => o.value === current)) node.value = current;
+  makeSearchable(node);
+}
+
+window.SigaTable = {
+  fillTbody,
+  fillSelect,
+  escapeHtml,
+  COL_LABEL,
+  formatRef,
+  personName,
+  makeSearchable,
+};

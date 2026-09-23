@@ -25,8 +25,8 @@
     marks: [],
   });
 
-  const SESSION_COLS = ["id", "course_id", "session_date", "topic"];
-  const MARK_COLS = ["id", "session_id", "student_id", "status", "notes"];
+  const SESSION_COLS = ["id", "course", "session_date", "topic"];
+  const MARK_COLS = ["id", "session", "student", "status", "notes"];
   const el = (id) => document.getElementById(id);
   const sessionsTable = SigaAdminTable.bind({
     tbody: el("sessions-tbody"),
@@ -104,24 +104,50 @@
 
   function subjectName(id) {
     const s = state.context.subjects.find((x) => x.id === id);
-    return s ? `${s.code} — ${s.name}` : `Materia ${id}`;
+    return s ? SigaTable.formatRef(s.id, (s.code || "") + " — " + (s.name || "")) : SigaTable.formatRef(id, "Asignatura");
   }
   function careerName(id) {
     const c = state.context.careers.find((x) => x.id === id);
-    return c ? `${c.code} — ${c.name}` : `Carrera ${id}`;
+    return c ? SigaTable.formatRef(c.id, (c.code || "") + " — " + (c.name || "")) : SigaTable.formatRef(id, "Carrera");
   }
   function termName(id) {
     const t = state.context.terms.find((x) => x.id === id);
-    return t ? `${t.code} — ${t.name}` : `Periodo ${id}`;
+    return t ? SigaTable.formatRef(t.id, (t.code || "") + " — " + (t.name || "")) : SigaTable.formatRef(id, "Periodo");
   }
   function studentLabel(s) {
-    return `${s.student_code || "EST"} (id ${s.id})`;
+    const id = s.id || s.student_id;
+    const name = s.name || s.full_name || s.student_code || "Estudiante";
+    return SigaTable.formatRef(id, name);
+  }
+
+  function mapSessionRow(row) {
+    const course = state.context.courses.find((c) => Number(c.id) === Number(row.course_id));
+    return {
+      ...row,
+      course: course ? parallelLabel(course) : SigaTable.formatRef(row.course_id, "Curso"),
+    };
+  }
+
+  function mapMarkRow(row) {
+    const student =
+      state.context.courseStudents.find(
+        (s) => Number(s.id) === Number(row.student_id) || Number(s.student_id) === Number(row.student_id)
+      ) || state.context.students.find((s) => Number(s.id) === Number(row.student_id));
+    const session = state.context.sessions.find((s) => Number(s.id) === Number(row.session_id));
+    return {
+      ...row,
+      session: session ? sessionLabel(session) : SigaTable.formatRef(row.session_id, "Sesión"),
+      student: student ? studentLabel(student) : SigaTable.formatRef(row.student_id, "Estudiante"),
+    };
   }
   function parallelLabel(c) {
-    return `${c.parallel_code} · ${subjectName(c.subject_id)} · curso ${c.id}`;
+    const sub = state.context.subjects.find((x) => x.id === c.subject_id);
+    const title = sub ? (sub.name || sub.code) : "Curso";
+    const par = c.parallel_code ? " · " + c.parallel_code : "";
+    return SigaTable.formatRef(c.id, title + par);
   }
   function sessionLabel(s) {
-    return `#${s.id} · ${s.session_date}${s.topic ? " · " + s.topic : ""}`;
+    return SigaTable.formatRef(s.id, (s.session_date || "Sesión") + (s.topic ? " · " + s.topic : ""));
   }
 
   function subjectIdsForCareer(careerId) {
@@ -164,8 +190,114 @@
     path.textContent = parts.join(" → ");
   }
 
+  function hoursForCourse(course) {
+    if (!course) return [1];
+    const n = (course.hours_theory || 0) + (course.hours_practical || 0) || course.hours_attendable || 1;
+    const count = Math.max(1, Number(n) || 1);
+    return Array.from({ length: count }, (_, i) => i + 1);
+  }
+
+  function fillHourSlots(course) {
+    const sel = el("att-hour");
+    if (!sel) return;
+    const hours = hoursForCourse(course);
+    const current = sel.value;
+    sel.innerHTML = hours.map((h) => '<option value="' + h + '">Hora ' + h + "</option>").join("");
+    if (hours.map(String).includes(current)) sel.value = current;
+  }
+
+  function paintRoster(data) {
+    const tbody = el("roster-tbody");
+    if (!tbody) return;
+    const students = (data && data.students) || [];
+    const empty = tbody.closest(".table-wrap")?.querySelector("[data-empty]");
+    if (!students.length) {
+      tbody.innerHTML = "";
+      if (empty) empty.classList.remove("d-none");
+      if (el("btn-save-roster")) el("btn-save-roster").disabled = true;
+      return;
+    }
+    if (empty) empty.classList.add("d-none");
+    tbody.innerHTML = students
+      .map((s) => {
+        const checked = s.present ? " checked" : "";
+        return (
+          "<tr><td>" +
+          SigaModal.escapeHtml(String(s.student_id || s.id || "")) +
+          "</td><td>" +
+          SigaModal.escapeHtml(s.name || s.student_code || "") +
+          '</td><td><input type="checkbox" class="form-check-input" data-student="' +
+          s.student_id +
+          '"' +
+          checked +
+          " /></td></tr>"
+        );
+      })
+      .join("");
+    if (el("btn-save-roster")) el("btn-save-roster").disabled = false;
+  }
+
+  async function loadRoster() {
+    const courseId = selectedCourseId();
+    const sessionDate = el("att-date")?.value;
+    const hourSlot = Number(el("att-hour")?.value || 1);
+    if (!courseId || !sessionDate) {
+      paintRoster({ students: [] });
+      return;
+    }
+    const { ok, data } = await api(
+      "GET",
+      "/attendance/roster?course_id=" +
+        courseId +
+        "&session_date=" +
+        encodeURIComponent(sessionDate) +
+        "&hour_slot=" +
+        hourSlot
+    );
+    if (!ok) {
+      toast(formatError(data), "bad");
+      paintRoster({ students: [] });
+      return;
+    }
+    if (data.hours_available && data.hours_available.length && el("att-hour")) {
+      const current = el("att-hour").value;
+      el("att-hour").innerHTML = data.hours_available
+        .map((h) => '<option value="' + h + '">Hora ' + h + "</option>")
+        .join("");
+      el("att-hour").value = String(hourSlot || current || data.hours_available[0]);
+    }
+    paintRoster(data);
+  }
+
+  async function saveRoster() {
+    const courseId = selectedCourseId();
+    const sessionDate = el("att-date")?.value;
+    const hourSlot = Number(el("att-hour")?.value || 1);
+    if (!courseId || !sessionDate) {
+      toast("Seleccione curso y fecha.", "bad");
+      return;
+    }
+    const records = [...document.querySelectorAll("#roster-tbody [data-student]")].map((box) => ({
+      student_id: Number(box.getAttribute("data-student")),
+      status: box.checked ? "PRESENT" : "ABSENT",
+    }));
+    const { ok, data } = await api("PUT", "/attendance/bulk", {
+      course_id: courseId,
+      session_date: sessionDate,
+      hour_slot: hourSlot,
+      records,
+    });
+    toast(ok ? "Asistencia guardada." : formatError(data), ok ? "ok" : "bad");
+    if (ok) {
+      paintRoster(data);
+      if (data.session_id && el("att-session-id")) {
+        el("att-session-id").value = String(data.session_id);
+      }
+    }
+  }
+
   function setCourseActionsEnabled(enabled) {
-    ["btn-create-session", "btn-mark-att", "btn-att-pct", "att-student-id", "pct-student-id"].forEach(
+    ["btn-create-session", "btn-mark-att", "btn-att-pct", "att-student-id", "pct-student-id", "btn-save-roster"].forEach(
       (id) => {
         const node = el(id);
         if (node) node.disabled = !enabled;
@@ -188,8 +320,8 @@
   }
 
   function renderLogs() {
-    sessionsTable.setRows(state.context.sessions || []);
-    marksTable.setRows(state.context.marks || []);
+    sessionsTable.setRows((state.context.sessions || []).map(mapSessionRow));
+    marksTable.setRows((state.context.marks || []).map(mapMarkRow));
   }
 
   function fillTerms() {
@@ -198,7 +330,7 @@
     fillSelect(
       termSel,
       state.context.terms,
-      (t) => `${t.code} — ${t.name}${t.is_current ? " (actual)" : ""}`,
+      (t) => SigaTable.formatRef(t.id, (t.code || "") + " — " + (t.name || "") + (t.is_current ? " (actual)" : "")),
       (t) => t.id
     );
     termSel.disabled = !state.context.terms.length;
@@ -225,6 +357,9 @@
     fillSelect(el("pct-student-id"), state.context.courseStudents, studentLabel, (s) => s.id);
     setCourseActionsEnabled(true);
     renderSessionSelect();
+    const course = state.context.courses.find((c) => c.id === courseId);
+    fillHourSlots(course);
+    await loadRoster();
   }
 
   function fillParallels() {
@@ -257,19 +392,27 @@
   }
 
   async function loadContext() {
-    const [careers, terms, courses, subjects, students, curricula] = await Promise.all([
+    const [careers, terms, courses, subjects, students, curricula, users] = await Promise.all([
       api("GET", "/careers"),
       api("GET", "/terms"),
       api("GET", "/courses"),
       api("GET", "/subjects"),
       api("GET", "/students"),
       api("GET", "/curricula"),
+      api("GET", "/users"),
     ]);
     state.context.careers = careers.ok && Array.isArray(careers.data) ? careers.data : [];
     state.context.terms = terms.ok && Array.isArray(terms.data) ? terms.data : [];
     state.context.courses = courses.ok && Array.isArray(courses.data) ? courses.data : [];
     state.context.subjects = subjects.ok && Array.isArray(subjects.data) ? subjects.data : [];
-    state.context.students = students.ok && Array.isArray(students.data) ? students.data : [];
+    const userList = users.ok && Array.isArray(users.data) ? users.data : [];
+    state.context.students = (students.ok && Array.isArray(students.data) ? students.data : []).map((s) => {
+      const user = userList.find((u) => Number(u.id) === Number(s.user_id));
+      const name = user
+        ? [user.first_name, user.last_name].filter(Boolean).join(" ").trim() || user.full_name || user.username
+        : "";
+      return { ...s, name };
+    });
     state.context.curricula = curricula.ok && Array.isArray(curricula.data) ? curricula.data : [];
 
     const careerSel = el("filter-career");
@@ -278,9 +421,10 @@
       state.context.careers.forEach((c) => {
         const opt = document.createElement("option");
         opt.value = String(c.id);
-        opt.textContent = `${c.code} — ${c.name}`;
+        opt.textContent = SigaTable.formatRef(c.id, (c.code || "") + " — " + (c.name || ""));
         careerSel.appendChild(opt);
       });
+      SigaTable.makeSearchable(careerSel);
     }
     fillTerms();
     fillParallels();
@@ -299,6 +443,7 @@
       course_id: courseId,
       session_date: el("att-date").value,
       topic: el("att-topic").value || null,
+      hour_slot: Number(el("att-hour")?.value || 1),
     };
     if (!body.session_date) {
       toast("Indica la fecha de la sesión.", "bad");
@@ -374,6 +519,10 @@
   el("filter-parallel")?.addEventListener("change", () => {
     onParallelChange().catch(() => toast("No se pudo cargar el curso", "bad"));
   });
+  el("btn-load-roster")?.addEventListener("click", () => loadRoster());
+  el("btn-save-roster")?.addEventListener("click", () => saveRoster());
+  el("att-date")?.addEventListener("change", () => loadRoster());
+  el("att-hour")?.addEventListener("change", () => loadRoster());
 
   await loadContext();
 })();

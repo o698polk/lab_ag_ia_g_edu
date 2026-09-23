@@ -99,37 +99,68 @@
           <form id="catalog-create-form" class="row g-2 align-items-end" novalidate>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-course_id">Curso (id)</label>
-              <input id="f-course_id" name="course_id" type="number" class="form-control" data-field="course_id" required />
+              <label class="form-label" for="f-course_id">Curso</label>
+              <select id="f-course_id" name="course_id" class="form-select" data-field="course_id" required></select>
             </div>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-teacher_id">Docente (id)</label>
-              <input id="f-teacher_id" name="teacher_id" type="number" class="form-control" data-field="teacher_id" required />
+              <label class="form-label" for="f-teacher_id">Docente</label>
+              <select id="f-teacher_id" name="teacher_id" class="form-select" data-field="teacher_id" required></select>
             </div>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-classroom_id">Aula (id)</label>
-              <input id="f-classroom_id" name="classroom_id" type="number" class="form-control" data-field="classroom_id" required />
+              <label class="form-label" for="f-classroom_id">Aula</label>
+              <select id="f-classroom_id" name="classroom_id" class="form-select" data-field="classroom_id" required></select>
             </div>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-term_id">Periodo (id)</label>
-              <input id="f-term_id" name="term_id" type="number" class="form-control" data-field="term_id" required />
+              <label class="form-label" for="f-term_id">Periodo</label>
+              <select id="f-term_id" name="term_id" class="form-select" data-field="term_id" required></select>
             </div>
 
-            <div class="col-md-3">
-              <label class="form-label" for="f-day_of_week">Día</label>
-              <input id="f-day_of_week" name="day_of_week" type="text" class="form-control" data-field="day_of_week" required />
+            <div class="col-12">
+              <label class="form-label req">Días de clase</label>
+              <input id="f-day_of_week" name="day_of_week" class="form-control d-none" data-field="day_of_week" />
+              <div id="day-boxes" class="day-boxes">
+                <label class="form-check form-check-inline"><input class="form-check-input" type="checkbox" data-day="MON" /> Lunes</label>
+                <label class="form-check form-check-inline"><input class="form-check-input" type="checkbox" data-day="TUE" /> Martes</label>
+                <label class="form-check form-check-inline"><input class="form-check-input" type="checkbox" data-day="WED" /> Miércoles</label>
+                <label class="form-check form-check-inline"><input class="form-check-input" type="checkbox" data-day="THU" /> Jueves</label>
+                <label class="form-check form-check-inline"><input class="form-check-input" type="checkbox" data-day="FRI" /> Viernes</label>
+                <label class="form-check form-check-inline"><input class="form-check-input" type="checkbox" data-day="SAT" /> Sábado</label>
+                <label class="form-check form-check-inline"><input class="form-check-input" type="checkbox" data-day="SUN" /> Domingo</label>
+              </div>
+              <p class="hint mb-0">Marque todos los días en que se dicta la materia. Se crea un horario por cada día.</p>
             </div>
 
-            <div class="col-md-3">
-              <label class="form-label" for="f-start_time">Inicio</label>
+            <div class="col-md-4">
+              <label class="form-label" for="f-hour-preset">Bloque horario</label>
+              <select id="f-hour-preset" class="form-select">
+                <option value="">Personalizado</option>
+                <option value="07:00-08:00">1ª hora · 07:00–08:00</option>
+                <option value="08:00-09:00">2ª hora · 08:00–09:00</option>
+                <option value="09:00-10:00">3ª hora · 09:00–10:00</option>
+                <option value="10:00-11:00">4ª hora · 10:00–11:00</option>
+                <option value="11:00-12:00">5ª hora · 11:00–12:00</option>
+                <option value="12:00-13:00">6ª hora · 12:00–13:00</option>
+                <option value="13:00-14:00">7ª hora · 13:00–14:00</option>
+                <option value="14:00-15:00">8ª hora · 14:00–15:00</option>
+                <option value="15:00-16:00">9ª hora · 15:00–16:00</option>
+                <option value="16:00-17:00">10ª hora · 16:00–17:00</option>
+                <option value="17:00-18:00">11ª hora · 17:00–18:00</option>
+                <option value="18:00-19:00">12ª hora · 18:00–19:00</option>
+                <option value="19:00-20:00">13ª hora · 19:00–20:00</option>
+                <option value="20:00-21:00">14ª hora · 20:00–21:00</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label req" for="f-start_time">Hora inicio</label>
               <input id="f-start_time" name="start_time" type="time" class="form-control" data-field="start_time" required />
             </div>
 
-            <div class="col-md-3">
-              <label class="form-label" for="f-end_time">Fin</label>
+            <div class="col-md-4">
+              <label class="form-label req" for="f-end_time">Hora fin</label>
               <input id="f-end_time" name="end_time" type="time" class="form-control" data-field="end_time" required />
             </div>
 

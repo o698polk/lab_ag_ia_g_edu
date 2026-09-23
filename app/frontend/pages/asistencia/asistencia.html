@@ -56,7 +56,7 @@
 
         <div class="module-head">
           <h2>Asistencia</h2>
-          <p>Carrera → periodo → paralelo → sesión → marca. Las operaciones se realizan en ventanas emergentes.</p>
+          <p>Curso → fecha → hora → estudiantes matriculados. Marque asistencia y guarde.</p>
         </div>
         <div class="admin-toolbar">
           <button type="button" class="btn btn-siga" id="btn-new-record">+ Nuevo</button>
@@ -86,7 +86,42 @@
               </select>
             </div>
           </div>
+          <div class="row g-2 mt-3">
+            <div class="col-md-3">
+              <label class="form-label" for="att-date">Fecha</label>
+              <input id="att-date" type="date" class="form-control" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="att-hour">Hora / carga horaria</label>
+              <select id="att-hour" class="form-select">
+                <option value="1">Hora 1</option>
+              </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+              <button type="button" class="btn btn-outline-secondary w-100" id="btn-load-roster">Cargar lista</button>
+            </div>
+          </div>
           <p class="cascade-path mt-3 mb-0" id="cascade-path" aria-live="polite">Sin curso seleccionado.</p>
+        </section>
+
+        <section class="table-wrap mb-3" aria-labelledby="roster-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="roster-title" class="section-title mb-0">Registro de asistencia</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Seleccione curso, fecha y hora para ver los matriculados.</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Estudiante</th>
+                <th scope="col">Asistencia</th>
+              </tr>
+            </thead>
+            <tbody id="roster-tbody"></tbody>
+          </table>
+          <div class="admin-pager px-3 py-2">
+            <button type="button" class="btn btn-siga" id="btn-save-roster" disabled>Guardar asistencia</button>
+          </div>
         </section>
 
         <div class="row g-3">
@@ -94,10 +129,6 @@
             <section class="card-soft h-100 d-none" id="session-form-wrap" aria-labelledby="session-title">
               <h3 id="session-title">Nueva sesión</h3>
               <div class="row g-3">
-                <div class="col-sm-6">
-                  <label class="form-label" for="att-date">Fecha</label>
-                  <input id="att-date" type="date" class="form-control" />
-                </div>
                 <div class="col-sm-6">
                   <label class="form-label" for="att-topic">Tema</label>
                   <input id="att-topic" class="form-control" placeholder="Clase" />

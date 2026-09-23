@@ -56,7 +56,7 @@
 
         <div class="module-head">
           <h2>Reportes</h2>
-          <p>Catálogo del servidor · HTML / CSV / JSON / PDF. La UI no autoriza.</p>
+          <p>Catálogo del servidor · HTML / CSV / JSON / PDF / Excel. La UI no autoriza.</p>
         </div>
         <div class="admin-toolbar">
           <button type="button" class="btn btn-siga" id="btn-new-record">+ Generar</button>
@@ -117,15 +117,20 @@
                 <option value="CSV">CSV</option>
                 <option value="HTML">HTML</option>
                 <option value="PDF">PDF</option>
+                <option value="XLSX">Excel</option>
               </select>
             </div>
             <div class="col-md-2" id="param-term-wrap">
-              <label class="form-label" for="param-term-id">Periodo (id)</label>
-              <input id="param-term-id" type="number" class="form-control" min="1" placeholder="Opcional" />
+              <label class="form-label" for="param-term-id">Periodo</label>
+              <select id="param-term-id" class="form-select">
+                <option value="">Opcional</option>
+              </select>
             </div>
             <div class="col-md-2" id="param-student-wrap">
-              <label class="form-label" for="param-student-id">Estudiante (id)</label>
-              <input id="param-student-id" type="number" class="form-control" min="1" placeholder="Opcional" />
+              <label class="form-label" for="param-student-id">Estudiante</label>
+              <select id="param-student-id" class="form-select">
+                <option value="">Opcional</option>
+              </select>
             </div>
             <div class="col-md-3">
               <button type="button" class="btn btn-siga w-100" id="btn-report">Generar reporte</button>

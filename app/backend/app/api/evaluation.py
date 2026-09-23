@@ -1,22 +1,26 @@
 # Ref: BL-O4-* | Skill: K-013/K-016/K-017 | Fase: F6
 """Evaluation API with ABAC and anti-IDOR for student grades."""
 
-from typing import Annotated, List
+from datetime import date
+from typing import Annotated, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.auth.deps import CurrentUser, get_current_user, require_permission
 from app.db.session import get_db
 from app.permissions import constants as P
 from app.schemas.evaluation import (
+    AttendanceBulkRequest,
     AttendanceMark,
     AttendancePercentOut,
     AttendanceRecordOut,
+    AttendanceRosterOut,
     AttendanceSessionCreate,
     AttendanceSessionOut,
     EvaluationCreate,
     EvaluationOut,
+    GradebookOut,
     GradeOut,
     GradeUpsert,
     KardexOut,
@@ -160,8 +164,15 @@ def create_session(
 ):
     svc = EvaluationService(db)
     try:
-        teacher = svc.teacher_for_user(current.user.id)
-        return svc.create_attendance_session(teacher=teacher, **body.model_dump())
+        as_admin = "ADMINISTRATOR" in current.roles
+        teacher = None
+        if not as_admin:
+            teacher = svc.teacher_for_user(current.user.id)
+        else:
+            teacher = svc.ops.get_teacher_by_user_id(current.user.id)
+        return svc.create_attendance_session(
+            teacher=teacher, as_admin=as_admin, **body.model_dump()
+        )
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -174,10 +185,85 @@ def mark_attendance(
 ):
     svc = EvaluationService(db)
     try:
-        teacher = svc.teacher_for_user(current.user.id)
-        return svc.mark_attendance(teacher=teacher, **body.model_dump())
+        as_admin = "ADMINISTRATOR" in current.roles
+        teacher = None
+        if not as_admin:
+            teacher = svc.teacher_for_user(current.user.id)
+        else:
+            teacher = svc.ops.get_teacher_by_user_id(current.user.id)
+        return svc.mark_attendance(
+            teacher=teacher, as_admin=as_admin, **body.model_dump()
+        )
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
+
+
+@router.get("/attendance/roster", response_model=AttendanceRosterOut)
+def attendance_roster(
+    current: Annotated[CurrentUser, Depends(require_permission(P.ATTENDANCE_VIEW))],
+    db: Annotated[Session, Depends(get_db)],
+    course_id: int = Query(...),
+    session_date: date = Query(...),
+    hour_slot: int = Query(default=1, ge=1),
+):
+    svc = EvaluationService(db)
+    if "ADMINISTRATOR" not in current.roles:
+        try:
+            teacher = svc.teacher_for_user(current.user.id)
+            course = svc._course(course_id)
+            svc._require_teacher_assignment(teacher, course)
+        except Exception as exc:  # noqa: BLE001
+            raise _map_err(exc) from exc
+    try:
+        return svc.attendance_roster(
+            course_id=course_id, session_date=session_date, hour_slot=hour_slot
+        )
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.put("/attendance/bulk", response_model=AttendanceRosterOut)
+def attendance_bulk(
+    body: AttendanceBulkRequest,
+    current: Annotated[CurrentUser, Depends(require_permission(P.ATTENDANCE_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    svc = EvaluationService(db)
+    try:
+        as_admin = "ADMINISTRATOR" in current.roles
+        teacher = None
+        if not as_admin:
+            teacher = svc.teacher_for_user(current.user.id)
+        else:
+            teacher = svc.ops.get_teacher_by_user_id(current.user.id)
+        return svc.save_attendance_bulk(
+            teacher=teacher,
+            as_admin=as_admin,
+            course_id=body.course_id,
+            session_date=body.session_date,
+            hour_slot=body.hour_slot,
+            records=[r.model_dump() for r in body.records],
+        )
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.get("/courses/{course_id}/gradebook", response_model=GradebookOut)
+def course_gradebook(
+    course_id: int,
+    current: Annotated[CurrentUser, Depends(require_permission(P.GRADES_VIEW))],
+    db: Annotated[Session, Depends(get_db)],
+    evaluation_id: Optional[int] = Query(default=None),
+):
+    svc = EvaluationService(db)
+    if "ADMINISTRATOR" not in current.roles:
+        try:
+            teacher = svc.teacher_for_user(current.user.id)
+            course = svc._course(course_id)
+            svc._require_teacher_assignment(teacher, course)
+        except Exception as exc:  # noqa: BLE001
+            raise _map_err(exc) from exc
+    return svc.gradebook(course_id, evaluation_id)
 
 
 @router.get(

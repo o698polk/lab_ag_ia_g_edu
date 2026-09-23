@@ -36,6 +36,9 @@ class UserService:
         email: str,
         password: str,
         role_codes: list[str] | None = None,
+        first_name: str = "",
+        last_name: str = "",
+        phone: str = "",
     ) -> User:
         if self.users.get_by_username_or_email(username) or self.users.get_by_username_or_email(
             email
@@ -44,6 +47,9 @@ class UserService:
         user = User(
             username=username,
             email=email,
+            first_name=first_name or "",
+            last_name=last_name or "",
+            phone=phone or "",
             password_hash=hash_password(password),
             status="ACTIVE",
         )
@@ -53,6 +59,42 @@ class UserService:
                 raise ValueError(f"ROLE_NOT_FOUND:{code}")
             user.roles.append(role)
         self.users.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
+
+    def update_user(
+        self,
+        user_id: int,
+        *,
+        username: str | None = None,
+        email: str | None = None,
+        first_name: str | None = None,
+        last_name: str | None = None,
+        phone: str | None = None,
+        status: str | None = None,
+        role_codes: list[str] | None = None,
+    ) -> User:
+        user = self.get_user(user_id)
+        if username and username != user.username:
+            if self.users.get_by_username_or_email(username):
+                raise ValueError("USER_EXISTS")
+            user.username = username
+        if email and email != user.email:
+            if self.users.get_by_username_or_email(email):
+                raise ValueError("USER_EXISTS")
+            user.email = email
+        if first_name is not None:
+            user.first_name = first_name
+        if last_name is not None:
+            user.last_name = last_name
+        if phone is not None:
+            user.phone = phone
+        if status is not None:
+            user.status = status
+        if role_codes is not None:
+            self.assign_roles(user_id, role_codes)
+            return self.get_user(user_id)
         self.db.commit()
         self.db.refresh(user)
         return user

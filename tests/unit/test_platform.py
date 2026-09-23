@@ -1,4 +1,4 @@
-﻿# Ref: BL-O5-* | Skill: K-006/K-007 | Fase: F6
+# Ref: BL-O5-* | Skill: K-006/K-007 | Fase: F6
 """Platform: dashboard, reports, notifications, user history."""
 
 from __future__ import annotations
@@ -73,6 +73,15 @@ def test_report_csv_html_and_pdf(client, auth_header):
     assert pdf.status_code == 200, pdf.text
     assert pdf.json()["format"] == "PDF"
     assert str(pdf.json()["content"]).startswith("%PDF")
+
+    xlsx = client.post(
+        "/api/v1/reports",
+        headers=auth_header,
+        json={"report_type": "students", "format": "XLSX"},
+    )
+    assert xlsx.status_code == 200, xlsx.text
+    assert xlsx.json()["format"] == "XLSX"
+    assert "Workbook" in xlsx.json()["content"] or "xml" in xlsx.json()["content"].lower()
 
 
 @pytest.mark.unit

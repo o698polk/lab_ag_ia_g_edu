@@ -18,6 +18,7 @@ from app.models import (
     Subject,
     Teacher,
     TeachingAssignment,
+    User,
 )
 from app.services.catalog_service import CatalogService, TermClosedError
 
@@ -72,6 +73,9 @@ class OperationsService:
         term_id: int,
         parallel_code: str = "A",
         capacity: int = 40,
+        hours_theory: int = 0,
+        hours_practical: int = 0,
+        hours_autonomous: int = 0,
     ) -> Course:
         self.catalog.assert_term_writable(term_id)
         if self.db.get(Subject, subject_id) is None:
@@ -90,12 +94,99 @@ class OperationsService:
             term_id=term_id,
             parallel_code=parallel_code,
             capacity=capacity,
+            hours_theory=hours_theory,
+            hours_practical=hours_practical,
+            hours_autonomous=hours_autonomous,
             status="ACTIVE",
         )
         self.db.add(course)
         self.db.commit()
         self.db.refresh(course)
         return course
+
+    def update_course(
+        self,
+        course_id: int,
+        *,
+        parallel_code: Optional[str] = None,
+        capacity: Optional[int] = None,
+        hours_theory: Optional[int] = None,
+        hours_practical: Optional[int] = None,
+        hours_autonomous: Optional[int] = None,
+        status: Optional[str] = None,
+        teacher_id: Optional[int] = None,
+    ) -> Course:
+        course = self.db.get(Course, course_id)
+        if course is None:
+            raise LookupError("COURSE_NOT_FOUND")
+        if parallel_code is not None:
+            course.parallel_code = parallel_code
+        if capacity is not None:
+            course.capacity = capacity
+        if hours_theory is not None:
+            course.hours_theory = hours_theory
+        if hours_practical is not None:
+            course.hours_practical = hours_practical
+        if hours_autonomous is not None:
+            course.hours_autonomous = hours_autonomous
+        if status is not None:
+            course.status = status
+        if teacher_id is not None:
+            existing = self.db.scalar(
+                select(TeachingAssignment).where(
+                    TeachingAssignment.course_id == course.id,
+                    TeachingAssignment.teacher_id == teacher_id,
+                    TeachingAssignment.term_id == course.term_id,
+                )
+            )
+            if existing is None:
+                self.db.add(
+                    TeachingAssignment(
+                        teacher_id=teacher_id,
+                        course_id=course.id,
+                        term_id=course.term_id,
+                        status="ACTIVE",
+                    )
+                )
+            else:
+                existing.status = "ACTIVE"
+        self.db.commit()
+        self.db.refresh(course)
+        return course
+
+    def course_teacher_id(self, course_id: int) -> Optional[int]:
+        row = self.db.scalar(
+            select(TeachingAssignment).where(
+                TeachingAssignment.course_id == course_id,
+                TeachingAssignment.status == "ACTIVE",
+            )
+        )
+        return row.teacher_id if row else None
+
+    def course_roster(self, course_id: int) -> list[dict]:
+        if self.db.get(Course, course_id) is None:
+            raise LookupError("COURSE_NOT_FOUND")
+        ens = self.db.scalars(
+            select(Enrollment).where(
+                Enrollment.course_id == course_id,
+                Enrollment.status == "ACTIVE",
+            )
+        ).all()
+        out = []
+        for en in ens:
+            student = self.db.get(Student, en.student_id)
+            user = self.db.get(User, student.user_id) if student else None
+            name = user.full_name if user else f"Estudiante {en.student_id}"
+            out.append(
+                {
+                    "student_id": en.student_id,
+                    "student_code": student.student_code if student else "",
+                    "name": name,
+                    "enrollment_id": en.id,
+                    "status": en.status,
+                }
+            )
+        return out
 
     def set_course_status(self, course_id: int, status: str) -> Course:
         course = self.db.get(Course, course_id)
@@ -295,3 +386,11 @@ class OperationsService:
         if term_id is not None:
             stmt = stmt.where(Schedule.term_id == term_id)
         return self.db.scalars(stmt).all()
+
+    def delete_schedule(self, schedule_id: int) -> Schedule:
+        row = self.db.get(Schedule, schedule_id)
+        if row is None:
+            raise LookupError("SCHEDULE_NOT_FOUND")
+        self.db.delete(row)
+        self.db.commit()
+        return row

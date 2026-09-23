@@ -251,3 +251,67 @@ def test_attendance_and_kardex(client, auth_header, teacher_header, student_head
     my_k = client.get("/api/v1/me/kardex", headers=student_header)
     assert my_k.status_code == 200
     assert my_k.json()[0]["academic_status"] == "APPROVED"
+
+
+@pytest.mark.unit
+def test_course_hours_roster_attendance_bulk_and_gradebook(
+    client, auth_header, teacher_header
+):
+    base = _setup_grade_context(client, auth_header)
+    cid = base["course"]["id"]
+    patched = client.patch(
+        f"/api/v1/courses/{cid}",
+        headers=auth_header,
+        json={
+            "hours_theory": 4,
+            "hours_practical": 2,
+            "hours_autonomous": 3,
+            "teacher_id": base["teacher"]["id"],
+        },
+    )
+    assert patched.status_code == 200, patched.text
+    assert patched.json()["hours_theory"] == 4
+    assert patched.json()["hours_attendable"] == 6
+
+    roster = client.get(f"/api/v1/courses/{cid}/roster", headers=auth_header)
+    assert roster.status_code == 200
+    assert any(r["student_id"] == base["student"]["id"] for r in roster.json())
+
+    att = client.put(
+        "/api/v1/attendance/bulk",
+        headers=teacher_header,
+        json={
+            "course_id": cid,
+            "session_date": "2026-09-22",
+            "hour_slot": 1,
+            "records": [
+                {"student_id": base["student"]["id"], "status": "PRESENT"},
+            ],
+        },
+    )
+    assert att.status_code == 200, att.text
+    assert att.json()["hour_slot"] == 1
+    assert att.json()["students"][0]["present"] is True
+
+    listed = client.get(
+        "/api/v1/attendance/roster",
+        headers=teacher_header,
+        params={"course_id": cid, "session_date": "2026-09-22", "hour_slot": 1},
+    )
+    assert listed.status_code == 200
+    assert listed.json()["hours_available"] == [1, 2, 3, 4, 5, 6]
+
+    ev = client.post(
+        "/api/v1/evaluations",
+        headers=teacher_header,
+        json={"course_id": cid, "name": "Acta 1", "weight_percent": 40},
+    )
+    assert ev.status_code == 201, ev.text
+    book = client.get(
+        f"/api/v1/courses/{cid}/gradebook",
+        headers=teacher_header,
+        params={"evaluation_id": ev.json()["id"]},
+    )
+    assert book.status_code == 200
+    assert book.json()["students"][0]["student_id"] == base["student"]["id"]
+    assert book.json()["students"][0]["attendance_pct"] == 100.0
