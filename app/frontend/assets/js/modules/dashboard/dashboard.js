@@ -123,8 +123,50 @@
     fillTbody(tbody, rows, ["action", "module", "summary", "created_at"]);
   }
 
+  async function loadAcademicTables() {
+    const roles = (state.user && state.user.roles) || [];
+    if (roles.includes("TEACHER") || roles.includes("ADMINISTRATOR")) {
+      const tbody = document.getElementById("dash-courses-tbody");
+      const empty = document.getElementById("dash-courses-empty");
+      const { ok, data } = await api("GET", "/courses");
+      const rows = ok && Array.isArray(data) ? data : [];
+      fillTbody(
+        tbody,
+        rows.map((c) => ({
+          course: c.course_name || c.parallel_code || "",
+          subject: c.subject_name || "",
+          term: c.term_name || "",
+        })),
+        ["course", "subject", "term"]
+      );
+      if (empty) {
+        empty.textContent = rows.length ? "" : ok ? "No hay cursos asignados." : formatError(data);
+        empty.classList.toggle("d-none", Boolean(rows.length));
+      }
+    }
+    if (roles.includes("STUDENT")) {
+      const tbody = document.getElementById("dash-subjects-tbody");
+      const empty = document.getElementById("dash-subjects-empty");
+      const { ok, data } = await api("GET", "/me/academic");
+      const rows = ok && Array.isArray(data) ? data : [];
+      fillTbody(
+        tbody,
+        rows.map((r) => ({
+          subject: r.subject_name || "",
+          teacher: r.teacher_name || "",
+          term: r.term_name || "",
+        })),
+        ["subject", "teacher", "term"]
+      );
+      if (empty) {
+        empty.textContent = rows.length ? "" : ok ? "No tienes materias matriculadas." : formatError(data);
+        empty.classList.toggle("d-none", Boolean(rows.length));
+      }
+    }
+  }
+
   async function refreshAll() {
-    await Promise.all([loadDashboard(), loadRecentNotifications(), loadHistory()]);
+    await Promise.all([loadDashboard(), loadRecentNotifications(), loadHistory(), loadAcademicTables()]);
   }
 
   document.getElementById("btn-refresh-dash")?.addEventListener("click", () => {

@@ -46,6 +46,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(64), unique=True, index=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    cedula: Mapped[str] = mapped_column(String(16), unique=True, index=True)
     first_name: Mapped[Optional[str]] = mapped_column(String(80), default="")
     last_name: Mapped[Optional[str]] = mapped_column(String(80), default="")
     phone: Mapped[Optional[str]] = mapped_column(String(32), default="")

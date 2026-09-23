@@ -95,6 +95,7 @@ TEACHER_PERMS = [
     "ai.use",
 ]
 STUDENT_PERMS = [
+    "courses.view",
     "grades.view",
     "attendance.view",
     "kardex.view",
@@ -138,6 +139,9 @@ def seed() -> None:
             admin = User(
                 username="admin",
                 email="admin@siga.local",
+                cedula="1712345678",
+                first_name="Ana",
+                last_name="Administradora",
                 password_hash=hash_password("Admin123!"),
                 status="ACTIVE",
             )
@@ -147,6 +151,9 @@ def seed() -> None:
             # Lab: always restore known demo password so UI login stays predictable.
             admin.password_hash = hash_password("Admin123!")
             admin.status = "ACTIVE"
+            admin.cedula = "1712345678"
+            admin.first_name = "Ana"
+            admin.last_name = "Administradora"
             if admin_role not in admin.roles:
                 admin.roles.append(admin_role)
 
@@ -156,6 +163,9 @@ def seed() -> None:
             teacher = User(
                 username="teacher1",
                 email="teacher1@siga.local",
+                cedula="1712345679",
+                first_name="Juan",
+                last_name="Pérez",
                 password_hash=hash_password("Teacher123!"),
                 status="ACTIVE",
             )
@@ -165,6 +175,9 @@ def seed() -> None:
         else:
             teacher.password_hash = hash_password("Teacher123!")
             teacher.status = "ACTIVE"
+            teacher.cedula = "1712345679"
+            teacher.first_name = "Juan"
+            teacher.last_name = "Pérez"
 
         student = db.scalar(select(User).where(User.username == "student1"))
         if student is None:
@@ -172,6 +185,9 @@ def seed() -> None:
             student = User(
                 username="student1",
                 email="student1@siga.local",
+                cedula="1712345680",
+                first_name="María Fernanda",
+                last_name="López",
                 password_hash=hash_password("Student123!"),
                 status="ACTIVE",
             )
@@ -181,6 +197,9 @@ def seed() -> None:
         else:
             student.password_hash = hash_password("Student123!")
             student.status = "ACTIVE"
+            student.cedula = "1712345680"
+            student.first_name = "María Fernanda"
+            student.last_name = "López"
 
         db.commit()
         print("OK: IAM seed completed")

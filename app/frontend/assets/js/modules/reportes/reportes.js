@@ -339,7 +339,7 @@
       termSel.innerHTML =
         '<option value="">Opcional</option>' +
         termItems
-          .map((t) => '<option value="' + t.id + '">' + escapeHtml(formatRef(t.id, (t.code || "") + " — " + (t.name || ""))) + "</option>")
+          .map((t) => '<option value="' + t.id + '">' + escapeHtml(formatRef(t.id, t.name, t.code)) + "</option>")
           .join("");
     }
     if (studentSel && studentSel.tagName === "SELECT") {

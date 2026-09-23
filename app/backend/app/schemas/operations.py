@@ -15,6 +15,7 @@ class CourseCreate(BaseModel):
     hours_theory: int = Field(default=0, ge=0)
     hours_practical: int = Field(default=0, ge=0)
     hours_autonomous: int = Field(default=0, ge=0)
+    teacher_id: Optional[int] = None
 
 
 class CourseUpdate(BaseModel):
@@ -40,6 +41,12 @@ class CourseOut(BaseModel):
     teacher_id: Optional[int] = None
     hours_total: int = 0
     hours_attendable: int = 0
+    course_name: str = ""
+    subject_name: str = ""
+    subject_code: str = ""
+    term_name: str = ""
+    term_code: str = ""
+    teacher_name: str = ""
 
     model_config = {"from_attributes": True}
 
@@ -64,6 +71,10 @@ class AssignmentOut(BaseModel):
     course_id: int
     term_id: int
     status: str
+    teacher_name: str = ""
+    course_name: str = ""
+    subject_name: str = ""
+    term_name: str = ""
 
     model_config = {"from_attributes": True}
 
@@ -74,6 +85,12 @@ class EnrollmentCreate(BaseModel):
     term_id: int
 
 
+class EnrollmentBulk(BaseModel):
+    course_id: int
+    term_id: int
+    student_ids: list[int] = Field(default_factory=list)
+
+
 class EnrollmentOut(BaseModel):
     id: int
     student_id: int
@@ -81,6 +98,10 @@ class EnrollmentOut(BaseModel):
     term_id: int
     status: str
     enrolled_at: Optional[datetime] = None
+    student_name: str = ""
+    course_name: str = ""
+    subject_name: str = ""
+    term_name: str = ""
 
     model_config = {"from_attributes": True}
 

@@ -116,6 +116,40 @@
           <p id="dash-loading" class="hint mt-2">Cargando indicadores…</p>
         </section>
 
+        <section class="table-wrap mt-3" data-roles="TEACHER,ADMINISTRATOR" aria-labelledby="my-courses-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="my-courses-title" class="section-title mb-0">Mis cursos</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty id="dash-courses-empty">Cargando cursos…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Curso</th>
+                <th scope="col">Materia</th>
+                <th scope="col">Periodo</th>
+              </tr>
+            </thead>
+            <tbody id="dash-courses-tbody"></tbody>
+          </table>
+        </section>
+
+        <section class="table-wrap mt-3" data-roles="STUDENT" aria-labelledby="dash-subjects-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="dash-subjects-title" class="section-title mb-0">Mis materias</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty id="dash-subjects-empty">Cargando materias…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Materia</th>
+                <th scope="col">Docente</th>
+                <th scope="col">Periodo</th>
+              </tr>
+            </thead>
+            <tbody id="dash-subjects-tbody"></tbody>
+          </table>
+        </section>
+
         <section class="table-wrap mt-3" aria-labelledby="shortcuts-title">
           <div class="panel-head px-3 pt-3 mb-0">
             <h3 id="shortcuts-title" class="section-title mb-0">Accesos rápidos</h3>

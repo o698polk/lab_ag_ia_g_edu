@@ -43,6 +43,7 @@ def create_user(
             username=body.username,
             email=body.email,
             password=body.password,
+            cedula=body.cedula,
             role_codes=body.role_codes,
             first_name=body.first_name,
             last_name=body.last_name,

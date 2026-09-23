@@ -102,8 +102,11 @@ class KardexEntry(Base):
     term_id: Mapped[int] = mapped_column(ForeignKey("academic_terms.id"), index=True)
     subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"), index=True)
     course_id: Mapped[Optional[int]] = mapped_column(ForeignKey("courses.id"))
+    first_partial: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2))
+    second_partial: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2))
+    recovery_grade: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2))
     final_grade: Mapped[Optional[Decimal]] = mapped_column(Numeric(5, 2))
     academic_status: Mapped[str] = mapped_column(
-        String(32), default="IN_PROGRESS"
-    )  # APPROVED|FAILED|IN_PROGRESS|WITHDRAWN
+        String(64), default="IN_PROGRESS"
+    )
     credits: Mapped[Decimal] = mapped_column(Numeric(5, 2), default=0)

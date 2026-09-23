@@ -24,10 +24,16 @@ def test_user_patch_and_permission_crud(client, auth_header):
     patched = client.patch(
         f"/api/v1/users/{admin['id']}",
         headers=auth_header,
-        json={"first_name": "Ada", "last_name": "Lovelace", "phone": "099000111"},
+        json={
+            "first_name": "Ada",
+            "last_name": "Lovelace",
+            "phone": "099000111",
+            "cedula": "0990001112",
+        },
     )
     assert patched.status_code == 200, patched.text
     assert patched.json()["first_name"] == "Ada"
+    assert patched.json()["cedula"] == "0990001112"
     assert patched.json()["id"] == admin["id"]
 
     created = client.post(
@@ -87,6 +93,21 @@ def test_me(client, admin_token):
     assert res.status_code == 200
     assert res.json()["username"] == "admin"
     assert "ADMINISTRATOR" in res.json()["roles"]
+
+
+@pytest.mark.unit
+def test_users_create_requires_cedula(client, admin_token):
+    res = client.post(
+        "/api/v1/users",
+        headers={"Authorization": f"Bearer {admin_token}"},
+        json={
+            "username": "sin_cedula",
+            "email": "sin_cedula@test.local",
+            "password": "SinCedula1!",
+            "role_codes": ["STUDENT"],
+        },
+    )
+    assert res.status_code == 422
 
 
 @pytest.mark.unit

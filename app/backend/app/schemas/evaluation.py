@@ -151,5 +151,57 @@ class KardexOut(BaseModel):
     final_grade: Optional[Decimal]
     academic_status: str
     credits: Decimal
+    subject_name: str = ""
+    term_name: str = ""
 
     model_config = {"from_attributes": True}
+
+
+class FinalGradeItem(BaseModel):
+    student_id: int
+    first_partial: Optional[Decimal] = Field(default=None, ge=0, le=10)
+    second_partial: Optional[Decimal] = Field(default=None, ge=0, le=10)
+    recovery_grade: Optional[Decimal] = Field(default=None, ge=0, le=10)
+
+
+class FinalGradesSave(BaseModel):
+    items: list[FinalGradeItem]
+
+
+class FinalGradeRow(BaseModel):
+    student_id: int
+    student_code: str
+    name: str
+    first_partial: Optional[Decimal] = None
+    second_partial: Optional[Decimal] = None
+    final_average: Optional[Decimal] = None
+    recovery_grade: Optional[Decimal] = None
+    academic_status: str = "IN_PROGRESS"
+    recovery_allowed: bool = False
+    official_grade: Optional[Decimal] = None
+    final_grade: Optional[Decimal] = None
+
+
+class FinalGradesOut(BaseModel):
+    course_id: int
+    course_name: str = ""
+    subject_name: str = ""
+    term_name: str = ""
+    teacher_name: str = ""
+    students: list[FinalGradeRow]
+
+
+class StudentCourseOut(BaseModel):
+    course_id: int
+    course_name: str = ""
+    subject_name: str = ""
+    teacher_name: str = ""
+    term_name: str = ""
+    first_partial: Optional[Decimal] = None
+    second_partial: Optional[Decimal] = None
+    final_average: Optional[Decimal] = None
+    recovery_grade: Optional[Decimal] = None
+    academic_status: str = "IN_PROGRESS"
+    official_grade: Optional[Decimal] = None
+    final_grade: Optional[Decimal] = None
+    attendance_pct: float = 0.0

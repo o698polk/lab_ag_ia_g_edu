@@ -20,11 +20,14 @@ from app.schemas.evaluation import (
     AttendanceSessionOut,
     EvaluationCreate,
     EvaluationOut,
+    FinalGradesOut,
+    FinalGradesSave,
     GradebookOut,
     GradeOut,
     GradeUpsert,
     KardexOut,
     KardexUpsert,
+    StudentCourseOut,
 )
 from app.services.catalog_service import TermClosedError
 from app.services.evaluation_service import EvaluationService
@@ -49,6 +52,22 @@ def _map_err(exc: Exception) -> HTTPException:
     if isinstance(exc, ValueError):
         return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
     return HTTPException(status_code=500, detail="INTERNAL")
+
+
+def _kardex_out(svc: EvaluationService, entry) -> KardexOut:
+    labels = svc.kardex_labels(entry)
+    return KardexOut(
+        id=entry.id,
+        student_id=entry.student_id,
+        term_id=entry.term_id,
+        subject_id=entry.subject_id,
+        course_id=entry.course_id,
+        final_grade=entry.final_grade,
+        academic_status=entry.academic_status,
+        credits=entry.credits,
+        subject_name=labels.get("subject_name") or "",
+        term_name=labels.get("term_name") or "",
+    )
 
 
 @router.post("/evaluations", response_model=EvaluationOut, status_code=201)
@@ -248,6 +267,61 @@ def attendance_bulk(
         raise _map_err(exc) from exc
 
 
+@router.get("/courses/{course_id}/final-grades", response_model=FinalGradesOut)
+def list_final_grades(
+    course_id: int,
+    current: Annotated[CurrentUser, Depends(require_permission(P.GRADES_VIEW))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    svc = EvaluationService(db)
+    if "ADMINISTRATOR" not in current.roles:
+        try:
+            teacher = svc.teacher_for_user(current.user.id)
+            course = svc._course(course_id)
+            svc._require_teacher_assignment(teacher, course)
+        except Exception as exc:  # noqa: BLE001
+            raise _map_err(exc) from exc
+    return svc.list_final_grades(course_id)
+
+
+@router.put("/courses/{course_id}/final-grades", response_model=FinalGradesOut)
+def save_final_grades(
+    course_id: int,
+    body: FinalGradesSave,
+    current: Annotated[CurrentUser, Depends(require_permission(P.GRADES_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    svc = EvaluationService(db)
+    try:
+        as_admin = "ADMINISTRATOR" in current.roles
+        teacher = None
+        if not as_admin:
+            teacher = svc.teacher_for_user(current.user.id)
+        else:
+            teacher = svc.ops.get_teacher_by_user_id(current.user.id)
+        return svc.save_final_grades(
+            teacher=teacher,
+            as_admin=as_admin,
+            course_id=course_id,
+            items=[item.model_dump() for item in body.items],
+        )
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.get("/me/academic", response_model=List[StudentCourseOut])
+def my_academic(
+    current: Annotated[CurrentUser, Depends(require_permission(P.GRADES_VIEW))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    svc = EvaluationService(db)
+    try:
+        student = svc.student_for_user(current.user.id)
+        return svc.student_academic(student.id)
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
 @router.get("/courses/{course_id}/gradebook", response_model=GradebookOut)
 def course_gradebook(
     course_id: int,
@@ -273,12 +347,29 @@ def course_gradebook(
 def attendance_percent(
     course_id: int,
     student_id: int,
-    _: Annotated[CurrentUser, Depends(require_permission(P.ATTENDANCE_VIEW))],
+    current: Annotated[CurrentUser, Depends(require_permission(P.ATTENDANCE_VIEW))],
     db: Annotated[Session, Depends(get_db)],
 ):
-    pct = EvaluationService(db).attendance_percentage(
-        course_id=course_id, student_id=student_id
-    )
+    svc = EvaluationService(db)
+    if "ADMINISTRATOR" not in current.roles:
+        if "TEACHER" in current.roles:
+            try:
+                teacher = svc.teacher_for_user(current.user.id)
+                course = svc._course(course_id)
+                svc._require_teacher_assignment(teacher, course)
+            except Exception as exc:  # noqa: BLE001
+                raise _map_err(exc) from exc
+        else:
+            try:
+                me = svc.student_for_user(current.user.id)
+            except Exception as exc:  # noqa: BLE001
+                raise _map_err(exc) from exc
+            if me.id != student_id:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail={"decision": "DENY", "reason_code": "RESOURCE_NOT_OWNED"},
+                )
+    pct = svc.attendance_percentage(course_id=course_id, student_id=student_id)
     return AttendancePercentOut(
         course_id=course_id, student_id=student_id, percentage=pct
     )
@@ -291,7 +382,8 @@ def upsert_kardex(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        return EvaluationService(db).upsert_kardex(**body.model_dump())
+        svc = EvaluationService(db)
+        return _kardex_out(svc, svc.upsert_kardex(**body.model_dump()))
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -304,7 +396,7 @@ def my_kardex(
     svc = EvaluationService(db)
     try:
         student = svc.student_for_user(current.user.id)
-        return svc.list_kardex(student.id)
+        return [_kardex_out(svc, row) for row in svc.list_kardex(student.id)]
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -315,9 +407,9 @@ def kardex_by_student(
     current: Annotated[CurrentUser, Depends(require_permission(P.KARDEX_VIEW))],
     db: Annotated[Session, Depends(get_db)],
 ):
-    if "ADMINISTRATOR" in current.roles:
-        return EvaluationService(db).list_kardex(student_id)
     svc = EvaluationService(db)
+    if "ADMINISTRATOR" in current.roles:
+        return [_kardex_out(svc, row) for row in svc.list_kardex(student_id)]
     try:
         me = svc.student_for_user(current.user.id)
     except LookupError as exc:
@@ -327,4 +419,4 @@ def kardex_by_student(
             status_code=status.HTTP_403_FORBIDDEN,
             detail={"decision": "DENY", "reason_code": "RESOURCE_NOT_OWNED"},
         )
-    return svc.list_kardex(student_id)
+    return [_kardex_out(svc, row) for row in svc.list_kardex(student_id)]

@@ -7,7 +7,7 @@ const COL_LABEL = {
   name: "Nombre", status: "Estado", parallel_code: "Paralelo", capacity: "Cupo",
   title: "Título", body: "Mensaje", type: "Tipo", student_code: "Código estudiante",
   teacher_code: "Código docente", specialty: "Especialidad", level: "Nivel",
-  username: "Usuario", email: "Correo",
+  username: "Usuario", email: "Correo", cedula: "Cédula",
   user: "Usuario", course: "Curso", teacher: "Docente", classroom: "Aula",
   term: "Periodo", student: "Estudiante", career: "Carrera", subjects: "Asignaturas",
   evaluation: "Evaluación", session: "Sesión", enrolled_at: "Fecha matrícula",
@@ -30,10 +30,11 @@ function personName(item) {
   );
 }
 
-function formatRef(id, text) {
-  if (id == null || id === "") return text || "—";
-  const name = String(text || "").trim();
-  return name ? id + " - " + name : String(id);
+function formatRef(_id, text, extra) {
+  const title = String(text || "").trim();
+  const code = extra == null ? "" : String(extra).trim();
+  if (title && code && code !== title) return title + " — " + code;
+  return title || code || "—";
 }
 
 function fillTbody(tbody, rows, columns) {
@@ -67,8 +68,8 @@ function makeSearchable(select) {
   const search = document.createElement("input");
   search.type = "search";
   search.className = "form-control form-control-sm siga-lookup-search";
-  search.placeholder = "Buscar…";
-  search.setAttribute("aria-label", "Buscar opción");
+  search.placeholder = "Buscar por nombre…";
+  search.setAttribute("aria-label", "Buscar por nombre");
   wrap.appendChild(search);
   wrap.appendChild(select);
   select.dataset.searchable = "1";

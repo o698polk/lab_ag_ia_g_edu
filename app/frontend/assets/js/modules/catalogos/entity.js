@@ -25,10 +25,15 @@
     return (list || []).find((item) => Number(item.id) === Number(id)) || null;
   }
 
-  function withId(text, id) {
-    if (id == null || id === "") return text || "—";
-    const name = String(text || "").trim();
-    return name ? id + " - " + name : String(id);
+  function visibleName(name, code) {
+    const title = String(name || "").trim();
+    const extra = String(code || "").trim();
+    if (title && extra && extra !== title) return title + " — " + extra;
+    return title || extra || "—";
+  }
+
+  function withId(text) {
+    return String(text || "").trim() || "—";
   }
 
   function userName(user) {
@@ -43,57 +48,54 @@
 
   function labelUser(id) {
     const user = byId(ctx.users, id);
-    if (!user) return id == null || id === "" ? "—" : withId("Usuario", id);
-    return withId(userName(user) || user.username, user.id);
+    if (!user) return id == null || id === "" ? "—" : "Usuario";
+    return visibleName(userName(user) || user.username, user.cedula);
   }
 
   function labelCareer(id) {
     const career = byId(ctx.careers, id);
-    if (!career) return id == null || id === "" ? "—" : withId("Carrera", id);
-    return withId((career.code || "") + " — " + (career.name || ""), career.id);
+    if (!career) return id == null || id === "" ? "—" : "Carrera";
+    return visibleName(career.name, career.code);
   }
 
   function labelSubject(id) {
     const subject = byId(ctx.subjects, id);
-    if (!subject) return id == null || id === "" ? "—" : withId("Asignatura", id);
-    return withId((subject.code || "") + " — " + (subject.name || ""), subject.id);
+    if (!subject) return id == null || id === "" ? "—" : "Asignatura";
+    return visibleName(subject.name, subject.code);
   }
 
   function labelTerm(id) {
     const term = byId(ctx.terms, id);
-    if (!term) return id == null || id === "" ? "—" : withId("Periodo", id);
-    return withId((term.code || "") + " — " + (term.name || ""), term.id);
+    if (!term) return id == null || id === "" ? "—" : "Periodo";
+    return visibleName(term.name, term.code);
   }
 
   function labelTeacher(id) {
     const teacher = byId(ctx.teachers, id);
-    if (!teacher) return id == null || id === "" ? "—" : withId("Docente", id);
-    const name = userName(byId(ctx.users, teacher.user_id)) || teacher.teacher_code || "Docente";
-    const prefix = teacher.teacher_code ? teacher.teacher_code + " — " : "";
-    return withId(prefix + name, teacher.id);
+    if (!teacher) return id == null || id === "" ? "—" : "Docente";
+    return visibleName(userName(byId(ctx.users, teacher.user_id)), teacher.teacher_code);
   }
 
   function labelStudent(id) {
     const student = byId(ctx.students, id);
-    if (!student) return id == null || id === "" ? "—" : withId("Estudiante", id);
-    const name = userName(byId(ctx.users, student.user_id)) || student.student_code || "Estudiante";
-    const prefix = student.student_code ? student.student_code + " — " : "";
-    return withId(prefix + name, student.id);
+    if (!student) return id == null || id === "" ? "—" : "Estudiante";
+    return visibleName(userName(byId(ctx.users, student.user_id)), student.student_code);
   }
 
   function labelCourse(id) {
     const course = byId(ctx.courses, id);
-    if (!course) return id == null || id === "" ? "—" : withId("Curso", id);
+    if (!course) return id == null || id === "" ? "—" : "Curso";
     const subject = byId(ctx.subjects, course.subject_id);
-    const title = subject ? (subject.code || "") + " — " + (subject.name || "") : "Curso";
-    const parallel = course.parallel_code ? " · " + course.parallel_code : "";
-    return withId(title + parallel, course.id);
+    return visibleName(
+      course.course_name || course.parallel_code,
+      course.subject_name || (subject && subject.name)
+    );
   }
 
   function labelClassroom(id) {
     const room = byId(ctx.classrooms, id);
-    if (!room) return id == null || id === "" ? "—" : withId("Aula", id);
-    return withId((room.code || "") + " — " + (room.name || ""), room.id);
+    if (!room) return id == null || id === "" ? "—" : "Aula";
+    return visibleName(room.name, room.code);
   }
 
   function labelSubjects(ids) {
@@ -102,14 +104,14 @@
   }
 
   const LOOKUPS = {
-    user_id: { path: "/users", label: (u) => withId(userName(u) || u.username, u.id) },
-    career_id: { path: "/careers", label: (c) => withId((c.code || "") + " — " + (c.name || ""), c.id) },
-    subject_id: { path: "/subjects", label: (s) => withId((s.code || "") + " — " + (s.name || ""), s.id) },
-    term_id: { path: "/terms", label: (t) => withId((t.code || "") + " — " + (t.name || ""), t.id) },
+    user_id: { path: "/users", label: (u) => visibleName(userName(u) || u.username, u.cedula) },
+    career_id: { path: "/careers", label: (c) => visibleName(c.name, c.code) },
+    subject_id: { path: "/subjects", label: (s) => visibleName(s.name, s.code) },
+    term_id: { path: "/terms", label: (t) => visibleName(t.name, t.code) },
     student_id: { path: "/students", label: (s) => labelStudent(s.id) },
     course_id: { path: "/courses", label: (c) => labelCourse(c.id) },
     teacher_id: { path: "/teachers", label: (t) => labelTeacher(t.id) },
-    classroom_id: { path: "/classrooms", label: (c) => withId((c.code || "") + " — " + (c.name || ""), c.id) },
+    classroom_id: { path: "/classrooms", label: (c) => visibleName(c.name, c.code) },
   };
 
   const DISPLAY_NEEDED = {
@@ -203,6 +205,7 @@
         hours_theory: Number(f.hours_theory || 0),
         hours_practical: Number(f.hours_practical || 0),
         hours_autonomous: Number(f.hours_autonomous || 0),
+        teacher_id: f.teacher_id ? Number(f.teacher_id) : undefined,
       }),
       update: (f) => ({
         parallel_code: f.parallel_code || "A",
@@ -214,14 +217,13 @@
         status: f.status || undefined,
       }),
       mapRow: (row) => {
-        const sub = byId(ctx.subjects, row.subject_id);
         const hours = (row.hours_theory || 0) + (row.hours_practical || 0) + (row.hours_autonomous || 0);
         return {
           ...row,
-          code: (sub && sub.code) || row.parallel_code || ("#" + row.id),
-          course: withId((sub && sub.name) || "Curso", row.id),
-          teacher: labelTeacher(row.teacher_id),
-          term: labelTerm(row.term_id),
+          code: row.subject_code || row.parallel_code || "",
+          course: visibleName(row.course_name || row.parallel_code, row.subject_name),
+          teacher: row.teacher_name || labelTeacher(row.teacher_id),
+          term: row.term_name || labelTerm(row.term_id),
           hours: hours + " h",
         };
       },
@@ -237,9 +239,9 @@
       }),
       mapRow: (row) => ({
         ...row,
-        student: labelStudent(row.student_id),
-        course: labelCourse(row.course_id),
-        term: labelTerm(row.term_id),
+        student: row.student_name || labelStudent(row.student_id),
+        course: visibleName(row.course_name, row.subject_name) || labelCourse(row.course_id),
+        term: row.term_name || labelTerm(row.term_id),
         enrolled_at: row.enrolled_at ? String(row.enrolled_at).replace("T", " ").slice(0, 16) : "",
       }),
     },
@@ -600,11 +602,14 @@
       fillLookup(el("enroll-cancel-id"), bags.enrollments || [], (e) => {
         const st = byId(ctx.students, e.student_id);
         const name = userName(byId(ctx.users, st && st.user_id)) || (st && st.student_code) || "Matrícula";
-        return withId(name, e.id);
+        return name;
       });
     }
     if (el("cur-id") && el("cur-id").tagName === "SELECT") {
-      fillLookup(el("cur-id"), bags.curricula || [], (c) => withId("v" + (c.version || ""), c.id));
+      fillLookup(el("cur-id"), bags.curricula || [], (c) => {
+        const career = byId(ctx.careers, c.career_id);
+        return visibleName(career && career.name, "v" + (c.version || ""));
+      });
     }
     if (el("cur-subject-id") && el("cur-subject-id").tagName === "SELECT") {
       fillLookup(el("cur-subject-id"), bags.subjects || [], LOOKUPS.subject_id.label);
@@ -661,6 +666,51 @@
     );
   }
 
+  function selectedStudents() {
+    return [...document.querySelectorAll("#enroll-students [data-student]:checked")].map((box) =>
+      Number(box.getAttribute("data-student"))
+    );
+  }
+
+  function paintEnrollStudents(selected) {
+    const host = el("enroll-students");
+    if (!host) return;
+    const picked = new Set((selected || []).map((id) => String(id)));
+    host.innerHTML = "";
+    (ctx.students || []).forEach((st) => {
+      const id = String(st.id);
+      const label = document.createElement("label");
+      label.className = "form-check d-block mb-1";
+      const box = document.createElement("input");
+      box.type = "checkbox";
+      box.className = "form-check-input";
+      box.setAttribute("data-student", id);
+      box.checked = picked.has(id);
+      const span = document.createElement("span");
+      span.className = "form-check-label ms-2";
+      span.textContent = labelStudent(st.id);
+      label.appendChild(box);
+      label.appendChild(span);
+      host.appendChild(label);
+    });
+    if (!host.children.length) {
+      host.textContent = "No hay estudiantes para matricular.";
+    }
+  }
+
+  async function syncEnrollChecks() {
+    const courseId = Number(el("f-course_id")?.value || 0);
+    const course = byId(ctx.courses, courseId);
+    if (el("f-term_id") && course) el("f-term_id").value = String(course.term_id);
+    if (!courseId) {
+      paintEnrollStudents([]);
+      return;
+    }
+    const { ok, data } = await api("GET", "/enrollments?course_id=" + courseId);
+    const enrolled = ok && Array.isArray(data) ? data.filter((r) => r.status === "ACTIVE").map((r) => r.student_id) : [];
+    paintEnrollStudents(enrolled);
+  }
+
   async function createItem(ev) {
     ev.preventDefault();
     const form = ev.target;
@@ -670,6 +720,36 @@
     }
     const fields = readForm();
     const out = el("create-out");
+    if (key === "enrollments" && el("enroll-students")) {
+      const courseId = Number(fields.course_id || 0);
+      const course = byId(ctx.courses, courseId);
+      const termId = Number(fields.term_id || (course && course.term_id) || 0);
+      if (!courseId || !termId) {
+        const msg = "Seleccione el curso.";
+        if (out) out.textContent = msg;
+        toast(msg, "bad");
+        return;
+      }
+      const { ok, status, data } = await api("POST", "/enrollments/bulk", {
+        course_id: courseId,
+        term_id: termId,
+        student_ids: selectedStudents(),
+      });
+      if (!ok) {
+        const msg =
+          status === 403
+            ? "DENY: sin permiso para matricular estudiantes."
+            : formatError(data);
+        if (out) out.textContent = msg;
+        toast(msg, "bad");
+        return;
+      }
+      if (out) out.textContent = "Matrícula guardada correctamente.";
+      toast("Matrícula guardada correctamente.", "ok");
+      await loadLookups();
+      await loadList();
+      return;
+    }
     const days = key === "schedules" ? selectedDays() : [];
     if (key === "schedules") {
       if (!days.length) {
@@ -805,11 +885,13 @@
     if (course && el("f-term_id") && course.term_id) {
       el("f-term_id").value = String(course.term_id);
     }
+    if (key === "enrollments") syncEnrollChecks();
   });
   el("btn-term-status")?.addEventListener("click", () => patchTermStatus());
   el("btn-enroll-cancel")?.addEventListener("click", () => cancelEnrollment());
   el("btn-cur-subject")?.addEventListener("click", () => addCurriculumSubject());
 
   await loadLookups();
+  if (key === "enrollments") paintEnrollStudents([]);
   await loadList();
 })();

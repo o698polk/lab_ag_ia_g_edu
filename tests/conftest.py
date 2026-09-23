@@ -127,6 +127,7 @@ def _reset_db():
         ]
         student_role = Role(code="STUDENT", name="Student", is_active=True)
         student_role.permissions = [
+            perm_map["courses.view"],
             perm_map["grades.view"],
             perm_map["attendance.view"],
             perm_map["kardex.view"],
@@ -141,6 +142,7 @@ def _reset_db():
         admin = User(
             username="admin",
             email="admin@test.local",
+            cedula="1712345678",
             password_hash=hash_password("Admin123!"),
             status="ACTIVE",
         )
@@ -148,6 +150,7 @@ def _reset_db():
         teacher = User(
             username="teacher1",
             email="teacher@test.local",
+            cedula="1712345679",
             password_hash=hash_password("Teacher123!"),
             status="ACTIVE",
         )
@@ -155,6 +158,7 @@ def _reset_db():
         student = User(
             username="student1",
             email="student@test.local",
+            cedula="1712345680",
             password_hash=hash_password("Student123!"),
             status="ACTIVE",
         )
@@ -162,6 +166,7 @@ def _reset_db():
         blocked = User(
             username="blocked",
             email="blocked@test.local",
+            cedula="1712345681",
             password_hash=hash_password("Blocked123!"),
             status="BLOCKED",
         )

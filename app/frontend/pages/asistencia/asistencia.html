@@ -56,48 +56,31 @@
 
         <div class="module-head">
           <h2>Asistencia</h2>
-          <p>Curso → fecha → hora → estudiantes matriculados. Marque asistencia y guarde.</p>
-        </div>
-        <div class="admin-toolbar">
-          <button type="button" class="btn btn-siga" id="btn-new-record">+ Nuevo</button>
-          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
-          <a class="btn btn-outline-secondary" href="/ui/pages/asistencia/registro.html">Registro rápido</a>
+          <p>Seleccione su curso, la fecha y la hora. El sistema carga solo a los estudiantes matriculados.</p>
         </div>
 
         <section class="card-soft mb-3" aria-labelledby="att-cascade-title">
-          <h3 id="att-cascade-title">Seleccionar curso</h3>
-          <div class="filter-cascade">
-            <div>
-              <label class="form-label" for="filter-career">1. Carrera</label>
-              <select id="filter-career" class="form-select">
-                <option value="">Todas / sin filtrar</option>
+          <h3 id="att-cascade-title">Mis cursos</h3>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="form-label" for="filter-course">Curso</label>
+              <select id="filter-course" class="form-select">
+                <option value="">Seleccionar curso…</option>
               </select>
             </div>
-            <div>
-              <label class="form-label" for="filter-term">2. Periodo</label>
-              <select id="filter-term" class="form-select" disabled>
-                <option value="">Selecciona periodo</option>
-              </select>
-            </div>
-            <div>
-              <label class="form-label" for="filter-parallel">3. Paralelo</label>
-              <select id="filter-parallel" class="form-select" disabled>
-                <option value="">Selecciona paralelo</option>
-              </select>
-            </div>
-          </div>
-          <div class="row g-2 mt-3">
             <div class="col-md-3">
               <label class="form-label" for="att-date">Fecha</label>
               <input id="att-date" type="date" class="form-control" />
             </div>
             <div class="col-md-3">
-              <label class="form-label" for="att-hour">Hora / carga horaria</label>
+              <label class="form-label" for="att-hour">Hora</label>
               <select id="att-hour" class="form-select">
                 <option value="1">Hora 1</option>
               </select>
             </div>
-            <div class="col-md-3 d-flex align-items-end">
+          </div>
+          <div class="row g-2 mt-2">
+            <div class="col-md-3">
               <button type="button" class="btn btn-outline-secondary w-100" id="btn-load-roster">Cargar lista</button>
             </div>
           </div>
@@ -112,9 +95,10 @@
           <table class="table table-sm table-hover align-middle data-table">
             <thead>
               <tr>
-                <th scope="col">Id</th>
+                <th scope="col">Nº</th>
                 <th scope="col">Estudiante</th>
                 <th scope="col">Asistencia</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="roster-tbody"></tbody>
@@ -124,116 +108,6 @@
           </div>
         </section>
 
-        <div class="row g-3">
-          <div class="col-lg-6">
-            <section class="card-soft h-100 d-none" id="session-form-wrap" aria-labelledby="session-title">
-              <h3 id="session-title">Nueva sesión</h3>
-              <div class="row g-3">
-                <div class="col-sm-6">
-                  <label class="form-label" for="att-topic">Tema</label>
-                  <input id="att-topic" class="form-control" placeholder="Clase" />
-                </div>
-                <div class="col-12">
-                  <button type="button" class="btn btn-siga" id="btn-create-session" disabled>Crear sesión</button>
-                </div>
-              </div>
-            </section>
-          </div>
-          <div class="col-lg-6">
-            <section class="card-soft h-100 d-none" id="mark-form-wrap" aria-labelledby="mark-title">
-              <h3 id="mark-title">Marcar asistencia</h3>
-              <div class="row g-3">
-                <div class="col-md-4">
-                  <label class="form-label" for="att-session-id">Sesión</label>
-                  <select id="att-session-id" class="form-select" disabled>
-                    <option value="">Crea o elige sesión</option>
-                  </select>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label" for="att-student-id">Estudiante</label>
-                  <select id="att-student-id" class="form-select" disabled>
-                    <option value="">Selecciona curso</option>
-                  </select>
-                </div>
-                <div class="col-md-4">
-                  <label class="form-label" for="att-status">Estado</label>
-                  <select id="att-status" class="form-select">
-                    <option value="PRESENT">Presente</option>
-                    <option value="ABSENT">Ausente</option>
-                    <option value="LATE">Atraso</option>
-                    <option value="JUSTIFIED">Justificado</option>
-                  </select>
-                </div>
-                <div class="col-12">
-                  <label class="form-label" for="att-notes">Notas</label>
-                  <input id="att-notes" class="form-control" placeholder="Opcional" />
-                </div>
-                <div class="col-12">
-                  <button type="button" class="btn btn-siga" id="btn-mark-att" disabled>Guardar asistencia</button>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-
-        <section class="card-soft mt-3" aria-labelledby="pct-title">
-          <h3 id="pct-title">Porcentaje de asistencia</h3>
-          <div class="row g-2 align-items-end">
-            <div class="col-sm-5">
-              <label class="form-label" for="pct-student-id">Estudiante del paralelo</label>
-              <select id="pct-student-id" class="form-select" disabled>
-                <option value="">Selecciona curso</option>
-              </select>
-            </div>
-            <div class="col-sm-3">
-              <button type="button" class="btn btn-outline-secondary w-100" id="btn-att-pct" disabled>Consultar %</button>
-            </div>
-            <div class="col-sm-4">
-              <p class="cascade-path mb-0" id="pct-result" aria-live="polite">Sin consulta.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="table-wrap mt-3" aria-labelledby="sessions-log-title">
-          <div class="panel-head px-3 pt-3 mb-0">
-            <h3 id="sessions-log-title" class="section-title mb-0">Sesiones de esta pantalla</h3>
-          </div>
-          <p class="empty-state mb-0" data-empty>Aún no creaste sesiones en esta sesión de navegador.</p>
-          <table class="table table-sm table-hover align-middle data-table">
-            <thead>
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Curso</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Tema</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="sessions-tbody"></tbody>
-          </table>
-          <div class="admin-pager" id="pager-sessions"></div>
-        </section>
-
-        <section class="table-wrap mt-3" aria-labelledby="marks-log-title">
-          <div class="panel-head px-3 pt-3 mb-0">
-            <h3 id="marks-log-title" class="section-title mb-0">Marcas recientes</h3>
-          </div>
-          <p class="empty-state mb-0" data-empty>Sin marcas en esta pantalla.</p>
-          <table class="table table-sm table-hover align-middle data-table">
-            <thead>
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Sesión</th>
-                <th scope="col">Estudiante</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Notas</th>
-                <th scope="col">Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="marks-tbody"></tbody>
-          </table>
-          <div class="admin-pager" id="pager-marks"></div>
-        </section>
 
       </main>
     </div>

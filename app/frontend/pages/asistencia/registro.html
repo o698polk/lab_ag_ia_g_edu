@@ -60,7 +60,7 @@
 
         <div class="module-head">
           <h2>Registro de asistencia</h2>
-          <p>Paralelo → crear sesión → marcar presente/ausente.</p>
+          <p>Curso → fecha → hora → estudiantes matriculados.</p>
         </div>
         <div class="admin-toolbar">
           <a class="btn btn-outline-secondary" href="/ui/pages/asistencia/asistencia.html">Volver</a>
@@ -68,91 +68,48 @@
 
         <section class="card-soft mb-3">
           <h3>Curso</h3>
-          <div class="filter-cascade">
-            <div>
-              <label class="form-label" for="filter-career">1. Carrera</label>
-              <select id="filter-career" class="form-select">
-                <option value="">Todas / sin filtrar</option>
+          <div class="row g-2">
+            <div class="col-md-6">
+              <label class="form-label" for="filter-course">Curso</label>
+              <select id="filter-course" class="form-select">
+                <option value="">Seleccionar curso…</option>
               </select>
             </div>
-            <div>
-              <label class="form-label" for="filter-term">2. Periodo</label>
-              <select id="filter-term" class="form-select" disabled>
-                <option value="">Selecciona periodo</option>
-              </select>
+            <div class="col-md-3">
+              <label class="form-label" for="att-date">Fecha</label>
+              <input id="att-date" type="date" class="form-control" />
             </div>
-            <div>
-              <label class="form-label" for="filter-parallel">3. Paralelo</label>
-              <select id="filter-parallel" class="form-select" disabled>
-                <option value="">Selecciona paralelo</option>
+            <div class="col-md-3">
+              <label class="form-label" for="att-hour">Hora</label>
+              <select id="att-hour" class="form-select">
+                <option value="1">Hora 1</option>
               </select>
             </div>
           </div>
           <p class="cascade-path mt-3 mb-0" id="cascade-path">Sin curso seleccionado.</p>
         </section>
 
-        <section class="card-soft mb-3">
-          <h3>Sesión y marca</h3>
-          <div class="row g-3">
-            <div class="col-md-3">
-              <label class="form-label" for="att-date">Fecha</label>
-              <input id="att-date" type="date" class="form-control" />
-            </div>
-            <div class="col-md-3">
-              <label class="form-label" for="att-topic">Tema</label>
-              <input id="att-topic" class="form-control" placeholder="Clase" />
-            </div>
-            <div class="col-md-3">
-              <label class="form-label" for="att-session-id">Sesión</label>
-              <select id="att-session-id" class="form-select" disabled>
-                <option value="">Crea sesión</option>
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label" for="att-student-id">Estudiante</label>
-              <select id="att-student-id" class="form-select" disabled>
-                <option value="">—</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label" for="att-status">Estado</label>
-              <select id="att-status" class="form-select">
-                <option value="PRESENT">Presente</option>
-                <option value="ABSENT">Ausente</option>
-                <option value="LATE">Atraso</option>
-                <option value="JUSTIFIED">Justificado</option>
-              </select>
-            </div>
-            <div class="col-md-8">
-              <label class="form-label" for="att-notes">Notas</label>
-              <input id="att-notes" class="form-control" placeholder="Opcional" />
-            </div>
-            <div class="col-12 d-flex flex-wrap gap-2">
-              <button type="button" class="btn btn-siga" id="btn-create-session" disabled>Crear sesión</button>
-              <button type="button" class="btn btn-siga" id="btn-mark-att" disabled>Guardar asistencia</button>
-              <button type="button" class="btn btn-outline-secondary" id="btn-att-pct" disabled>Consultar %</button>
-            </div>
+        <section class="table-wrap mb-3" aria-labelledby="roster-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="roster-title" class="section-title mb-0">Registro de asistencia</h3>
           </div>
-          <p class="cascade-path mt-3 mb-0" id="pct-result">Sin consulta.</p>
-          <select id="pct-student-id" class="d-none" aria-hidden="true"></select>
-        </section>
-
-        <section class="table-wrap">
-          <p class="empty-state mb-0" data-empty>Sin marcas aún.</p>
+          <p class="empty-state mb-0" data-empty>Seleccione curso, fecha y hora.</p>
           <table class="table table-sm table-hover align-middle data-table">
             <thead>
               <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Sesión</th>
+                <th scope="col">Nº</th>
                 <th scope="col">Estudiante</th>
-                <th scope="col">Estado</th>
-                <th scope="col">Notas</th>
+                <th scope="col">Asistencia</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
-            <tbody id="marks-tbody"></tbody>
+            <tbody id="roster-tbody"></tbody>
           </table>
+          <div class="admin-pager px-3 py-2">
+            <button type="button" class="btn btn-siga" id="btn-save-roster" disabled>Guardar asistencia</button>
+            <button type="button" class="btn btn-outline-secondary" id="btn-load-roster">Cargar lista</button>
+          </div>
         </section>
-        <tbody id="sessions-tbody" class="d-none" aria-hidden="true"></tbody>
 
       </main>
     </div>

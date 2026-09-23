@@ -67,7 +67,7 @@ copy .env.example .env
 # 2.5 Migraciones + datos demo
 .\.venv\Scripts\python.exe -m alembic -c alembic.ini upgrade head
 .\.venv\Scripts\python.exe scripts\seed_iam.py
-.\.venv\Scripts\python.exe scripts\seed_demo_academic.py
+.\.venv\Scripts\python.exe scripts\seed_academic.py
 ```
 
 Credenciales lab: [`documentation/CREDENCIALES-USUARIOS.md`](documentation/CREDENCIALES-USUARIOS.md)
@@ -75,8 +75,8 @@ Credenciales lab: [`documentation/CREDENCIALES-USUARIOS.md`](documentation/CREDE
 | Usuario | Contraseña | Rol |
 |---|---|---|
 | `admin` | `Admin123!` | Administrador |
-| `teacher1` | `Teacher123!` | Docente |
-| `student1` | `Student123!` | Estudiante |
+| `teacher1` … `teacher16` | `Teacher123!` | Docente |
+| `student1` … `student300` | `Student123!` | Estudiante |
 
 ---
 

@@ -315,3 +315,92 @@ def test_course_hours_roster_attendance_bulk_and_gradebook(
     assert book.status_code == 200
     assert book.json()["students"][0]["student_id"] == base["student"]["id"]
     assert book.json()["students"][0]["attendance_pct"] == 100.0
+
+
+@pytest.mark.unit
+def test_course_grades_rules_and_integrity(client, auth_header, teacher_header, student_header):
+    base = _setup_grade_context(client, auth_header)
+    path = f"/api/v1/courses/{base['course']['id']}/final-grades"
+    sid = base["student"]["id"]
+
+    approved = client.put(
+        path,
+        headers=teacher_header,
+        json={"items": [{"student_id": sid, "first_partial": "8.50", "second_partial": "9.00"}]},
+    )
+    assert approved.status_code == 200, approved.text
+    row = approved.json()["students"][0]
+    assert row["academic_status"] == "APROBADO"
+    assert str(row["final_average"]) in ("8.75", "8.750")
+    assert row["recovery_grade"] is None
+
+    blocked = client.put(
+        path,
+        headers=teacher_header,
+        json={
+            "items": [
+                {
+                    "student_id": sid,
+                    "first_partial": "8.50",
+                    "second_partial": "9.00",
+                    "recovery_grade": "9.00",
+                }
+            ]
+        },
+    )
+    assert blocked.status_code == 400
+    assert blocked.json()["detail"] == "RECOVERY_NOT_ALLOWED"
+
+    pending = client.put(
+        path,
+        headers=teacher_header,
+        json={"items": [{"student_id": sid, "first_partial": "6.00", "second_partial": "6.50"}]},
+    )
+    assert pending.json()["students"][0]["academic_status"] == "SUPLETORIO PENDIENTE"
+
+    recovered = client.put(
+        path,
+        headers=teacher_header,
+        json={
+            "items": [
+                {
+                    "student_id": sid,
+                    "first_partial": "6.00",
+                    "second_partial": "6.50",
+                    "recovery_grade": "7.50",
+                }
+            ]
+        },
+    )
+    rec = recovered.json()["students"][0]
+    assert rec["academic_status"] == "APROBADO POR RECUPERACIÓN"
+    assert str(rec["official_grade"]) in ("7.00", "7.0", "7.000")
+
+    failed = client.put(
+        path,
+        headers=teacher_header,
+        json={
+            "items": [
+                {
+                    "student_id": sid,
+                    "first_partial": "5.50",
+                    "second_partial": "6.00",
+                    "recovery_grade": "6.25",
+                }
+            ]
+        },
+    )
+    assert failed.json()["students"][0]["academic_status"] == "REPROBADO"
+
+    student_write = client.put(
+        path,
+        headers=student_header,
+        json={"items": [{"student_id": sid, "first_partial": "10", "second_partial": "10"}]},
+    )
+    assert student_write.status_code == 403
+
+    mine = client.get("/api/v1/me/academic", headers=student_header)
+    assert mine.status_code == 200
+    mine_row = next(r for r in mine.json() if r["course_id"] == base["course"]["id"])
+    assert mine_row["academic_status"] == "REPROBADO"
+    assert mine_row["first_partial"] is not None

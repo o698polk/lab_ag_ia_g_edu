@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.auth.deps import CurrentUser, require_permission
 from app.db.session import get_db
+from app.models import Course, Teacher
 from app.permissions import constants as P
 from app.schemas.academic import StatusUpdate
 from app.schemas.operations import (
@@ -20,6 +21,7 @@ from app.schemas.operations import (
     CourseOut,
     CourseRosterStudent,
     CourseUpdate,
+    EnrollmentBulk,
     EnrollmentCreate,
     EnrollmentOut,
     ScheduleCreate,
@@ -40,6 +42,7 @@ def _course_out(svc: OperationsService, course) -> CourseOut:
     practical = getattr(course, "hours_practical", 0) or 0
     autonomous = getattr(course, "hours_autonomous", 0) or 0
     attendable = theory + practical
+    labels = svc.course_labels(course)
     return CourseOut(
         id=course.id,
         subject_id=course.subject_id,
@@ -50,9 +53,49 @@ def _course_out(svc: OperationsService, course) -> CourseOut:
         hours_practical=practical,
         hours_autonomous=autonomous,
         status=course.status,
-        teacher_id=svc.course_teacher_id(course.id),
+        teacher_id=labels.get("teacher_id"),
         hours_total=theory + practical + autonomous,
         hours_attendable=attendable if attendable > 0 else 1,
+        course_name=labels.get("course_name") or "",
+        subject_name=labels.get("subject_name") or "",
+        subject_code=labels.get("subject_code") or "",
+        term_name=labels.get("term_name") or "",
+        term_code=labels.get("term_code") or "",
+        teacher_name=labels.get("teacher_name") or "",
+    )
+
+
+def _assignment_out(svc: OperationsService, row) -> AssignmentOut:
+    course = svc.db.get(Course, row.course_id)
+    labels = svc.course_labels(course) if course else {}
+    teacher = svc.db.get(Teacher, row.teacher_id)
+    return AssignmentOut(
+        id=row.id,
+        teacher_id=row.teacher_id,
+        course_id=row.course_id,
+        term_id=row.term_id,
+        status=row.status,
+        teacher_name=svc._user_name(teacher.user_id) if teacher else "",
+        course_name=labels.get("course_name") or "",
+        subject_name=labels.get("subject_name") or "",
+        term_name=labels.get("term_name") or "",
+    )
+
+
+def _enrollment_out(svc: OperationsService, row) -> EnrollmentOut:
+    course = svc.db.get(Course, row.course_id)
+    labels = svc.course_labels(course) if course else {}
+    return EnrollmentOut(
+        id=row.id,
+        student_id=row.student_id,
+        course_id=row.course_id,
+        term_id=row.term_id,
+        status=row.status,
+        enrolled_at=row.enrolled_at,
+        student_name=svc.student_name(row.student_id),
+        course_name=labels.get("course_name") or "",
+        subject_name=labels.get("subject_name") or "",
+        term_name=labels.get("term_name") or "",
     )
 
 
@@ -75,12 +118,24 @@ def _map_err(exc: Exception) -> HTTPException:
 
 @router.get("/courses", response_model=List[CourseOut])
 def list_courses(
-    _: Annotated[CurrentUser, Depends(require_permission(P.COURSES_VIEW))],
+    current: Annotated[CurrentUser, Depends(require_permission(P.COURSES_VIEW))],
     db: Annotated[Session, Depends(get_db)],
     term_id: Optional[int] = Query(default=None),
 ):
     svc = OperationsService(db)
-    return [_course_out(svc, c) for c in svc.list_courses(term_id=term_id)]
+    teacher_id = None
+    student_id = None
+    if "ADMINISTRATOR" not in current.roles:
+        if "TEACHER" in current.roles:
+            teacher = svc.get_teacher_by_user_id(current.user.id)
+            teacher_id = teacher.id if teacher else -1
+        elif "STUDENT" in current.roles:
+            student = svc.get_student_by_user_id(current.user.id)
+            student_id = student.id if student else -1
+    return [
+        _course_out(svc, c)
+        for c in svc.list_courses(term_id=term_id, teacher_id=teacher_id, student_id=student_id)
+    ]
 
 
 @router.post("/courses", response_model=CourseOut, status_code=201)
@@ -142,7 +197,8 @@ def list_assignments(
     db: Annotated[Session, Depends(get_db)],
     course_id: Optional[int] = Query(default=None),
 ):
-    return OperationsService(db).list_assignments(course_id=course_id)
+    svc = OperationsService(db)
+    return [_assignment_out(svc, row) for row in svc.list_assignments(course_id=course_id)]
 
 
 @router.post("/teaching-assignments", response_model=AssignmentOut, status_code=201)
@@ -152,7 +208,8 @@ def assign_teacher(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        return OperationsService(db).assign_teacher(**body.model_dump())
+        svc = OperationsService(db)
+        return _assignment_out(svc, svc.assign_teacher(**body.model_dump()))
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -165,7 +222,8 @@ def set_assignment_status(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        return OperationsService(db).set_assignment_status(assignment_id, body.status)
+        svc = OperationsService(db)
+        return _assignment_out(svc, svc.set_assignment_status(assignment_id, body.status))
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -195,7 +253,8 @@ def list_enrollments(
     db: Annotated[Session, Depends(get_db)],
     course_id: Optional[int] = Query(default=None),
 ):
-    return OperationsService(db).list_enrollments(course_id=course_id)
+    svc = OperationsService(db)
+    return [_enrollment_out(svc, row) for row in svc.list_enrollments(course_id=course_id)]
 
 
 @router.post("/enrollments", response_model=EnrollmentOut, status_code=201)
@@ -205,7 +264,24 @@ def enroll(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        return OperationsService(db).enroll_student(**body.model_dump())
+        svc = OperationsService(db)
+        return _enrollment_out(svc, svc.enroll_student(**body.model_dump()))
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.post("/enrollments/bulk", response_model=List[EnrollmentOut])
+def enroll_bulk(
+    body: EnrollmentBulk,
+    _: Annotated[CurrentUser, Depends(require_permission(P.ENROLLMENTS_CREATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        svc = OperationsService(db)
+        return [
+            _enrollment_out(svc, row)
+            for row in svc.sync_enrollments(**body.model_dump())
+        ]
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -217,7 +293,8 @@ def cancel_enrollment(
     db: Annotated[Session, Depends(get_db)],
 ):
     try:
-        return OperationsService(db).cancel_enrollment(enrollment_id)
+        svc = OperationsService(db)
+        return _enrollment_out(svc, svc.cancel_enrollment(enrollment_id))
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 

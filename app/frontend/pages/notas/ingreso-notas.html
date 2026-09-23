@@ -59,93 +59,52 @@
       <main class="app-content">
 
         <div class="module-head">
-          <h2>Ingreso de notas</h2>
-          <p>Flujo corto: carrera → periodo → paralelo → evaluación → nota.</p>
+          <h2>Ingreso de calificaciones</h2>
+          <p>Registre primer y segundo parcial. El promedio se calcula solo. La recuperación se habilita si el promedio es menor a 7.00.</p>
         </div>
         <div class="admin-toolbar">
-          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
           <a class="btn btn-outline-secondary" href="/ui/pages/notas/notas.html">Volver a notas</a>
         </div>
 
         <section class="card-soft mb-3" aria-labelledby="ingreso-cascade-title">
           <h3 id="ingreso-cascade-title">Curso</h3>
-          <div class="filter-cascade">
-            <div>
-              <label class="form-label" for="filter-career">1. Carrera</label>
-              <select id="filter-career" class="form-select">
-                <option value="">Todas / sin filtrar</option>
+          <div class="row g-2">
+            <div class="col-md-8">
+              <label class="form-label" for="filter-course">Curso</label>
+              <select id="filter-course" class="form-select">
+                <option value="">Seleccionar curso…</option>
               </select>
             </div>
-            <div>
-              <label class="form-label" for="filter-term">2. Periodo</label>
-              <select id="filter-term" class="form-select" disabled>
-                <option value="">Selecciona periodo</option>
-              </select>
-            </div>
-            <div>
-              <label class="form-label" for="filter-parallel">3. Paralelo</label>
-              <select id="filter-parallel" class="form-select" disabled>
-                <option value="">Selecciona paralelo</option>
-              </select>
+            <div class="col-md-4 d-flex align-items-end">
+              <button type="button" class="btn btn-outline-secondary w-100" id="btn-load-gradebook">Cargar estudiantes</button>
             </div>
           </div>
           <p class="cascade-path mt-3 mb-0" id="cascade-path" aria-live="polite">Sin curso seleccionado.</p>
         </section>
 
-        <section class="card-soft mb-3" aria-labelledby="ingreso-form-title">
-          <h3 id="ingreso-form-title">Registrar</h3>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="form-label" for="grade-eval-id">Evaluación</label>
-              <select id="grade-eval-id" class="form-select" disabled>
-                <option value="">Selecciona curso primero</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label" for="grade-student-id">Estudiante</label>
-              <select id="grade-student-id" class="form-select" disabled>
-                <option value="">Selecciona curso primero</option>
-              </select>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label" for="grade-score">Nota (0 a 100)</label>
-              <input id="grade-score" type="number" class="form-control" min="0" max="100" step="0.01" value="90" />
-            </div>
-            <div class="col-12">
-              <label class="form-label" for="grade-comment">Comentario</label>
-              <input id="grade-comment" class="form-control" placeholder="Opcional" />
-            </div>
-            <div class="col-12 d-flex flex-wrap gap-2">
-              <button type="button" class="btn btn-siga" id="btn-upsert-grade" disabled>Guardar nota</button>
-              <button type="button" class="btn btn-outline-secondary" id="btn-course-grades" disabled>Ver notas del curso</button>
-            </div>
+        <section class="table-wrap mb-3" id="gradebook-wrap" aria-labelledby="gradebook-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="gradebook-title" class="section-title mb-0">Calificaciones</h3>
           </div>
-        </section>
-
-        <section class="table-wrap" id="panel-grades">
-          <p class="empty-state mb-0" data-empty>Guarda o consulta para ver filas.</p>
+          <p class="empty-state mb-0" data-empty>Seleccione un curso para registrar los parciales.</p>
           <table class="table table-sm table-hover align-middle data-table">
             <thead>
               <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Evaluación</th>
+                <th scope="col">Nº</th>
                 <th scope="col">Estudiante</th>
-                <th scope="col">Nota</th>
-                <th scope="col">Comentario</th>
-                <th scope="col">Fecha</th>
+                <th scope="col">1.er Parcial</th>
+                <th scope="col">2.º Parcial</th>
+                <th scope="col">Promedio</th>
+                <th scope="col">Recuperación</th>
+                <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
-            <tbody id="grades-tbody"></tbody>
+            <tbody id="gradebook-tbody"></tbody>
           </table>
-          <div class="admin-pager" id="pager-grades"></div>
-        </section>
-
-        <!-- Shared module expects these ids; keep hidden on ingreso page -->
-        <button type="button" id="btn-my-grades" class="d-none" tabindex="-1" aria-hidden="true"></button>
-        <button type="button" id="btn-my-kardex" class="d-none" tabindex="-1" aria-hidden="true"></button>
-        <section class="d-none" id="panel-kardex">
-          <tbody id="kardex-tbody"></tbody>
+          <div class="admin-pager px-3 py-2">
+            <button type="button" class="btn btn-siga" id="btn-save-gradebook" disabled>Guardar calificaciones</button>
+          </div>
         </section>
 
       </main>

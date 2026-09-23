@@ -137,6 +137,23 @@ class CatalogService:
     def list_terms(self) -> Sequence[AcademicTerm]:
         return self.db.scalars(select(AcademicTerm).order_by(AcademicTerm.id)).all()
 
+    def active_term(self) -> Optional[AcademicTerm]:
+        return self.db.scalar(
+            select(AcademicTerm)
+            .where(AcademicTerm.status == "ACTIVE")
+            .order_by(AcademicTerm.id)
+        )
+
+    def _activate_exclusive(self, term: AcademicTerm) -> None:
+        for other in self.list_terms():
+            if other.id == term.id:
+                continue
+            if other.status == "ACTIVE":
+                other.status = "CLOSED"
+            other.is_current = False
+        term.status = "ACTIVE"
+        term.is_current = True
+
     def create_term(
         self,
         *,
@@ -151,9 +168,9 @@ class CatalogService:
             raise ValueError("TERM_EXISTS")
         if status not in {"PLANNED", "ACTIVE", "CLOSED", "CANCELLED"}:
             raise ValueError("INVALID_TERM_STATUS")
-        if is_current:
-            for t in self.list_terms():
-                t.is_current = False
+        if status == "ACTIVE" or is_current:
+            status = "ACTIVE"
+            is_current = True
         term = AcademicTerm(
             code=code,
             name=name,
@@ -163,6 +180,9 @@ class CatalogService:
             is_current=is_current,
         )
         self.db.add(term)
+        self.db.flush()
+        if term.status == "ACTIVE":
+            self._activate_exclusive(term)
         self.db.commit()
         self.db.refresh(term)
         return term
@@ -173,12 +193,11 @@ class CatalogService:
             raise LookupError("TERM_NOT_FOUND")
         if status not in {"PLANNED", "ACTIVE", "CLOSED", "CANCELLED"}:
             raise ValueError("INVALID_TERM_STATUS")
-        term.status = status
         if status == "ACTIVE":
-            for t in self.list_terms():
-                if t.id != term.id:
-                    t.is_current = False
-            term.is_current = True
+            self._activate_exclusive(term)
+        else:
+            term.status = status
+            term.is_current = False
         self.db.commit()
         self.db.refresh(term)
         return term

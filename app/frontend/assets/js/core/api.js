@@ -193,6 +193,9 @@ function formatError(data) {
     if (detail === "Not Found") {
       return "No se encontró el registro.";
     }
+    if (detail === "CEDULA_EXISTS") {
+      return "Ya existe un usuario con esa cédula.";
+    }
     return detail;
   }
   return JSON.stringify(data, null, 2);

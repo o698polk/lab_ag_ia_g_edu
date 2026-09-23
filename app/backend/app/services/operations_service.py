@@ -10,6 +10,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models import (
+    AcademicTerm,
     Classroom,
     Course,
     Enrollment,
@@ -59,11 +60,92 @@ class OperationsService:
             )
         )
 
+    def get_student_by_user_id(self, user_id: int) -> Optional[Student]:
+        return self.db.scalar(
+            select(Student).where(
+                Student.user_id == user_id, Student.deleted_at.is_(None)
+            )
+        )
+
+    def _user_name(self, user_id: Optional[int]) -> str:
+        if not user_id:
+            return ""
+        user = self.db.get(User, user_id)
+        return user.full_name if user else ""
+
+    def course_labels(self, course: Course) -> dict:
+        subject = self.db.get(Subject, course.subject_id)
+        term = self.db.get(AcademicTerm, course.term_id)
+        teacher_id = self.course_teacher_id(course.id)
+        teacher = self.db.get(Teacher, teacher_id) if teacher_id else None
+        return {
+            "course_name": course.parallel_code or "",
+            "subject_name": subject.name if subject else "",
+            "subject_code": subject.code if subject else "",
+            "term_name": term.name if term else "",
+            "term_code": term.code if term else "",
+            "teacher_id": teacher_id,
+            "teacher_name": self._user_name(teacher.user_id if teacher else None),
+        }
+
+    def student_name(self, student_id: int) -> str:
+        student = self.db.get(Student, student_id)
+        if student is None:
+            return ""
+        return self._user_name(student.user_id)
+
+    def _set_course_teacher(self, course: Course, teacher_id: int) -> None:
+        teacher = self.db.get(Teacher, teacher_id)
+        if teacher is None or teacher.deleted_at is not None:
+            raise LookupError("TEACHER_NOT_FOUND")
+        rows = self.db.scalars(
+            select(TeachingAssignment).where(TeachingAssignment.course_id == course.id)
+        ).all()
+        found = None
+        for row in rows:
+            if row.teacher_id == teacher_id and row.term_id == course.term_id:
+                found = row
+                row.status = "ACTIVE"
+            else:
+                row.status = "INACTIVE"
+        if found is None:
+            self.db.add(
+                TeachingAssignment(
+                    teacher_id=teacher_id,
+                    course_id=course.id,
+                    term_id=course.term_id,
+                    status="ACTIVE",
+                )
+            )
+
     # --- Courses ---
-    def list_courses(self, term_id: Optional[int] = None) -> Sequence[Course]:
+    def list_courses(
+        self,
+        term_id: Optional[int] = None,
+        *,
+        teacher_id: Optional[int] = None,
+        student_id: Optional[int] = None,
+    ) -> Sequence[Course]:
         stmt = select(Course).order_by(Course.id)
-        if term_id is not None:
+        if teacher_id is not None:
+            active = self.catalog.active_term()
+            if active is None:
+                return []
+            stmt = stmt.where(Course.term_id == active.id)
+        elif term_id is not None:
             stmt = stmt.where(Course.term_id == term_id)
+        if teacher_id is not None:
+            assigned = select(TeachingAssignment.course_id).where(
+                TeachingAssignment.teacher_id == teacher_id,
+                TeachingAssignment.status == "ACTIVE",
+            )
+            stmt = stmt.where(Course.id.in_(assigned))
+        if student_id is not None:
+            enrolled = select(Enrollment.course_id).where(
+                Enrollment.student_id == student_id,
+                Enrollment.status == "ACTIVE",
+            )
+            stmt = stmt.where(Course.id.in_(enrolled))
         return self.db.scalars(stmt).all()
 
     def create_course(
@@ -76,6 +158,7 @@ class OperationsService:
         hours_theory: int = 0,
         hours_practical: int = 0,
         hours_autonomous: int = 0,
+        teacher_id: Optional[int] = None,
     ) -> Course:
         self.catalog.assert_term_writable(term_id)
         if self.db.get(Subject, subject_id) is None:
@@ -100,6 +183,9 @@ class OperationsService:
             status="ACTIVE",
         )
         self.db.add(course)
+        self.db.flush()
+        if teacher_id:
+            self._set_course_teacher(course, teacher_id)
         self.db.commit()
         self.db.refresh(course)
         return course
@@ -132,24 +218,7 @@ class OperationsService:
         if status is not None:
             course.status = status
         if teacher_id is not None:
-            existing = self.db.scalar(
-                select(TeachingAssignment).where(
-                    TeachingAssignment.course_id == course.id,
-                    TeachingAssignment.teacher_id == teacher_id,
-                    TeachingAssignment.term_id == course.term_id,
-                )
-            )
-            if existing is None:
-                self.db.add(
-                    TeachingAssignment(
-                        teacher_id=teacher_id,
-                        course_id=course.id,
-                        term_id=course.term_id,
-                        status="ACTIVE",
-                    )
-                )
-            else:
-                existing.status = "ACTIVE"
+            self._set_course_teacher(course, teacher_id)
         self.db.commit()
         self.db.refresh(course)
         return course
@@ -294,6 +363,35 @@ class OperationsService:
         self.db.commit()
         self.db.refresh(enr)
         return enr
+
+    def sync_enrollments(
+        self, *, course_id: int, term_id: int, student_ids: list[int]
+    ) -> list[Enrollment]:
+        course = self.db.get(Course, course_id)
+        if course is None:
+            raise LookupError("COURSE_NOT_FOUND")
+        wanted = {int(sid) for sid in student_ids}
+        existing = self.db.scalars(
+            select(Enrollment).where(Enrollment.course_id == course_id)
+        ).all()
+        kept: list[Enrollment] = []
+        for row in existing:
+            if row.student_id in wanted:
+                if row.status != "ACTIVE":
+                    self.catalog.assert_term_writable(term_id)
+                    row.status = "ACTIVE"
+                kept.append(row)
+                wanted.discard(row.student_id)
+            elif row.status == "ACTIVE":
+                self.catalog.assert_term_writable(row.term_id)
+                row.status = "CANCELLED"
+        self.db.flush()
+        for sid in wanted:
+            kept.append(
+                self.enroll_student(student_id=sid, course_id=course_id, term_id=term_id)
+            )
+        self.db.commit()
+        return [row for row in kept if row.status == "ACTIVE"]
 
     def cancel_enrollment(self, enrollment_id: int) -> Enrollment:
         enr = self.db.get(Enrollment, enrollment_id)

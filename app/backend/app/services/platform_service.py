@@ -28,6 +28,7 @@ from app.models import (
     User,
     UserHistoryEvent,
 )
+from app.services.catalog_service import CatalogService
 from app.services.role_service import AuthorizationError
 
 
@@ -217,17 +218,20 @@ class PlatformService:
             teacher = self.db.scalar(select(Teacher).where(Teacher.user_id == user.id))
             assigned = 0
             students = 0
-            if teacher:
+            active = CatalogService(self.db).active_term()
+            if teacher and active:
                 assigned = self._count(
                     TeachingAssignment,
                     TeachingAssignment.teacher_id == teacher.id,
                     TeachingAssignment.status == "ACTIVE",
+                    TeachingAssignment.term_id == active.id,
                 )
                 course_ids = list(
                     self.db.scalars(
                         select(TeachingAssignment.course_id).where(
                             TeachingAssignment.teacher_id == teacher.id,
                             TeachingAssignment.status == "ACTIVE",
+                            TeachingAssignment.term_id == active.id,
                         )
                     )
                 )

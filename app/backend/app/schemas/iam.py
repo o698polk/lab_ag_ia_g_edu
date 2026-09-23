@@ -117,10 +117,18 @@ class PermissionOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+def _normalize_cedula(value: str) -> str:
+    cleaned = (value or "").strip().replace("-", "").replace(" ", "")
+    if not cleaned or not cleaned.isdigit() or not (6 <= len(cleaned) <= 16):
+        raise ValueError("invalid cedula")
+    return cleaned
+
+
 class UserOut(BaseModel):
     id: int
     username: str
     email: str
+    cedula: str
     first_name: str = ""
     last_name: str = ""
     full_name: str = ""
@@ -139,6 +147,7 @@ class UserCreate(BaseModel):
 
     username: str = Field(min_length=3, max_length=64)
     email: str = Field(min_length=5, max_length=255)
+    cedula: str = Field(min_length=6, max_length=16)
     password: str = Field(min_length=8)
     first_name: str = ""
     last_name: str = ""
@@ -152,12 +161,18 @@ class UserCreate(BaseModel):
             raise ValueError("invalid email")
         return v.lower()
 
+    @field_validator("cedula")
+    @classmethod
+    def cedula_must_be_valid(cls, v: str) -> str:
+        return _normalize_cedula(v)
+
 
 class UserUpdate(BaseModel):
     model_config = {"extra": "forbid"}
 
     username: Optional[str] = Field(default=None, min_length=3, max_length=64)
     email: Optional[str] = Field(default=None, min_length=5, max_length=255)
+    cedula: Optional[str] = Field(default=None, min_length=6, max_length=16)
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     phone: Optional[str] = None
@@ -172,6 +187,13 @@ class UserUpdate(BaseModel):
         if "@" not in v:
             raise ValueError("invalid email")
         return v.lower()
+
+    @field_validator("cedula")
+    @classmethod
+    def cedula_must_be_valid(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return v
+        return _normalize_cedula(v)
 
 
 class UserStatusUpdate(BaseModel):
@@ -197,6 +219,7 @@ def user_to_out(user) -> UserOut:  # noqa: ANN001
         id=user.id,
         username=user.username,
         email=user.email,
+        cedula=user.cedula or "",
         first_name=user.first_name or "",
         last_name=user.last_name or "",
         full_name=user.full_name,

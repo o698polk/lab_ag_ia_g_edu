@@ -35,6 +35,7 @@ class UserService:
         username: str,
         email: str,
         password: str,
+        cedula: str,
         role_codes: list[str] | None = None,
         first_name: str = "",
         last_name: str = "",
@@ -44,9 +45,12 @@ class UserService:
             email
         ):
             raise ValueError("USER_EXISTS")
+        if self.users.get_by_cedula(cedula):
+            raise ValueError("CEDULA_EXISTS")
         user = User(
             username=username,
             email=email,
+            cedula=cedula,
             first_name=first_name or "",
             last_name=last_name or "",
             phone=phone or "",
@@ -69,6 +73,7 @@ class UserService:
         *,
         username: str | None = None,
         email: str | None = None,
+        cedula: str | None = None,
         first_name: str | None = None,
         last_name: str | None = None,
         phone: str | None = None,
@@ -84,6 +89,10 @@ class UserService:
             if self.users.get_by_username_or_email(email):
                 raise ValueError("USER_EXISTS")
             user.email = email
+        if cedula and cedula != user.cedula:
+            if self.users.get_by_cedula(cedula):
+                raise ValueError("CEDULA_EXISTS")
+            user.cedula = cedula
         if first_name is not None:
             user.first_name = first_name
         if last_name is not None:

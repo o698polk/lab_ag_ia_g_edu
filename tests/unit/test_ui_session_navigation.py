@@ -125,6 +125,7 @@ def test_register_user_admin_ok_student_denied(client, admin_token, student_toke
         json={
             "username": "navuser1",
             "email": "navuser1@siga.local",
+            "cedula": "0991112224",
             "password": "NavUser123!",
             "role_codes": ["STUDENT"],
         },
@@ -136,6 +137,7 @@ def test_register_user_admin_ok_student_denied(client, admin_token, student_toke
         json={
             "username": "navuser2",
             "email": "navuser2@siga.local",
+            "cedula": "0991112225",
             "password": "NavUser123!",
             "role_codes": ["STUDENT"],
         },
@@ -186,7 +188,7 @@ def test_ui_f2f3_architecture():
     assert 'data-metric="students"' in dash
 
     notas = (PAGES / "notas" / "notas.html").read_text(encoding="utf-8")
-    assert 'id="grades-tbody"' in notas
+    assert 'id="gradebook-tbody"' in notas
     assert "<thead>" in notas
 
     login_js = (ASSETS / "js" / "modules" / "auth" / "login.js").read_text(encoding="utf-8")
@@ -228,30 +230,29 @@ def test_ui_f4_dashboard_polish():
 
 @pytest.mark.unit
 def test_ui_f5_notas_cascade():
-    """PromptMaster FASE 5: carrera → periodo → paralelo + ingreso page."""
+    """Notas: curso asignado + nota final; estudiante consulta."""
     notas = (PAGES / "notas" / "notas.html").read_text(encoding="utf-8")
-    assert 'id="filter-career"' in notas
-    assert 'id="filter-term"' in notas
-    assert 'id="filter-parallel"' in notas
-    assert 'id="grades-tbody"' in notas
-    assert 'id="kardex-tbody"' in notas
+    assert 'id="filter-course"' in notas
+    assert 'id="gradebook-tbody"' in notas
+    assert 'id="student-subjects-tbody"' in notas
+    assert 'id="student-grades-tbody"' in notas
+    assert 'id="student-attendance-tbody"' in notas
     assert "<thead>" in notas
-    assert "filter-cascade" in notas
+    assert "1.er Parcial" in notas
+    assert "Recuperación" in notas
+    assert "Promedio" in notas
 
     ingreso = PAGES / "notas" / "ingreso-notas.html"
     assert ingreso.is_file()
     ingreso_html = ingreso.read_text(encoding="utf-8")
-    assert 'id="filter-parallel"' in ingreso_html
-    assert 'id="btn-upsert-grade"' in ingreso_html
+    assert 'id="filter-course"' in ingreso_html
+    assert 'id="btn-save-gradebook"' in ingreso_html
 
     js = (ASSETS / "js" / "modules" / "notas" / "notas.js").read_text(encoding="utf-8")
-    assert 'api("GET", "/careers")' in js
-    assert 'api("GET", "/terms")' in js
     assert 'api("GET", "/courses")' in js
-    assert 'api("PUT", "/grades"' in js
-    assert 'api("GET", "/me/grades")' in js
-    assert "filter-career" in js
-    assert "filter-parallel" in js
+    assert "/final-grades" in js
+    assert 'api("GET", "/me/academic")' in js
+    assert "filter-course" in js
 
     forms = (ASSETS / "css" / "forms.css").read_text(encoding="utf-8")
     assert ".filter-cascade" in forms
@@ -259,29 +260,25 @@ def test_ui_f5_notas_cascade():
 
 @pytest.mark.unit
 def test_ui_f6_asistencia_cascade():
-    """PromptMaster FASE 6: asistencia cascade + registro rápido."""
+    """Asistencia: curso asignado → fecha → hora → matriculados."""
     page = (PAGES / "asistencia" / "asistencia.html").read_text(encoding="utf-8")
-    assert 'id="filter-career"' in page
-    assert 'id="filter-term"' in page
-    assert 'id="filter-parallel"' in page
-    assert 'id="btn-create-session"' in page
-    assert 'id="btn-mark-att"' in page
-    assert 'id="sessions-tbody"' in page
-    assert 'id="marks-tbody"' in page
+    assert 'id="filter-course"' in page
+    assert 'id="att-date"' in page
+    assert 'id="att-hour"' in page
+    assert 'id="roster-tbody"' in page
+    assert 'id="btn-save-roster"' in page
     assert "<thead>" in page
 
     registro = PAGES / "asistencia" / "registro.html"
     assert registro.is_file()
     reg = registro.read_text(encoding="utf-8")
-    assert 'id="filter-parallel"' in reg
-    assert 'id="btn-create-session"' in reg
+    assert 'id="filter-course"' in reg
+    assert 'id="roster-tbody"' in reg
 
     js = (ASSETS / "js" / "modules" / "asistencia" / "asistencia.js").read_text(encoding="utf-8")
-    assert 'api("POST", "/attendance/sessions"' in js
-    assert 'api("PUT", "/attendance/records"' in js
-    assert "/attendance/courses/" in js
-    assert "filter-career" in js
-    assert "filter-parallel" in js
+    assert 'api("GET", "/attendance/roster"' in js
+    assert 'api("PUT", "/attendance/bulk"' in js
+    assert "filter-course" in js
 
 
 @pytest.mark.unit
@@ -370,6 +367,7 @@ def test_ui_f9_usuarios_roles():
     uh = usuarios.read_text(encoding="utf-8")
     assert 'id="users-tbody"' in uh
     assert 'id="user-create-form"' in uh
+    assert 'id="u-cedula"' in uh
     assert 'id="btn-user-roles"' in uh
     assert "<thead>" in uh
 
@@ -565,12 +563,12 @@ def test_ui_complete_missing_functions():
     assert 'path: "/teaching-assignments"' in ejs
 
     notas = (PAGES / "notas" / "notas.html").read_text(encoding="utf-8")
-    assert 'id="btn-create-eval"' in notas
-    assert 'id="btn-upsert-kardex"' in notas
+    assert 'id="btn-save-gradebook"' in notas
+    assert 'id="student-subjects-tbody"' in notas
 
     njs = (ASSETS / "js" / "modules" / "notas" / "notas.js").read_text(encoding="utf-8")
-    assert 'api("POST", "/evaluations"' in njs
-    assert 'api("PUT", "/kardex"' in njs
+    assert "/final-grades" in njs
+    assert 'api("GET", "/me/academic")' in njs
 
     reportes = (PAGES / "reportes" / "reportes.html").read_text(encoding="utf-8")
     assert 'value="PDF"' in reportes
@@ -589,7 +587,7 @@ def test_ui_complete_missing_functions():
     asistencia = (PAGES / "asistencia" / "asistencia.html").read_text(encoding="utf-8")
     assert 'id="roster-tbody"' in asistencia
     assert 'id="att-hour"' in asistencia
-    assert 'id="btn-create-session"' in asistencia
+    assert 'id="btn-save-roster"' in asistencia
 
     notas_html = (PAGES / "notas" / "notas.html").read_text(encoding="utf-8")
     assert 'id="gradebook-tbody"' in notas_html

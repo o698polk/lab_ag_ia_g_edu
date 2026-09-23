@@ -198,6 +198,7 @@ def test_mass_assignment_role_not_via_user_create(client, auth_header):
         json={
             "username": "massuser",
             "email": "mass@test.local",
+            "cedula": "0991112228",
             "password": "Mass1234!",
             "role_codes": [],
             "roles": ["ADMINISTRATOR"],
@@ -213,6 +214,7 @@ def test_mass_assignment_role_not_via_user_create(client, auth_header):
         json={
             "username": "massuser",
             "email": "mass@test.local",
+            "cedula": "0991112228",
             "password": "Mass1234!",
             "role_codes": [],
         },

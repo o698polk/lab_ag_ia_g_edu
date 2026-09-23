@@ -24,6 +24,7 @@ def test_user_service_create_update_status(client, auth_header):
         json={
             "username": "edgeuser",
             "email": "edge@test.local",
+            "cedula": "0991112226",
             "password": "Edge1234!",
             "role_codes": ["STUDENT"],
         },
@@ -76,6 +77,7 @@ def test_change_password(client, auth_header):
         json={
             "username": "pwduser",
             "email": "pwd@test.local",
+            "cedula": "0991112227",
             "password": "OldPass123!",
             "role_codes": ["STUDENT"],
         },

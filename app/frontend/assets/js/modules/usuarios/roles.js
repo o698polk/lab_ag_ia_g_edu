@@ -43,7 +43,7 @@
               ' /><label class="form-check-label" for="perm-' +
               p.id +
               '">' +
-              SigaModal.escapeHtml(SigaTable.formatRef(p.id, p.description || p.name || p.code)) +
+              SigaModal.escapeHtml(p.description || p.name || p.code) +
               "</label></div>"
             );
           })
@@ -139,7 +139,7 @@
       permissions: (r.permissions || []).join(", "),
     }));
     table.setRows(rows);
-    fillSelect(el("role-code"), rolesCache, (r) => SigaTable.formatRef(r.id, r.name || r.code), (r) => r.id);
+    fillSelect(el("role-code"), rolesCache, (r) => r.name || r.code, (r) => r.id);
     const selected = el("role-code")?.value;
     const role = rolesCache.find((r) => String(r.id) === String(selected) || r.code === selected);
     if (role) {

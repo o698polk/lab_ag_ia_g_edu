@@ -34,6 +34,14 @@ class UserRepository:
         )
         return self.db.scalar(stmt)
 
+    def get_by_cedula(self, cedula: str) -> Optional[User]:
+        stmt = (
+            select(User)
+            .options(selectinload(User.roles).selectinload(Role.permissions))
+            .where(User.deleted_at.is_(None), User.cedula == cedula)
+        )
+        return self.db.scalar(stmt)
+
     def list_users(self) -> Sequence[User]:
         stmt = (
             select(User)

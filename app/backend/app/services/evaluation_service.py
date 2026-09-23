@@ -11,6 +11,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session, selectinload
 
 from app.models import (
+    AcademicTerm,
     AttendanceRecord,
     AttendanceSession,
     Course,
@@ -20,17 +21,32 @@ from app.models import (
     Grade,
     KardexEntry,
     Student,
+    Subject,
     Teacher,
     User,
 )
 from app.services.catalog_service import CatalogService, TermClosedError
+from app.services.grade_rules import (
+    COURSE_STATUSES,
+    CourseGradeResult,
+    RecoveryNotAllowedError,
+    resolve_course_grade,
+)
 from app.services.operations_service import OperationsService
 from app.services.role_service import AuthorizationError
+
+_UNSET = object()
 
 
 class EvaluationService:
     VALID_ATTENDANCE = {"PRESENT", "ABSENT", "LATE", "JUSTIFIED"}
-    VALID_KARDEX = {"APPROVED", "FAILED", "IN_PROGRESS", "WITHDRAWN"}
+    VALID_KARDEX = {
+        "APPROVED",
+        "FAILED",
+        "IN_PROGRESS",
+        "WITHDRAWN",
+        *COURSE_STATUSES,
+    }
 
     def __init__(self, db: Session) -> None:
         self.db = db
@@ -452,6 +468,9 @@ class EvaluationService:
         final_grade: Optional[Decimal],
         academic_status: str,
         credits: Decimal,
+        first_partial: Optional[Decimal] = _UNSET,  # type: ignore[assignment]
+        second_partial: Optional[Decimal] = _UNSET,  # type: ignore[assignment]
+        recovery_grade: Optional[Decimal] = _UNSET,  # type: ignore[assignment]
     ) -> KardexEntry:
         if academic_status not in self.VALID_KARDEX:
             raise ValueError("INVALID_KARDEX_STATUS")
@@ -469,6 +488,9 @@ class EvaluationService:
                 term_id=term_id,
                 subject_id=subject_id,
                 course_id=course_id,
+                first_partial=None if first_partial is _UNSET else first_partial,
+                second_partial=None if second_partial is _UNSET else second_partial,
+                recovery_grade=None if recovery_grade is _UNSET else recovery_grade,
                 final_grade=final_grade,
                 academic_status=academic_status,
                 credits=credits,
@@ -476,6 +498,12 @@ class EvaluationService:
             self.db.add(entry)
         else:
             entry.course_id = course_id
+            if first_partial is not _UNSET:
+                entry.first_partial = first_partial
+            if second_partial is not _UNSET:
+                entry.second_partial = second_partial
+            if recovery_grade is not _UNSET:
+                entry.recovery_grade = recovery_grade
             entry.final_grade = final_grade
             entry.academic_status = academic_status
             entry.credits = credits
@@ -489,3 +517,139 @@ class EvaluationService:
             .where(KardexEntry.student_id == student_id)
             .order_by(KardexEntry.id)
         ).all()
+
+    def kardex_for_course(self, course: Course, student_id: int) -> Optional[KardexEntry]:
+        return self.db.scalar(
+            select(KardexEntry).where(
+                KardexEntry.student_id == student_id,
+                KardexEntry.term_id == course.term_id,
+                KardexEntry.subject_id == course.subject_id,
+            )
+        )
+
+    def _resolved_entry(self, entry: Optional[KardexEntry]) -> CourseGradeResult:
+        if entry is None:
+            return resolve_course_grade(None, None, None)
+        return resolve_course_grade(
+            entry.first_partial, entry.second_partial, entry.recovery_grade
+        )
+
+    def _grade_row(self, row: dict, entry: Optional[KardexEntry]) -> dict:
+        resolved = self._resolved_entry(entry)
+        return {
+            "student_id": row["student_id"],
+            "student_code": row.get("student_code") or "",
+            "name": row.get("name") or "",
+            "first_partial": resolved.first_partial,
+            "second_partial": resolved.second_partial,
+            "final_average": resolved.final_average,
+            "recovery_grade": resolved.recovery_grade,
+            "academic_status": resolved.academic_status,
+            "recovery_allowed": resolved.recovery_allowed,
+            "official_grade": resolved.official_grade,
+            "final_grade": resolved.official_grade,
+        }
+
+    def list_final_grades(self, course_id: int) -> dict:
+        course = self._course(course_id)
+        labels = self.ops.course_labels(course)
+        roster = self.ops.course_roster(course_id)
+        students = [
+            self._grade_row(row, self.kardex_for_course(course, row["student_id"]))
+            for row in roster
+        ]
+        return {
+            "course_id": course.id,
+            "course_name": labels.get("course_name") or "",
+            "subject_name": labels.get("subject_name") or "",
+            "term_name": labels.get("term_name") or "",
+            "teacher_name": labels.get("teacher_name") or "",
+            "students": students,
+        }
+
+    def save_final_grades(
+        self,
+        *,
+        teacher: Optional[Teacher],
+        as_admin: bool,
+        course_id: int,
+        items: list[dict],
+    ) -> dict:
+        course = self._course(course_id)
+        if not as_admin:
+            if teacher is None:
+                raise AuthorizationError("TEACHER_PROFILE_REQUIRED")
+            self._require_teacher_assignment(teacher, course)
+        else:
+            self.catalog.assert_term_writable(course.term_id)
+        enrolled = {row["student_id"] for row in self.ops.course_roster(course_id)}
+        subject = self.db.get(Subject, course.subject_id)
+        credits = subject.credits if subject and subject.credits is not None else Decimal("0")
+        for item in items:
+            student_id = int(item["student_id"])
+            if student_id not in enrolled:
+                raise ValueError("STUDENT_NOT_ENROLLED")
+            try:
+                resolved = resolve_course_grade(
+                    item.get("first_partial"),
+                    item.get("second_partial"),
+                    item.get("recovery_grade"),
+                )
+            except RecoveryNotAllowedError:
+                raise ValueError("RECOVERY_NOT_ALLOWED") from None
+            self.upsert_kardex(
+                student_id=student_id,
+                term_id=course.term_id,
+                subject_id=course.subject_id,
+                course_id=course.id,
+                first_partial=resolved.first_partial,
+                second_partial=resolved.second_partial,
+                recovery_grade=resolved.recovery_grade,
+                final_grade=resolved.official_grade,
+                academic_status=resolved.academic_status,
+                credits=credits,
+            )
+        return self.list_final_grades(course_id)
+
+    def student_academic(self, student_id: int) -> list[dict]:
+        enrollments = self.db.scalars(
+            select(Enrollment).where(
+                Enrollment.student_id == student_id,
+                Enrollment.status == "ACTIVE",
+            )
+        ).all()
+        out = []
+        for enr in enrollments:
+            course = self.db.get(Course, enr.course_id)
+            if course is None:
+                continue
+            labels = self.ops.course_labels(course)
+            resolved = self._resolved_entry(self.kardex_for_course(course, student_id))
+            out.append(
+                {
+                    "course_id": course.id,
+                    "course_name": labels.get("course_name") or "",
+                    "subject_name": labels.get("subject_name") or "",
+                    "teacher_name": labels.get("teacher_name") or "",
+                    "term_name": labels.get("term_name") or "",
+                    "first_partial": resolved.first_partial,
+                    "second_partial": resolved.second_partial,
+                    "final_average": resolved.final_average,
+                    "recovery_grade": resolved.recovery_grade,
+                    "academic_status": resolved.academic_status,
+                    "official_grade": resolved.official_grade,
+                    "final_grade": resolved.official_grade,
+                    "attendance_pct": self.attendance_percentage(
+                        course_id=course.id, student_id=student_id
+                    ),
+                }
+            )
+        return out
+
+    def kardex_labels(self, entry: KardexEntry) -> dict:
+        subject = self.db.get(Subject, entry.subject_id)
+        term = self.db.get(AcademicTerm, entry.term_id)
+        return {
+            "subject_name": subject.name if subject else "",
+            "term_name": term.name if term else "",
+        }

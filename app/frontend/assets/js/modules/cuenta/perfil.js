@@ -12,6 +12,7 @@
     if (el) el.textContent = v || "—";
   };
   set("pf-username", u.username);
+  set("pf-cedula", u.cedula);
   set("pf-email", u.email);
   set("pf-status", u.status);
   set("pf-roles", (u.roles || []).join(", "));

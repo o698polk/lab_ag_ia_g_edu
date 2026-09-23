@@ -10,13 +10,13 @@
     return;
   }
 
-  const COLS = ["id", "first_name", "last_name", "username", "email", "phone", "status", "roles", "created_at"];
+  const COLS = ["id", "first_name", "last_name", "cedula", "username", "email", "phone", "status", "roles", "created_at"];
   const el = (id) => document.getElementById(id);
   let cache = [];
   let rolesCache = [];
 
   function roleLabel(role) {
-    return SigaTable.formatRef(role.id, role.name || role.code);
+    return role.name || role.code || "Rol";
   }
 
   function roleCodeFromSelect(selectId) {
@@ -63,6 +63,7 @@
       id: u.id,
       first_name: u.first_name || "",
       last_name: u.last_name || "",
+      cedula: u.cedula || "",
       username: u.username,
       email: u.email,
       phone: u.phone || "",
@@ -101,6 +102,8 @@
         SigaModal.escapeHtml(row.first_name) +
         "</dd><dt>Apellidos</dt><dd>" +
         SigaModal.escapeHtml(row.last_name) +
+        "</dd><dt>Cédula</dt><dd>" +
+        SigaModal.escapeHtml(row.cedula) +
         "</dd><dt>Usuario</dt><dd>" +
         SigaModal.escapeHtml(row.username) +
         "</dd><dt>Correo</dt><dd>" +
@@ -137,6 +140,7 @@
     if (el("m-user-id")) el("m-user-id").value = row.id;
     if (el("m-first-name")) el("m-first-name").value = row.first_name || "";
     if (el("m-last-name")) el("m-last-name").value = row.last_name || "";
+    if (el("m-cedula")) el("m-cedula").value = row.cedula || "";
     if (el("m-username")) el("m-username").value = row.username || "";
     if (el("m-email")) el("m-email").value = row.email || "";
     if (el("m-phone")) el("m-phone").value = row.phone || "";
@@ -161,6 +165,7 @@
     const body = {
       first_name: (el("u-first-name")?.value || "").trim(),
       last_name: (el("u-last-name")?.value || "").trim(),
+      cedula: (el("u-cedula")?.value || "").trim(),
       username: (el("u-username").value || "").trim(),
       email: (el("u-email").value || "").trim(),
       phone: (el("u-phone")?.value || "").trim(),
@@ -208,6 +213,7 @@
     const body = {
       first_name: (el("m-first-name")?.value || "").trim(),
       last_name: (el("m-last-name")?.value || "").trim(),
+      cedula: (el("m-cedula")?.value || "").trim(),
       username: (el("m-username")?.value || "").trim(),
       email: (el("m-email")?.value || "").trim(),
       phone: (el("m-phone")?.value || "").trim(),
