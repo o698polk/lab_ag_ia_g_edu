@@ -1,4 +1,4 @@
-/* global SigaApi, SigaAuth, SigaToast, SigaTable */
+/* global SigaApi, SigaAuth, SigaToast, SigaTable, SigaModal, SigaAdminTable */
 // Ref: PromptMaster FASE 8 | GET /reports/catalog · POST /reports · GET /reports/logs
 (async function () {
   if (!(await SigaAuth.requireAuth())) return;
@@ -20,6 +20,61 @@
   const LOG_COLS = ["id", "user_id", "report_type", "format", "result_status", "row_count", "created_at"];
   const el = (id) => document.getElementById(id);
   let catalog = [];
+  const catalogTable = SigaAdminTable.bind({
+    tbody: el("report-catalog-tbody"),
+    columns: ["code", "name", "group", "description"],
+    searchInput: el("admin-search"),
+    pager: el("pager-catalog"),
+    idKey: "code",
+    actions: () => SigaAdminTable.actionButtons(["view", "edit"]),
+    onAction: (act, row) => {
+      if (!row) return;
+      if (act === "view") {
+        SigaModal.open({
+          title: "Consulta de reporte",
+          body: SigaModal.viewDl([
+            ["Código", row.code],
+            ["Nombre", row.name],
+            ["Grupo", row.group],
+            ["Descripción", row.description],
+          ]),
+          footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
+        });
+      }
+      if (act === "edit") openGenerate(row.code);
+    },
+  });
+  const logsTable = SigaAdminTable.bind({
+    tbody: el("logs-tbody"),
+    columns: LOG_COLS,
+    searchInput: el("admin-search"),
+    pager: el("pager-logs"),
+    statusKeys: ["result_status"],
+    actions: () => SigaAdminTable.actionButtons(["view"]),
+    onAction: (act, row) => {
+      if (act !== "view" || !row) return;
+      SigaModal.open({
+        title: "Consulta de historial",
+        body: SigaModal.viewDl(LOG_COLS.map((k) => [k, row[k]])),
+        footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
+      });
+    },
+  });
+
+  function openGenerate(code) {
+    if (code) selectType(code);
+    const wrap = el("report-generate-wrap");
+    if (!wrap) return;
+    SigaModal.openParked({
+      title: "Generar reporte",
+      node: wrap,
+      footer:
+        '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cancelar</button>' +
+        '<button type="button" class="btn btn-siga" id="btn-modal-generate">Guardar</button>',
+      wide: true,
+    });
+    document.getElementById("btn-modal-generate")?.addEventListener("click", () => generateReport());
+  }
 
   function groupOf(code) {
     for (const [g, codes] of Object.entries(GROUPS)) {
@@ -84,6 +139,15 @@
       host.appendChild(btn);
     });
     selectType(items[0].code);
+    const labels = { people: "Personas", academic: "Académico", ops: "Operación" };
+    catalogTable.setRows(
+      items.map((c) => ({
+        code: c.code,
+        name: c.name || c.code,
+        group: labels[groupOf(c.code)] || groupOf(c.code),
+        description: c.description || "",
+      }))
+    );
   }
 
   function buildParameters() {
@@ -120,6 +184,29 @@
         htmlBox.classList.remove("d-none");
         htmlBox.innerHTML = content;
       }
+      return;
+    }
+
+    if (format === "PDF") {
+      if (pre) pre.textContent = "PDF generado (" + (content ? content.length : 0) + " bytes). Usa Descargar.";
+      let btn = document.getElementById("btn-download-pdf");
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.id = "btn-download-pdf";
+        btn.type = "button";
+        btn.className = "btn btn-sm btn-outline-secondary mt-2";
+        btn.textContent = "Descargar PDF";
+        pre?.insertAdjacentElement("afterend", btn);
+      }
+      btn.onclick = () => {
+        const bytes = new Uint8Array(content.length);
+        for (let i = 0; i < content.length; i += 1) bytes[i] = content.charCodeAt(i) & 0xff;
+        const blob = new Blob([bytes], { type: "application/pdf" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "reporte-siga.pdf";
+        a.click();
+      };
       return;
     }
 
@@ -185,7 +272,7 @@
     const tbody = el("logs-tbody");
     if (!ok) {
       toast(formatError(data), "bad");
-      fillTbody(tbody, [], LOG_COLS);
+      logsTable.setRows([]);
       return;
     }
     const rows = (Array.isArray(data) ? data : []).map((r) => ({
@@ -197,10 +284,11 @@
       row_count: r.row_count,
       created_at: r.created_at ? String(r.created_at).replace("T", " ").slice(0, 19) : "",
     }));
-    fillTbody(tbody, rows, LOG_COLS);
+    logsTable.setRows(rows);
   }
 
   el("btn-report")?.addEventListener("click", () => generateReport());
+  el("btn-new-record")?.addEventListener("click", () => openGenerate());
   el("btn-report-logs")?.addEventListener("click", () => loadReportLogs());
   el("report-type")?.addEventListener("change", () => selectType(el("report-type").value));
 

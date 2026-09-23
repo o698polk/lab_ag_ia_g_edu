@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 
 </head>
@@ -45,6 +47,10 @@
     <a class="side-link" href="/ui/pages/catalogos/docentes.html">Docentes</a>
     <a class="side-link" href="/ui/pages/catalogos/cursos.html">Cursos</a>
     <a class="side-link" href="/ui/pages/catalogos/matriculas.html">Matrículas</a>
+    <a class="side-link" href="/ui/pages/catalogos/mallas.html">Mallas</a>
+    <a class="side-link" href="/ui/pages/catalogos/aulas.html">Aulas</a>
+    <a class="side-link" href="/ui/pages/catalogos/horarios.html">Horarios</a>
+    <a class="side-link" href="/ui/pages/catalogos/asignaciones.html">Asignaciones</a>
   </nav>
 </aside>
 
@@ -64,27 +70,50 @@
         <span>Catálogos</span>
       </nav>
       <main class="app-content">
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Administración</p>
-            <p class="hint">Una pantalla por entidad. Solo administrador.</p>
-          </div>
+        <div class="module-head">
+          <h2>Catálogos</h2>
+          <p>Una pantalla por entidad. Solo administrador. Abra el módulo desde la tabla.</p>
         </div>
-        <div class="dash-shortcuts" id="catalog-index">
+        <div class="admin-toolbar">
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+        </div>
+        <div class="dash-shortcuts d-none" id="catalog-index-legacy">
           <a class="dash-shortcut" href="/ui/pages/catalogos/carreras.html"><strong>Carreras</strong><span>Código, modalidad, duración</span></a>
-          <a class="dash-shortcut" href="/ui/pages/catalogos/asignaturas.html"><strong>Asignaturas</strong><span>Materias y créditos</span></a>
-          <a class="dash-shortcut" href="/ui/pages/catalogos/periodos.html"><strong>Periodos</strong><span>Términos académicos</span></a>
-          <a class="dash-shortcut" href="/ui/pages/catalogos/estudiantes.html"><strong>Estudiantes</strong><span>Perfiles académicos</span></a>
-          <a class="dash-shortcut" href="/ui/pages/catalogos/docentes.html"><strong>Docentes</strong><span>Perfiles y especialidad</span></a>
-          <a class="dash-shortcut" href="/ui/pages/catalogos/cursos.html"><strong>Cursos</strong><span>Paralelos ofertados</span></a>
-          <a class="dash-shortcut" href="/ui/pages/catalogos/matriculas.html"><strong>Matrículas</strong><span>Inscripción a cursos</span></a>
         </div>
+        <section class="table-wrap" id="catalog-index">
+          <p class="empty-state mb-0 d-none" data-empty>Sin módulos.</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Módulo</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Carreras</td><td>Código, modalidad, duración</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/carreras.html">Abrir</a></td></tr>
+              <tr><td>Asignaturas</td><td>Materias y créditos</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/asignaturas.html">Abrir</a></td></tr>
+              <tr><td>Periodos</td><td>Términos académicos</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/periodos.html">Abrir</a></td></tr>
+              <tr><td>Estudiantes</td><td>Perfiles académicos</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/estudiantes.html">Abrir</a></td></tr>
+              <tr><td>Docentes</td><td>Perfiles y especialidad</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/docentes.html">Abrir</a></td></tr>
+              <tr><td>Cursos</td><td>Paralelos ofertados</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/cursos.html">Abrir</a></td></tr>
+              <tr><td>Matrículas</td><td>Inscripción a cursos</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/matriculas.html">Abrir</a></td></tr>
+              <tr><td>Mallas</td><td>Currículo por carrera</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/mallas.html">Abrir</a></td></tr>
+              <tr><td>Aulas</td><td>Aulas y capacidad</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/aulas.html">Abrir</a></td></tr>
+              <tr><td>Horarios</td><td>Día y franja</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/horarios.html">Abrir</a></td></tr>
+              <tr><td>Asignaciones</td><td>Docente ↔ curso</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/asignaciones.html">Abrir</a></td></tr>
+            </tbody>
+          </table>
+        </section>
       </main>
     </div>
   </div>
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script>

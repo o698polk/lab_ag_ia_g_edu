@@ -14,12 +14,14 @@ from sqlalchemy.orm import Session
 from app.auth.password import hash_password, verify_password
 from app.auth.tokens import (
     create_access_token,
+    create_reset_token,
     decode_token,
     hash_token,
     new_refresh_token_value,
     refresh_expiry,
     session_expiry,
 )
+from app.core.config import get_settings
 from app.models import RefreshToken, SessionToken, User
 from app.repositories.user_repository import UserRepository
 
@@ -129,6 +131,29 @@ class AuthService:
     def change_password(self, user: User, current: str, new_password: str) -> None:
         if not verify_password(current, user.password_hash):
             raise PermissionError("INVALID_CREDENTIALS")
+        user.password_hash = hash_password(new_password)
+        self.db.commit()
+
+    def request_password_reset(self, identifier: str) -> Optional[str]:
+        """Issue reset JWT if user exists. Token returned only in local/test."""
+        user = self.users.get_by_username_or_email(identifier)
+        if user is None or not user.is_active:
+            return None
+        token = create_reset_token(user_id=user.id, username=user.username)
+        env = get_settings().app_env
+        if env in {"local", "test"}:
+            return token
+        return None
+
+    def reset_password(self, token: str, new_password: str) -> None:
+        payload = decode_token(token, expected_type="password_reset")
+        user = self.users.get_by_id(int(payload["sub"]))
+        if user is None or not user.is_active:
+            raise PermissionError("USER_INACTIVE")
+        user.password_hash = hash_password(new_password)
+        self.db.commit()
+
+    def set_password(self, user: User, new_password: str) -> None:
         user.password_hash = hash_password(new_password)
         self.db.commit()
 

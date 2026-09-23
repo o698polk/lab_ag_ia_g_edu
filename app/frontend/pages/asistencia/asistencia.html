@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -52,12 +54,14 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Clase</p>
-            <p class="hint">Carrera → periodo → paralelo → sesión → marca. Solo docente/admin.</p>
-          </div>
-          <a class="btn btn-sm btn-outline-secondary" href="/ui/pages/asistencia/registro.html">Registro rápido</a>
+        <div class="module-head">
+          <h2>Asistencia</h2>
+          <p>Carrera → periodo → paralelo → sesión → marca. Las operaciones se realizan en ventanas emergentes.</p>
+        </div>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-siga" id="btn-new-record">+ Nuevo</button>
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <a class="btn btn-outline-secondary" href="/ui/pages/asistencia/registro.html">Registro rápido</a>
         </div>
 
         <section class="card-soft mb-3" aria-labelledby="att-cascade-title">
@@ -87,7 +91,7 @@
 
         <div class="row g-3">
           <div class="col-lg-6">
-            <section class="card-soft h-100" aria-labelledby="session-title">
+            <section class="card-soft h-100 d-none" id="session-form-wrap" aria-labelledby="session-title">
               <h3 id="session-title">Nueva sesión</h3>
               <div class="row g-3">
                 <div class="col-sm-6">
@@ -105,7 +109,7 @@
             </section>
           </div>
           <div class="col-lg-6">
-            <section class="card-soft h-100" aria-labelledby="mark-title">
+            <section class="card-soft h-100 d-none" id="mark-form-wrap" aria-labelledby="mark-title">
               <h3 id="mark-title">Marcar asistencia</h3>
               <div class="row g-3">
                 <div class="col-md-4">
@@ -128,6 +132,10 @@
                     <option value="LATE">Atraso</option>
                     <option value="JUSTIFIED">Justificado</option>
                   </select>
+                </div>
+                <div class="col-12">
+                  <label class="form-label" for="att-notes">Notas</label>
+                  <input id="att-notes" class="form-control" placeholder="Opcional" />
                 </div>
                 <div class="col-12">
                   <button type="button" class="btn btn-siga" id="btn-mark-att" disabled>Guardar asistencia</button>
@@ -167,10 +175,12 @@
                 <th scope="col">Curso</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Tema</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="sessions-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="pager-sessions"></div>
         </section>
 
         <section class="table-wrap mt-3" aria-labelledby="marks-log-title">
@@ -186,10 +196,12 @@
                 <th scope="col">Estudiante</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Notas</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="marks-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="pager-marks"></div>
         </section>
 
       </main>
@@ -199,6 +211,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/asistencia/asistencia.js"></script>

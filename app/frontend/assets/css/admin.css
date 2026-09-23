@@ -1,0 +1,120 @@
+/* Classic institutional admin — tables, toolbars, modals */
+.app-content { max-width: 1280px; }
+.module-head { margin-bottom: 0.85rem; }
+.module-head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.module-head p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.88rem; }
+.admin-toolbar + .panel-head { display: none !important; }
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+}
+.admin-toolbar .form-control,
+.admin-toolbar .form-select {
+  min-height: 34px;
+  border-radius: 3px;
+  font-size: 0.875rem;
+}
+.admin-search { min-width: 220px; flex: 1 1 180px; max-width: 320px; }
+.admin-filter { min-width: 140px; }
+.admin-toolbar .btn { border-radius: 3px; min-height: 34px; font-size: 0.85rem; font-weight: 600; }
+.btn-siga, .btn { border-radius: 3px; }
+.form-control, .form-select { border-radius: 3px; }
+.card-soft { border-radius: 4px; box-shadow: none; }
+.table-wrap {
+  border-radius: 0 0 4px 4px;
+  background: #fff;
+}
+.data-table thead th {
+  background: #eef2f6;
+  color: #334155;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #cfd8e3;
+  white-space: nowrap;
+}
+.data-table tbody td { font-size: 0.875rem; }
+.data-table tbody tr:hover { background: #f7fafc; }
+.col-actions { width: 1%; white-space: nowrap; text-align: right; }
+.action-btns { display: inline-flex; gap: 0.25rem; }
+.action-btns .btn { min-height: 28px; padding: 0.15rem 0.45rem; font-size: 0.75rem; }
+.status-badge {
+  display: inline-block;
+  min-width: 4.5rem;
+  padding: 0.12rem 0.45rem;
+  border: 1px solid #cfd8e3;
+  background: #f8fafc;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.status-badge.is-active, .status-badge.is-ok { color: #166534; background: #ecfdf3; border-color: #bbf7d0; }
+.status-badge.is-off, .status-badge.is-bad { color: #9b2c2c; background: #fef2f2; border-color: #fecaca; }
+.status-badge.is-warn { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+.admin-pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--line);
+  background: #f8fafc;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.admin-pager .btn { min-height: 28px; font-size: 0.75rem; }
+.siga-modal-backdrop {
+  position: fixed; inset: 0; z-index: 30;
+  background: rgba(20, 32, 51, 0.45);
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4rem 1rem 2rem;
+  overflow: auto;
+}
+.siga-modal-backdrop.show { display: flex; }
+.siga-modal {
+  width: min(560px, 100%);
+  background: #fff;
+  border: 1px solid #c5d0dc;
+  box-shadow: 0 8px 28px rgba(16, 26, 43, 0.18);
+}
+.siga-modal.wide { width: min(760px, 100%); }
+.siga-modal-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--line);
+  background: #f3f6f9;
+}
+.siga-modal-head h3 { margin: 0; font-size: 0.98rem; }
+.siga-modal-body { padding: 0.9rem; }
+.siga-modal-foot {
+  display: flex; justify-content: flex-end; gap: 0.45rem;
+  padding: 0.65rem 0.9rem;
+  border-top: 1px solid var(--line);
+  background: #f8fafc;
+}
+.view-dl { margin: 0; display: grid; grid-template-columns: 140px 1fr; gap: 0.35rem 0.75rem; }
+.view-dl dt { color: var(--muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+.view-dl dd { margin: 0; font-size: 0.9rem; }
+.req::after { content: " *"; color: var(--deny); }
+.form-error { color: var(--deny); font-size: 0.8rem; margin-top: 0.2rem; }
+.empty-state { border-radius: 0; border: 0; border-bottom: 1px solid var(--line); }
+.dash-welcome, .dash-shortcut { border-radius: 4px; box-shadow: none; }
+.dash-shortcut:hover { transform: none; }
+.siga-toast { border-radius: 4px; }
+.side-link { border-radius: 4px; }
+.btn-danger-admin { background: #9b2c2c; border-color: #9b2c2c; color: #fff; }
+.btn-danger-admin:hover { background: #7f1d1d; border-color: #7f1d1d; color: #fff; }

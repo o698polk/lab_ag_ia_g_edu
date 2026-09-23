@@ -82,15 +82,21 @@ class EvaluationService:
     def create_evaluation(
         self,
         *,
-        teacher: Teacher,
+        teacher: Optional[Teacher] = None,
         course_id: int,
         name: str,
         weight_percent: Decimal,
         evaluation_type_code: Optional[str] = None,
         due_date: Optional[date] = None,
+        as_admin: bool = False,
     ) -> Evaluation:
         course = self._course(course_id)
-        self._require_teacher_assignment(teacher, course)
+        if as_admin:
+            self.catalog.assert_term_writable(course.term_id)
+        else:
+            if teacher is None:
+                raise AuthorizationError("TEACHER_PROFILE_REQUIRED")
+            self._require_teacher_assignment(teacher, course)
         if weight_percent <= 0:
             raise ValueError("INVALID_WEIGHT")
         current = self.db.scalar(
@@ -135,17 +141,23 @@ class EvaluationService:
     def upsert_grade(
         self,
         *,
-        teacher: Teacher,
+        teacher: Optional[Teacher] = None,
         evaluation_id: int,
         student_id: int,
         score: Decimal,
         comment: Optional[str] = None,
+        as_admin: bool = False,
     ) -> Grade:
         ev = self.db.get(Evaluation, evaluation_id)
         if ev is None:
             raise LookupError("EVALUATION_NOT_FOUND")
         course = self._course(ev.course_id)
-        self._require_teacher_assignment(teacher, course)
+        if as_admin:
+            self.catalog.assert_term_writable(course.term_id)
+        else:
+            if teacher is None:
+                raise AuthorizationError("TEACHER_PROFILE_REQUIRED")
+            self._require_teacher_assignment(teacher, course)
 
         enrolled = self.db.scalar(
             select(Enrollment).where(
@@ -171,14 +183,14 @@ class EvaluationService:
                 student_id=student_id,
                 score=score,
                 comment=comment,
-                graded_by_teacher_id=teacher.id,
+                graded_by_teacher_id=teacher.id if teacher else None,
                 graded_at=datetime.now(timezone.utc),
             )
             self.db.add(grade)
         else:
             grade.score = score
             grade.comment = comment
-            grade.graded_by_teacher_id = teacher.id
+            grade.graded_by_teacher_id = teacher.id if teacher else None
             grade.graded_at = datetime.now(timezone.utc)
         self.db.commit()
         self.db.refresh(grade)

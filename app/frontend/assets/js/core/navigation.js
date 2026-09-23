@@ -59,6 +59,47 @@ function wire() {
   });
 }
 
+function ensureCatalogExtras() {
+  const sub = document.querySelector(".side-nav-sub");
+  if (!sub) return;
+  const extras = [
+    ["/ui/pages/catalogos/mallas.html", "Mallas"],
+    ["/ui/pages/catalogos/aulas.html", "Aulas"],
+    ["/ui/pages/catalogos/horarios.html", "Horarios"],
+    ["/ui/pages/catalogos/asignaciones.html", "Asignaciones"],
+  ];
+  extras.forEach(([href, label]) => {
+    if (sub.querySelector('a[href="' + href + '"]')) return;
+    const a = document.createElement("a");
+    a.className = "side-link";
+    a.href = href;
+    a.textContent = label;
+    if (String(location.pathname || "").includes(href.split("/").pop())) {
+      a.classList.add("active");
+    }
+    sub.appendChild(a);
+  });
+}
+
+function ensureSeguridadNav(user) {
+  const roles = (user && user.roles) || [];
+  if (!roles.includes("ADMINISTRATOR")) return;
+  const nav = document.querySelector(".app-sidebar .side-nav");
+  if (!nav || nav.querySelector('[data-nav="seguridad"]')) return;
+  const link = document.createElement("a");
+  link.className = "side-link";
+  link.href = "/ui/pages/seguridad/seguridad.html";
+  link.dataset.nav = "seguridad";
+  link.dataset.roles = "ADMINISTRATOR";
+  link.textContent = "Seguridad";
+  if (String(location.pathname || "").includes("/seguridad/")) {
+    link.classList.add("active");
+  }
+  const perfil = nav.querySelector('a[href*="/cuenta/perfil"]');
+  if (perfil) perfil.insertAdjacentElement("beforebegin", link);
+  else nav.appendChild(link);
+}
+
 function ensureAdminNav(user) {
   const roles = (user && user.roles) || [];
   if (!roles.includes("ADMINISTRATOR")) return;
@@ -83,4 +124,4 @@ function ensureAdminNav(user) {
   }
 }
 
-window.SigaNav = { wire, ensureAdminNav, ensureSkipLink };
+window.SigaNav = { wire, ensureAdminNav, ensureSkipLink, ensureCatalogExtras, ensureSeguridadNav };

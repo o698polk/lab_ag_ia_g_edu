@@ -12,9 +12,12 @@ from app.auth.deps import CurrentUser, get_current_user
 from app.db.session import get_db
 from app.schemas.iam import (
     ChangePasswordRequest,
+    ForgotPasswordOut,
+    ForgotPasswordRequest,
     LoginRequest,
     LogoutRequest,
     RefreshRequest,
+    ResetPasswordRequest,
     TokenResponse,
     UserOut,
     user_to_out,
@@ -99,4 +102,21 @@ def change_password(
         )
     except PermissionError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return None
+
+
+@router.post("/forgot-password", response_model=ForgotPasswordOut)
+def forgot_password(body: ForgotPasswordRequest, db: Annotated[Session, Depends(get_db)]):
+    token = AuthService(db).request_password_reset(body.username)
+    return ForgotPasswordOut(accepted=True, reset_token=token)
+
+
+@router.post("/reset-password", status_code=status.HTTP_204_NO_CONTENT)
+def reset_password(body: ResetPasswordRequest, db: Annotated[Session, Depends(get_db)]):
+    try:
+        AuthService(db).reset_password(body.token, body.new_password)
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="INVALID_RESET_TOKEN"
+        ) from exc
     return None

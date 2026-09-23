@@ -48,7 +48,7 @@ def test_generate_report_json_and_log(client, auth_header):
 
 
 @pytest.mark.unit
-def test_report_csv_html_and_pdf_deferred(client, auth_header):
+def test_report_csv_html_and_pdf(client, auth_header):
     csv_res = client.post(
         "/api/v1/reports",
         headers=auth_header,
@@ -70,8 +70,9 @@ def test_report_csv_html_and_pdf_deferred(client, auth_header):
         headers=auth_header,
         json={"report_type": "grades", "format": "PDF"},
     )
-    assert pdf.status_code == 501
-    assert pdf.json()["detail"]["reason_code"] == "PDF_P2_DEFERRED"
+    assert pdf.status_code == 200, pdf.text
+    assert pdf.json()["format"] == "PDF"
+    assert str(pdf.json()["content"]).startswith("%PDF")
 
 
 @pytest.mark.unit

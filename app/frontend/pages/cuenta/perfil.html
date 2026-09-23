@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -51,12 +53,12 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Sesión</p>
-            <p class="hint">Datos de /auth/me. La UI no autoriza.</p>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-logout-profile">Cerrar sesión</button>
+        <div class="module-head">
+          <h2>Perfil</h2>
+          <p>Datos de /auth/me. La UI no autoriza.</p>
+        </div>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-outline-secondary" id="btn-logout-profile">Cerrar sesión</button>
         </div>
 
         <div class="row g-3">
@@ -96,6 +98,8 @@
           <a href="/ui/pages/usuarios/usuarios.html">Usuarios</a>
           ·
           <a href="/ui/pages/usuarios/roles.html">Roles y permisos</a>
+          ·
+          <a href="/ui/pages/seguridad/seguridad.html">Seguridad</a>
         </p>
 
       </main>
@@ -105,6 +109,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/cuenta/perfil.js"></script>

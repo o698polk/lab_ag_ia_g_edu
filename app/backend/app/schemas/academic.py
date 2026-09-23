@@ -15,6 +15,10 @@ class CareerCreate(BaseModel):
     duration_semesters: int = 10
 
 
+class StatusUpdate(BaseModel):
+    status: str
+
+
 class CareerOut(BaseModel):
     id: int
     code: str

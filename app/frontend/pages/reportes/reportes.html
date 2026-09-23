@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -52,15 +54,17 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Informes académicos</p>
-            <p class="hint">Catálogo del servidor · HTML / CSV / JSON (PDF diferido). La UI no autoriza.</p>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-report-logs">Actualizar historial</button>
+        <div class="module-head">
+          <h2>Reportes</h2>
+          <p>Catálogo del servidor · HTML / CSV / JSON / PDF. La UI no autoriza.</p>
+        </div>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-siga" id="btn-new-record">+ Generar</button>
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <button type="button" class="btn btn-outline-secondary" id="btn-report-logs">Actualizar</button>
         </div>
 
-        <section class="mb-3" aria-labelledby="cat-title">
+        <section class="mb-3 d-none" aria-labelledby="cat-title">
           <h3 id="cat-title" class="section-title">Categorías</h3>
           <div class="report-categories" id="report-categories">
             <div class="card-soft">
@@ -79,7 +83,27 @@
           <p id="catalog-empty" class="empty-state mt-2 d-none">No se pudo cargar el catálogo de reportes.</p>
         </section>
 
-        <section class="card-soft mb-3" aria-labelledby="gen-title">
+        <section class="table-wrap mb-3" aria-labelledby="types-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="types-title" class="section-title mb-0">Tipos de reporte</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Cargando catálogo…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="code">Código</th>
+                <th scope="col" data-sort="name">Nombre</th>
+                <th scope="col" data-sort="group">Grupo</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="report-catalog-tbody"></tbody>
+          </table>
+          <div class="admin-pager" id="pager-catalog"></div>
+        </section>
+
+        <section class="card-soft mb-3 d-none" id="report-generate-wrap" aria-labelledby="gen-title">
           <h3 id="gen-title">Generar</h3>
           <div class="row g-3 align-items-end">
             <div class="col-md-4">
@@ -92,6 +116,7 @@
                 <option value="JSON">JSON</option>
                 <option value="CSV">CSV</option>
                 <option value="HTML">HTML</option>
+                <option value="PDF">PDF</option>
               </select>
             </div>
             <div class="col-md-2" id="param-term-wrap">
@@ -142,10 +167,12 @@
                 <th scope="col">Estado</th>
                 <th scope="col">Filas</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="logs-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="pager-logs"></div>
         </section>
 
       </main>
@@ -155,6 +182,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/reportes/reportes.js"></script>

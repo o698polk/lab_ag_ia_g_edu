@@ -258,3 +258,27 @@ class CatalogService:
         self.db.commit()
         self.db.refresh(teacher)
         return teacher
+
+    def _set_status(self, model, row_id: int, status: str, missing: str):
+        row = self.db.get(model, row_id)
+        if row is None:
+            raise LookupError(missing)
+        row.status = status
+        self.db.commit()
+        self.db.refresh(row)
+        return row
+
+    def set_career_status(self, career_id: int, status: str) -> Career:
+        return self._set_status(Career, career_id, status, "CAREER_NOT_FOUND")
+
+    def set_subject_status(self, subject_id: int, status: str) -> Subject:
+        return self._set_status(Subject, subject_id, status, "SUBJECT_NOT_FOUND")
+
+    def set_student_status(self, student_id: int, status: str) -> Student:
+        return self._set_status(Student, student_id, status, "STUDENT_NOT_FOUND")
+
+    def set_teacher_status(self, teacher_id: int, status: str) -> Teacher:
+        return self._set_status(Teacher, teacher_id, status, "TEACHER_NOT_FOUND")
+
+    def set_curriculum_status(self, curriculum_id: int, status: str) -> Curriculum:
+        return self._set_status(Curriculum, curriculum_id, status, "CURRICULUM_NOT_FOUND")

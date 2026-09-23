@@ -45,8 +45,67 @@ REPORT_TYPES = {
     "career": "Reporte por carrera",
 }
 
-VALID_FORMATS = {"HTML", "CSV", "JSON"}
+VALID_FORMATS = {"HTML", "CSV", "JSON", "PDF"}
 VALID_NTF_TYPES = {"INFO", "WARNING", "SUCCESS", "ALERT", "SECURITY", "ACADEMIC"}
+
+
+def _pdf_escape(text: str) -> str:
+    return (
+        text.replace("\\", "\\\\")
+        .replace("(", "\\(")
+        .replace(")", "\\)")
+        .encode("latin-1", "replace")
+        .decode("latin-1")
+    )
+
+
+def _render_pdf(rows: list[dict], title: str) -> str:
+    """Minimal PDF 1.4 (no extra deps) for lab export."""
+    lines = [title, ""]
+    if not rows:
+        lines.append("Sin datos")
+    else:
+        headers = list(rows[0].keys())
+        lines.append(" | ".join(str(h) for h in headers))
+        for row in rows[:80]:
+            lines.append(" | ".join(str(row.get(h, ""))[:40] for h in headers))
+    cmds = ["BT", "/F1 9 Tf"]
+    y = 800
+    for line in lines:
+        cmds.append(f"1 0 0 1 36 {y} Tm ({_pdf_escape(line[:120])}) Tj")
+        y -= 12
+        if y < 40:
+            break
+    cmds.append("ET")
+    stream = "\n".join(cmds).encode("latin-1", "replace")
+    objects = [
+        b"1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n",
+        b"2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n",
+        b"3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+        b"/Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj\n",
+        b"4 0 obj << /Length "
+        + str(len(stream)).encode()
+        + b" >> stream\n"
+        + stream
+        + b"\nendstream endobj\n",
+        b"5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n",
+    ]
+    out = bytearray(b"%PDF-1.4\n")
+    offsets = [0]
+    for obj in objects:
+        offsets.append(len(out))
+        out.extend(obj)
+    xref_pos = len(out)
+    out.extend(f"xref\n0 {len(objects) + 1}\n".encode("ascii"))
+    out.extend(b"0000000000 65535 f \n")
+    for off in offsets[1:]:
+        out.extend(f"{off:010d} 00000 n \n".encode("ascii"))
+    out.extend(
+        f"trailer << /Size {len(objects) + 1} /Root 1 0 R >>\nstartxref\n{xref_pos}\n%%EOF\n".encode(
+            "ascii"
+        )
+    )
+    return out.decode("latin-1")
 
 
 class PlatformService:
@@ -241,8 +300,6 @@ class PlatformService:
         format_ = format_.upper().strip()
         if report_type not in REPORT_TYPES:
             raise ValueError("INVALID_REPORT_TYPE")
-        if format_ == "PDF":
-            raise ValueError("PDF_NOT_AVAILABLE_P2")
         if format_ not in VALID_FORMATS:
             raise ValueError("INVALID_FORMAT")
 
@@ -424,6 +481,8 @@ class PlatformService:
             writer.writeheader()
             writer.writerows(rows)
             return buf.getvalue()
+        if format_ == "PDF":
+            return _render_pdf(rows, REPORT_TYPES.get(report_type, report_type))
         # HTML
         title = REPORT_TYPES.get(report_type, report_type)
         if not rows:

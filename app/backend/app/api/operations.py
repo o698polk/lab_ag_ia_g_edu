@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.auth.deps import CurrentUser, require_permission
 from app.db.session import get_db
 from app.permissions import constants as P
+from app.schemas.academic import StatusUpdate
 from app.schemas.operations import (
     AbacCheckOut,
     AssignmentCreate,
@@ -70,6 +71,19 @@ def create_course(
         raise _map_err(exc) from exc
 
 
+@router.patch("/courses/{course_id}/status", response_model=CourseOut)
+def set_course_status(
+    course_id: int,
+    body: StatusUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.COURSES_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return OperationsService(db).set_course_status(course_id, body.status)
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
 @router.get("/teaching-assignments", response_model=List[AssignmentOut])
 def list_assignments(
     _: Annotated[CurrentUser, Depends(require_permission(P.ASSIGNMENTS_VIEW))],
@@ -87,6 +101,19 @@ def assign_teacher(
 ):
     try:
         return OperationsService(db).assign_teacher(**body.model_dump())
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.patch("/teaching-assignments/{assignment_id}/status", response_model=AssignmentOut)
+def set_assignment_status(
+    assignment_id: int,
+    body: StatusUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.ASSIGNMENTS_CREATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return OperationsService(db).set_assignment_status(assignment_id, body.status)
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 

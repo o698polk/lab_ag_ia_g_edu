@@ -10,12 +10,14 @@ from app.auth.deps import CurrentUser, require_permission
 from app.db.session import get_db
 from app.permissions import constants as P
 from app.schemas.iam import (
+    AdminSetPasswordRequest,
     AssignRolesRequest,
     UserCreate,
     UserOut,
     UserStatusUpdate,
     user_to_out,
 )
+from app.services.auth_service import AuthService
 from app.services.user_service import UserService
 
 router = APIRouter(prefix="/users", tags=["users"])
@@ -95,3 +97,18 @@ def assign_roles(
         return user_to_out(UserService(db).assign_roles(user_id, body.role_codes))
     except (LookupError, ValueError) as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@router.post("/{user_id}/password", status_code=status.HTTP_204_NO_CONTENT)
+def admin_set_password(
+    user_id: int,
+    body: AdminSetPasswordRequest,
+    _: Annotated[CurrentUser, Depends(require_permission(P.USERS_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        user = UserService(db).get_user(user_id)
+        AuthService(db).set_password(user, body.new_password)
+    except LookupError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    return None

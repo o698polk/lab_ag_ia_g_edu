@@ -99,3 +99,19 @@ Condiciones ya aceptadas en F10: gaps P1/P2, ADR-013, sin Internet
 ```
 
 La aceptación del cierre es **exclusivamente humana**.
+
+---
+
+## 9. Addendum post-PromptMaster UX (2026-09-22)
+
+No cambia la decisión humana del Gate F12. Actualiza el estado de deuda **después** de F2–F10 frontend:
+
+| Ítem F12 | Estado actual |
+|---|---|
+| UI notas (carrera→periodo→paralelo) | Cerrada — `/ui/pages/notas/` |
+| UI asistencia | Cerrada — `/ui/pages/asistencia/` |
+| UI catálogos por entidad | Cerrada — `/ui/pages/catalogos/` |
+| UI reportes / usuarios / avisos / asistente | Cerrada |
+| a11y + responsive + shims legacy | Cerrada — `evidence/verify/UX-F10-CHECKLIST.md` |
+| Recuperación de contraseña | Sigue abierta (sin endpoint) |
+| Export PDF | Sigue 501 (P2) |

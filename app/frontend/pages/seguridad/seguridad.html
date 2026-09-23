@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seguridad · SIGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/assets/css/base.css" />
+  <link rel="stylesheet" href="/ui/assets/css/layout.css" />
+  <link rel="stylesheet" href="/ui/assets/css/components.css" />
+  <link rel="stylesheet" href="/ui/assets/css/forms.css" />
+  <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
+  <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
+</head>
+<body>
+  <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
+  <div class="app-frame">
+
+<aside class="app-sidebar" aria-label="Menú principal">
+  <a class="app-brand" href="/ui/pages/dashboard/dashboard.html">
+    <span class="app-brand-dot"></span><span>SIGA</span>
+  </a>
+  <p class="side-section">Módulos</p>
+  <nav class="side-nav">
+    <a class="side-link" href="/ui/pages/dashboard/dashboard.html">Dashboard</a>
+    <a class="side-link" href="/ui/pages/notas/notas.html">Notas</a>
+    <a class="side-link" href="/ui/pages/asistencia/asistencia.html" data-roles="TEACHER,ADMINISTRATOR">Asistencia</a>
+    <a class="side-link" href="/ui/pages/catalogos/catalogos.html" data-roles="ADMINISTRATOR">Catálogos</a>
+    <a class="side-link" href="/ui/pages/reportes/reportes.html" data-roles="TEACHER,ADMINISTRATOR">Reportes</a>
+    <a class="side-link" href="/ui/pages/avisos/avisos.html">Avisos</a>
+    <a class="side-link" href="/ui/pages/asistente/asistente.html">Asistente</a>
+    <a class="side-link active" href="/ui/pages/seguridad/seguridad.html" data-nav="seguridad" data-roles="ADMINISTRATOR">Seguridad</a>
+    <a class="side-link" href="/ui/pages/cuenta/perfil.html">Perfil</a>
+  </nav>
+</aside>
+
+    <div class="app-main">
+      <header class="app-topbar">
+        <button type="button" id="btn-sidebar" class="btn-sidebar" aria-expanded="false" aria-label="Abrir menú">Menú</button>
+        <h1 class="topbar-title">Seguridad</h1>
+        <div class="topbar-actions">
+          <a href="/ui/pages/cuenta/perfil.html" id="session-chip" class="siga-chip muted">Sin sesión</a>
+          <button type="button" id="btn-logout" class="btn btn-outline-secondary btn-sm">Cerrar sesión</button>
+        </div>
+      </header>
+      <nav class="breadcrumb" aria-label="Miga de pan">
+        <a href="/ui/pages/dashboard/dashboard.html">Dashboard</a>
+        <span class="sep">/</span>
+        <span>Seguridad</span>
+      </nav>
+      <main class="app-content">
+
+        <div class="module-head">
+          <h2>Seguridad</h2>
+          <p>Políticas, herramientas, auditoría y eventos. Consulta únicamente. La UI no autoriza.</p>
+        </div>
+        <div class="admin-toolbar">
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <button type="button" class="btn btn-outline-secondary" id="btn-sec-refresh">Actualizar</button>
+        </div>
+
+        <section class="table-wrap mb-3" aria-labelledby="pol-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="pol-title" class="section-title mb-0">Políticas</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Cargando políticas…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="policy_id">Política</th>
+                <th scope="col" data-sort="version">Versión</th>
+                <th scope="col" data-sort="module">Módulo</th>
+                <th scope="col" data-sort="effect_default">Default</th>
+                <th scope="col">Reglas</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="policies-tbody"></tbody>
+          </table>
+          <div class="admin-pager" id="pager-policies"></div>
+        </section>
+
+        <section class="table-wrap mb-3" aria-labelledby="tools-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="tools-title" class="section-title mb-0">Herramientas registradas</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Cargando herramientas…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="tool_name">Nombre</th>
+                <th scope="col" data-sort="risk_level">Riesgo</th>
+                <th scope="col">Permisos</th>
+                <th scope="col">Roles</th>
+                <th scope="col">Recurso</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tools-tbody"></tbody>
+          </table>
+          <div class="admin-pager" id="pager-tools"></div>
+        </section>
+
+        <section class="table-wrap mb-3" aria-labelledby="audit-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="audit-title" class="section-title mb-0">Auditoría</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Cargando auditoría…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="id">Id</th>
+                <th scope="col">Request</th>
+                <th scope="col">Usuario</th>
+                <th scope="col" data-sort="action">Acción</th>
+                <th scope="col" data-sort="module">Módulo</th>
+                <th scope="col" data-sort="status">Estado</th>
+                <th scope="col">Motivo</th>
+                <th scope="col" data-sort="created_at">Fecha</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="audit-tbody"></tbody>
+          </table>
+          <div class="admin-pager" id="pager-audit"></div>
+        </section>
+
+        <section class="table-wrap" aria-labelledby="sec-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="sec-title" class="section-title mb-0">Eventos de seguridad</h3>
+          </div>
+          <p class="empty-state mb-0" data-empty>Cargando eventos…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="id">Id</th>
+                <th scope="col">Request</th>
+                <th scope="col">Usuario</th>
+                <th scope="col" data-sort="event_type">Tipo</th>
+                <th scope="col" data-sort="severity">Severidad</th>
+                <th scope="col" data-sort="created_at">Fecha</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="security-tbody"></tbody>
+          </table>
+          <div class="admin-pager" id="pager-security"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="/ui/assets/js/core/api.js"></script>
+  <script src="/ui/assets/js/components/toast.js"></script>
+  <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
+  <script src="/ui/assets/js/core/navigation.js"></script>
+  <script src="/ui/assets/js/core/auth.js"></script>
+  <script src="/ui/assets/js/modules/seguridad/seguridad.js"></script>
+</body>
+</html>

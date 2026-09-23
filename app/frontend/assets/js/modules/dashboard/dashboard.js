@@ -65,13 +65,12 @@
   }
 
   async function loadRecentNotifications() {
-    const list = document.getElementById("dash-notif-list");
+    const tbody = document.getElementById("dash-notif-tbody");
     const empty = document.getElementById("dash-notif-empty");
-    const tpl = document.getElementById("dash-notif-tpl");
-    if (!list || !tpl) return;
-    list.querySelectorAll(".notif-item").forEach((n) => n.remove());
+    if (!tbody) return;
     const { ok, data } = await api("GET", "/notifications");
     if (!ok) {
+      fillTbody(tbody, [], ["title", "type", "status"]);
       if (empty) {
         empty.textContent = formatError(data);
         empty.classList.remove("d-none");
@@ -80,6 +79,7 @@
     }
     const items = Array.isArray(data) ? data.slice(0, 5) : [];
     if (!items.length) {
+      fillTbody(tbody, [], ["title", "type", "status"]);
       if (empty) {
         empty.textContent = "No tienes avisos.";
         empty.classList.remove("d-none");
@@ -87,15 +87,15 @@
       return;
     }
     if (empty) empty.classList.add("d-none");
-    items.forEach((n) => {
-      const node = tpl.content.cloneNode(true);
-      const root = node.querySelector(".notif-item");
-      if (n.read_flag) root.classList.add("read");
-      root.querySelector('[data-field="title"]').textContent = n.title || n.type || "";
-      root.querySelector('[data-field="type"]').textContent = n.type || "";
-      root.querySelector('[data-field="body"]').textContent = n.body || "";
-      list.appendChild(node);
-    });
+    fillTbody(
+      tbody,
+      items.map((n) => ({
+        title: n.title || n.type || "",
+        type: n.type || "",
+        status: n.read_flag ? "Leído" : "No leído",
+      })),
+      ["title", "type", "status"]
+    );
   }
 
   async function loadHistory() {

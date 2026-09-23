@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cursos / paralelos · Catálogos · SIGA</title>
+  <title>Asignaciones · Catálogos · SIGA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 
 </head>
-<body data-entity="courses">
+<body data-entity="assignments">
   <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
   <div class="app-frame">
 
@@ -40,12 +40,12 @@
   </nav>
   <p class="side-section">Catálogos</p>
   <nav class="side-nav side-nav-sub" data-roles="ADMINISTRATOR">
-    <a class="side-link" href="/ui/pages/catalogos/carreras.html">Carreras</a>
+    <a class="side-link active" href="/ui/pages/catalogos/asignaciones.html">Asignaciones</a>
     <a class="side-link" href="/ui/pages/catalogos/asignaturas.html">Asignaturas</a>
     <a class="side-link" href="/ui/pages/catalogos/periodos.html">Periodos</a>
     <a class="side-link" href="/ui/pages/catalogos/estudiantes.html">Estudiantes</a>
     <a class="side-link" href="/ui/pages/catalogos/docentes.html">Docentes</a>
-    <a class="side-link active" href="/ui/pages/catalogos/cursos.html">Cursos</a>
+    <a class="side-link" href="/ui/pages/catalogos/cursos.html">Cursos</a>
     <a class="side-link" href="/ui/pages/catalogos/matriculas.html">Matrículas</a>
   </nav>
 </aside>
@@ -53,7 +53,7 @@
     <div class="app-main">
       <header class="app-topbar">
         <button type="button" id="btn-sidebar" class="btn-sidebar" aria-expanded="false" aria-label="Abrir menú">Menú</button>
-        <h1 class="topbar-title">Cursos / paralelos</h1>
+        <h1 class="topbar-title">Asignaciones</h1>
         <div class="topbar-actions">
           <a href="/ui/pages/cuenta/perfil.html" id="session-chip" class="siga-chip muted">Sin sesión</a>
           <a class="btn btn-outline-secondary btn-sm" href="/ui/pages/catalogos/catalogos.html">Índice</a>
@@ -65,7 +65,7 @@
         <span class="sep">/</span>
         <a href="/ui/pages/catalogos/catalogos.html">Catálogos</a>
         <span class="sep">/</span>
-        <span>Cursos / paralelos</span>
+        <span>Asignaciones</span>
       </nav>
       <main class="app-content">
         <div class="module-head">
@@ -89,7 +89,7 @@
         <div class="panel-head">
           <div>
             <p class="eyebrow">Catálogo</p>
-            <p class="hint">GET/POST /courses. Tabla con thead en HTML.</p>
+            <p class="hint">GET/POST /teaching-assignments.</p>
           </div>
           <button type="button" class="btn btn-sm btn-outline-secondary" >Actualizar</button>
         </div>
@@ -99,24 +99,20 @@
           <form id="catalog-create-form" class="row g-2 align-items-end" novalidate>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-subject_id">Subject id</label>
-              <input id="f-subject_id" name="subject_id" type="number" class="form-control" data-field="subject_id" required />
+              <label class="form-label" for="f-teacher_id">Docente (id)</label>
+              <input id="f-teacher_id" name="teacher_id" type="number" class="form-control" data-field="teacher_id" required />
             </div>
 
             <div class="col-md-3">
-              <label class="form-label" for="f-term_id">Term id</label>
+              <label class="form-label" for="f-course_id">Curso (id)</label>
+              <input id="f-course_id" name="course_id" type="number" class="form-control" data-field="course_id" required />
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label" for="f-term_id">Periodo (id)</label>
               <input id="f-term_id" name="term_id" type="number" class="form-control" data-field="term_id" required />
             </div>
 
-            <div class="col-md-3">
-              <label class="form-label" for="f-parallel_code">Paralelo</label>
-              <input id="f-parallel_code" name="parallel_code" type="text" class="form-control" data-field="parallel_code" />
-            </div>
-
-            <div class="col-md-3">
-              <label class="form-label" for="f-capacity">Cupo</label>
-              <input id="f-capacity" name="capacity" type="number" class="form-control" data-field="capacity" />
-            </div>
             <div class="col-md-3">
               <button type="submit" class="btn btn-siga w-100">Crear</button>
             </div>
@@ -128,7 +124,7 @@
           <p class="empty-state mb-0" data-empty>Cargando…</p>
           <table class="table table-sm table-hover align-middle data-table">
             <thead>
-              <tr><th scope="col">Id</th><th scope="col">Materia</th><th scope="col">Periodo</th><th scope="col">Paralelo</th><th scope="col">Cupo</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr>
+              <tr><th scope="col">Id</th><th scope="col">Docente</th><th scope="col">Curso</th><th scope="col">Periodo</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr>
             </thead>
             <tbody id="catalog-tbody"></tbody>
           </table>

@@ -55,8 +55,15 @@ def create_evaluation(
 ):
     svc = EvaluationService(db)
     try:
-        teacher = svc.teacher_for_user(current.user.id)
-        return svc.create_evaluation(teacher=teacher, **body.model_dump())
+        as_admin = "ADMINISTRATOR" in current.roles
+        teacher = None
+        if not as_admin:
+            teacher = svc.teacher_for_user(current.user.id)
+        else:
+            teacher = svc.ops.get_teacher_by_user_id(current.user.id)
+        return svc.create_evaluation(
+            teacher=teacher, as_admin=as_admin, **body.model_dump()
+        )
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -78,8 +85,15 @@ def upsert_grade(
 ):
     svc = EvaluationService(db)
     try:
-        teacher = svc.teacher_for_user(current.user.id)
-        return svc.upsert_grade(teacher=teacher, **body.model_dump())
+        as_admin = "ADMINISTRATOR" in current.roles
+        teacher = None
+        if not as_admin:
+            teacher = svc.teacher_for_user(current.user.id)
+        else:
+            teacher = svc.ops.get_teacher_by_user_id(current.user.id)
+        return svc.upsert_grade(
+            teacher=teacher, as_admin=as_admin, **body.model_dump()
+        )
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 

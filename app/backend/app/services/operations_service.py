@@ -97,6 +97,24 @@ class OperationsService:
         self.db.refresh(course)
         return course
 
+    def set_course_status(self, course_id: int, status: str) -> Course:
+        course = self.db.get(Course, course_id)
+        if course is None:
+            raise LookupError("COURSE_NOT_FOUND")
+        course.status = status
+        self.db.commit()
+        self.db.refresh(course)
+        return course
+
+    def set_assignment_status(self, assignment_id: int, status: str) -> TeachingAssignment:
+        row = self.db.get(TeachingAssignment, assignment_id)
+        if row is None:
+            raise LookupError("ASSIGNMENT_NOT_FOUND")
+        row.status = status
+        self.db.commit()
+        self.db.refresh(row)
+        return row
+
     # --- Teaching assignments ---
     def list_assignments(self, course_id: Optional[int] = None) -> Sequence[TeachingAssignment]:
         stmt = select(TeachingAssignment).order_by(TeachingAssignment.id)

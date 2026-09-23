@@ -507,3 +507,137 @@ def test_ui_legacy_js_css_shims():
     dash = (PAGES / "dashboard" / "dashboard.html").read_text(encoding="utf-8")
     assert "/ui/assets/js/" in dash
     assert "/ui/js/" not in dash
+
+
+@pytest.mark.unit
+def test_ui_complete_missing_functions():
+    """Páginas y JS para APIs que estaban sin UI o incompletas."""
+    recover = PAGES / "auth" / "recuperar.html"
+    assert recover.is_file()
+    recover_html = recover.read_text(encoding="utf-8")
+    assert 'id="forgot-form"' in recover_html
+    assert 'id="reset-form"' in recover_html
+    assert "/ui/assets/js/modules/auth/recuperar.js" in recover_html
+
+    rjs = (ASSETS / "js" / "modules" / "auth" / "recuperar.js").read_text(encoding="utf-8")
+    assert 'api("POST", "/auth/forgot-password"' in rjs
+    assert "/auth/reset-password" in rjs
+
+    login = (PAGES / "auth" / "login.html").read_text(encoding="utf-8")
+    assert "/ui/pages/auth/recuperar.html" in login
+
+    sec = PAGES / "seguridad" / "seguridad.html"
+    assert sec.is_file()
+    sec_html = sec.read_text(encoding="utf-8")
+    assert 'id="policies-tbody"' in sec_html
+    assert 'id="tools-tbody"' in sec_html
+    assert 'id="audit-tbody"' in sec_html
+    assert 'id="security-tbody"' in sec_html
+    assert "<thead>" in sec_html
+
+    sjs = (ASSETS / "js" / "modules" / "seguridad" / "seguridad.js").read_text(
+        encoding="utf-8"
+    )
+    assert 'api("GET", "/policies")' in sjs
+    assert 'api("GET", "/tools")' in sjs
+    assert 'api("GET", "/audit/events")' in sjs
+    assert 'api("GET", "/security/events")' in sjs
+
+    nav = (ASSETS / "js" / "core" / "navigation.js").read_text(encoding="utf-8")
+    assert "ensureSeguridadNav" in nav
+    assert "ensureCatalogExtras" in nav
+
+    extras = ["mallas", "aulas", "horarios", "asignaciones"]
+    for slug in extras:
+        path = PAGES / "catalogos" / f"{slug}.html"
+        assert path.is_file(), f"missing {path}"
+        html = path.read_text(encoding="utf-8")
+        assert "data-entity=" in html
+        assert 'id="catalog-tbody"' in html
+        assert "<thead>" in html
+
+    ejs = (ASSETS / "js" / "modules" / "catalogos" / "entity.js").read_text(
+        encoding="utf-8"
+    )
+    assert 'path: "/curricula"' in ejs
+    assert 'path: "/classrooms"' in ejs
+    assert 'path: "/schedules"' in ejs
+    assert 'path: "/teaching-assignments"' in ejs
+
+    notas = (PAGES / "notas" / "notas.html").read_text(encoding="utf-8")
+    assert 'id="btn-create-eval"' in notas
+    assert 'id="btn-upsert-kardex"' in notas
+
+    njs = (ASSETS / "js" / "modules" / "notas" / "notas.js").read_text(encoding="utf-8")
+    assert 'api("POST", "/evaluations"' in njs
+    assert 'api("PUT", "/kardex"' in njs
+
+    reportes = (PAGES / "reportes" / "reportes.html").read_text(encoding="utf-8")
+    assert 'value="PDF"' in reportes
+
+    rjs_rep = (ASSETS / "js" / "modules" / "reportes" / "reportes.js").read_text(
+        encoding="utf-8"
+    )
+    assert 'format === "PDF"' in rjs_rep
+
+    roles = (PAGES / "usuarios" / "roles.html").read_text(encoding="utf-8")
+    assert 'id="role-create-form"' in roles
+    assert 'id="btn-role-deactivate"' in roles
+
+    roles_js = (ASSETS / "js" / "modules" / "usuarios" / "roles.js").read_text(
+        encoding="utf-8"
+    )
+    assert 'api("POST", "/roles"' in roles_js
+    assert "DELETE" in roles_js
+
+    users_js = (ASSETS / "js" / "modules" / "usuarios" / "usuarios.js").read_text(
+        encoding="utf-8"
+    )
+    assert "/password" in users_js
+
+
+@pytest.mark.unit
+def test_ui_admin_crud_pattern():
+    """Patrón administrativo: toolbar, tabla, modales CRUD y componentes comunes."""
+    css = (ASSETS / "css" / "admin.css").read_text(encoding="utf-8")
+    assert ".admin-toolbar" in css
+    assert ".status-badge" in css
+    assert ".siga-modal" in css
+
+    modal = (ASSETS / "js" / "components" / "modal.js").read_text(encoding="utf-8")
+    assert "confirmDelete" in modal
+    assert "openParked" in modal
+    assert "footerCancelSave" in modal
+
+    table = (ASSETS / "js" / "components" / "admin-table.js").read_text(encoding="utf-8")
+    assert "SigaAdminTable" in table
+    assert "actionButtons" in table
+
+    pages = [
+        PAGES / "catalogos" / "carreras.html",
+        PAGES / "usuarios" / "usuarios.html",
+        PAGES / "usuarios" / "roles.html",
+        PAGES / "avisos" / "avisos.html",
+        PAGES / "reportes" / "reportes.html",
+        PAGES / "notas" / "notas.html",
+        PAGES / "asistencia" / "asistencia.html",
+        PAGES / "seguridad" / "seguridad.html",
+    ]
+    for path in pages:
+        html = path.read_text(encoding="utf-8")
+        assert "admin.css" in html, path.name
+        assert "modal.js" in html, path.name
+        assert "admin-table.js" in html, path.name
+        assert "Acciones" in html, path.name
+        assert "module-head" in html, path.name
+
+    carreras = (PAGES / "catalogos" / "carreras.html").read_text(encoding="utf-8")
+    assert 'id="btn-new-record"' in carreras
+    assert 'id="catalog-create-form"' in carreras
+
+    entity = (ASSETS / "js" / "modules" / "catalogos" / "entity.js").read_text(
+        encoding="utf-8"
+    )
+    assert "SigaModal" in entity
+    assert "SigaAdminTable" in entity
+    assert "confirmDelete" in entity

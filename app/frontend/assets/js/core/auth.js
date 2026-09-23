@@ -22,6 +22,12 @@ async function requireAuth() {
   if (window.SigaNav && typeof SigaNav.ensureAdminNav === "function") {
     SigaNav.ensureAdminNav(me.data);
   }
+  if (window.SigaNav && typeof SigaNav.ensureSeguridadNav === "function") {
+    SigaNav.ensureSeguridadNav(me.data);
+  }
+  if (window.SigaNav && typeof SigaNav.ensureCatalogExtras === "function") {
+    SigaNav.ensureCatalogExtras();
+  }
   const chip = document.getElementById("session-chip");
   if (chip) {
     chip.textContent = me.data.username + " · " + ((me.data.roles || []).join(", ") || "sin rol");

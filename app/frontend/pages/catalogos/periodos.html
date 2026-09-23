@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 
 </head>
@@ -66,15 +68,33 @@
         <span>Periodos</span>
       </nav>
       <main class="app-content">
+        <div class="module-head">
+          <h2>Administración de registros</h2>
+          <p>Tabla principal. Las operaciones se realizan en ventanas emergentes.</p>
+        </div>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-siga" id="btn-new-record">+ Nuevo</button>
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <select id="admin-filter" class="form-select admin-filter" aria-label="Filtro de estado">
+            <option value="">Todos los estados</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+            <option value="PLANNED">PLANNED</option>
+            <option value="CLOSED">CLOSED</option>
+            <option value="CANCELLED">CANCELLED</option>
+          </select>
+          <button type="button" class="btn btn-outline-secondary" id="btn-refresh-catalog">Actualizar</button>
+        </div>
+
         <div class="panel-head">
           <div>
             <p class="eyebrow">Catálogo</p>
             <p class="hint">GET/POST /terms · PATCH status. Tabla con thead en HTML.</p>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-catalog">Actualizar</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" >Actualizar</button>
         </div>
 
-        <section class="card-soft mb-3">
+        <section class="card-soft mb-3 d-none" id="catalog-create-wrap">
           <h3>Alta</h3>
           <form id="catalog-create-form" class="row g-2 align-items-end" novalidate>
 
@@ -109,7 +129,7 @@
           <p id="create-out" class="hint mt-2 mb-0"></p>
         </section>
 
-          <div class="card-soft mt-3">
+          <div class="card-soft mt-3 d-none admin-extra">
             <h3>Cambiar estado</h3>
             <div class="row g-2 align-items-end">
               <div class="col-md-3">
@@ -135,10 +155,11 @@
           <p class="empty-state mb-0" data-empty>Cargando…</p>
           <table class="table table-sm table-hover align-middle data-table">
             <thead>
-              <tr><th scope="col">Id</th><th scope="col">Código</th><th scope="col">Nombre</th><th scope="col">Inicio</th><th scope="col">Fin</th><th scope="col">Estado</th><th scope="col">Actual</th></tr>
+              <tr><th scope="col">Id</th><th scope="col">Código</th><th scope="col">Nombre</th><th scope="col">Inicio</th><th scope="col">Fin</th><th scope="col">Estado</th><th scope="col">Actual</th><th scope="col">Acciones</th></tr>
             </thead>
             <tbody id="catalog-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="admin-pager"></div>
         </section>
       </main>
     </div>
@@ -147,6 +168,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/catalogos/entity.js"></script>

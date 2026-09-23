@@ -28,6 +28,30 @@ class RoleService:
     def list_permissions(self) -> Sequence[Permission]:
         return self.roles.list_permissions()
 
+    PROTECTED = {"ADMINISTRATOR", "TEACHER", "STUDENT"}
+
+    def create_role(self, code: str, name: str) -> Role:
+        code = code.strip().upper()
+        existing = self.roles.get_by_code(code)
+        if existing is not None:
+            raise ValueError("ROLE_EXISTS")
+        role = Role(code=code, name=name.strip(), is_active=True)
+        self.db.add(role)
+        self.db.commit()
+        self.db.refresh(role)
+        return role
+
+    def deactivate_role(self, role_code: str) -> Role:
+        role = self.roles.get_by_code(role_code)
+        if role is None:
+            raise LookupError("ROLE_NOT_FOUND")
+        if role.code in self.PROTECTED:
+            raise ValueError("ROLE_PROTECTED")
+        role.is_active = False
+        self.db.commit()
+        self.db.refresh(role)
+        return role
+
     def assign_permissions(self, role_code: str, permission_codes: list[str]) -> Role:
         role = self.roles.get_by_code(role_code)
         if role is None:

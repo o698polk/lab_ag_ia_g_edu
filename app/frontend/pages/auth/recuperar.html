@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recuperar contraseña · SIGA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/ui/assets/css/base.css" />
+  <link rel="stylesheet" href="/ui/assets/css/layout.css" />
+  <link rel="stylesheet" href="/ui/assets/css/components.css" />
+  <link rel="stylesheet" href="/ui/assets/css/forms.css" />
+  <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
+</head>
+<body>
+  <a class="skip-link" href="#gate-main">Saltar al contenido</a>
+  <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
+  <section class="gate" id="gate-main">
+    <nav class="public-nav" aria-label="Navegación pública">
+      <a class="public-nav-link" href="/ui/pages/home.html">Inicio</a>
+      <a class="public-nav-link" href="/ui/pages/auth/login.html">Login</a>
+      <a class="public-nav-link" href="/ui/pages/auth/registro.html">Registro</a>
+      <a class="public-nav-link active" href="/ui/pages/auth/recuperar.html">Recuperar</a>
+    </nav>
+    <div class="gate-card">
+      <div class="gate-mark">SIGA</div>
+      <h1>Recuperar contraseña</h1>
+      <p class="gate-lead">Pide un token de restablecimiento y define una clave nueva. En lab local el token se muestra aquí.</p>
+
+      <form id="forgot-form" autocomplete="on">
+        <label class="form-label" for="forgot-username">Usuario o correo</label>
+        <input id="forgot-username" class="form-control form-control-lg" required autocomplete="username" />
+        <button type="submit" class="btn btn-siga btn-lg w-100 mt-4">Solicitar token</button>
+      </form>
+      <p id="forgot-out" class="hint mt-3" aria-live="polite"></p>
+      <pre id="reset-token-box" class="siga-log d-none"></pre>
+
+      <hr class="my-4" />
+
+      <form id="reset-form" autocomplete="off">
+        <label class="form-label" for="reset-token">Token</label>
+        <input id="reset-token" class="form-control form-control-lg" required minlength="10" />
+        <label class="form-label mt-3" for="reset-password">Nueva contraseña (mín. 8)</label>
+        <input id="reset-password" type="password" class="form-control form-control-lg" required minlength="8" autocomplete="new-password" />
+        <button type="submit" class="btn btn-outline-secondary btn-lg w-100 mt-4">Restablecer</button>
+      </form>
+      <p id="reset-out" class="hint mt-3" aria-live="polite"></p>
+      <a class="btn btn-link btn-sm" href="/ui/pages/auth/login.html">Volver al login</a>
+    </div>
+  </section>
+
+  <script src="/ui/assets/js/core/api.js"></script>
+  <script src="/ui/assets/js/components/toast.js"></script>
+  <script src="/ui/assets/js/modules/auth/recuperar.js"></script>
+</body>
+</html>

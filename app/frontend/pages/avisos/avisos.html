@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 
 </head>
@@ -42,26 +44,25 @@
       <nav class="breadcrumb" aria-label="Miga de pan"><a href="/ui/pages/dashboard/dashboard.html">Dashboard</a><span class="sep">/</span><span>Avisos</span></nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Bandeja</p>
-            <h2 class="h5 mb-1">Avisos</h2>
-            <p class="hint mb-0">Avisos del usuario autenticado. El servidor autoriza cada acción.</p>
+        <div class="module-head">
+          <h2>Avisos</h2>
+          <p>Bandeja del usuario autenticado. El servidor autoriza cada acción.</p>
+        </div>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-siga d-none" id="btn-new-record" data-roles="ADMINISTRATOR">+ Nuevo</button>
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <div class="form-check mb-0">
+            <input class="form-check-input" type="checkbox" id="filt-unread" />
+            <label class="form-check-label" for="filt-unread">Solo no leídos</label>
           </div>
-          <div class="d-flex flex-wrap gap-2 align-items-center">
-            <div class="form-check mb-0">
-              <input class="form-check-input" type="checkbox" id="filt-unread" />
-              <label class="form-check-label" for="filt-unread">Solo no leídos</label>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-notif">Actualizar</button>
-          </div>
+          <button type="button" class="btn btn-outline-secondary" id="btn-refresh-notif">Actualizar</button>
         </div>
 
         <section id="admin-create-notif" class="card-soft mb-3 d-none" data-roles="ADMINISTRATOR" aria-label="Crear aviso">
           <p class="eyebrow mb-2">Administración</p>
           <form id="notif-create-form" class="row g-2 align-items-end">
             <div class="col-md-3">
-              <label class="form-label" for="ntf-user">Destinatario</label>
+              <label class="form-label req" for="ntf-user">Destinatario</label>
               <select id="ntf-user" class="form-select form-select-sm" required></select>
             </div>
             <div class="col-md-2">
@@ -76,23 +77,33 @@
               </select>
             </div>
             <div class="col-md-3">
-              <label class="form-label" for="ntf-title">Título</label>
+              <label class="form-label req" for="ntf-title">Título</label>
               <input id="ntf-title" class="form-control form-control-sm" maxlength="200" required />
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
               <label class="form-label" for="ntf-body">Cuerpo</label>
               <input id="ntf-body" class="form-control form-control-sm" maxlength="500" />
-            </div>
-            <div class="col-md-1">
-              <button type="submit" class="btn btn-siga btn-sm w-100">Crear</button>
             </div>
           </form>
         </section>
 
-        <div id="notif-list">
-          <p class="empty-state mb-0" id="notif-empty">Cargando…</p>
+        <section class="table-wrap" id="notif-list">
+          <p class="empty-state mb-0" id="notif-empty" data-empty>Cargando…</p>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="id">Id</th>
+                <th scope="col" data-sort="title">Título</th>
+                <th scope="col" data-sort="type">Tipo</th>
+                <th scope="col" data-sort="status">Estado</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="notif-tbody"></tbody>
+          </table>
+          <div class="admin-pager" id="admin-pager"></div>
           <template id="notif-item-tpl">
-            <article class="notif-item">
+            <article class="notif-item d-none">
               <div class="d-flex justify-content-between gap-2">
                 <strong data-field="title"></strong>
                 <span class="small text-secondary" data-field="type"></span>
@@ -101,7 +112,7 @@
               <button type="button" class="btn btn-sm btn-outline-secondary mt-2 d-none" data-action="read">Marcar leída</button>
             </article>
           </template>
-        </div>
+        </section>
 
       </main>
     </div>
@@ -110,6 +121,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
 

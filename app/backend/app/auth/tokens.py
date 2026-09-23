@@ -39,6 +39,19 @@ def create_access_token(
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 
+def create_reset_token(*, user_id: int, username: str) -> str:
+    settings = get_settings()
+    exp = _now() + timedelta(minutes=15)
+    payload = {
+        "sub": str(user_id),
+        "username": username,
+        "type": "password_reset",
+        "iat": int(_now().timestamp()),
+        "exp": int(exp.timestamp()),
+    }
+    return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+
+
 def decode_token(token: str, *, expected_type: str = "access") -> dict[str, Any]:
     """Decode JWT with algorithm whitelist and type check (F8)."""
     settings = get_settings()

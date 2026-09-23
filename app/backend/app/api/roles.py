@@ -12,6 +12,7 @@ from app.permissions import constants as P
 from app.schemas.iam import (
     AssignPermissionsRequest,
     PermissionOut,
+    RoleCreate,
     RoleOut,
     role_to_out,
 )
@@ -26,6 +27,34 @@ def list_roles(
     db: Annotated[Session, Depends(get_db)],
 ):
     return [role_to_out(r) for r in RoleService(db).list_roles()]
+
+
+@router.post("/roles", response_model=RoleOut, status_code=status.HTTP_201_CREATED)
+def create_role(
+    body: RoleCreate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.ROLES_CREATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        role = RoleService(db).create_role(body.code, body.name)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return role_to_out(role)
+
+
+@router.delete("/roles/{role_code}", response_model=RoleOut)
+def deactivate_role(
+    role_code: str,
+    _: Annotated[CurrentUser, Depends(require_permission(P.ROLES_DELETE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        role = RoleService(db).deactivate_role(role_code)
+    except LookupError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    return role_to_out(role)
 
 
 @router.get("/permissions", response_model=List[PermissionOut])

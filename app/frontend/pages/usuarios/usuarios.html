@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -60,15 +62,23 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">IAM · administrador</p>
-            <p class="hint">GET/POST /users · PATCH status · PUT roles · DELETE soft. Estudiante recibe DENY.</p>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-users">Actualizar</button>
+        <div class="module-head">
+          <h2>Usuarios</h2>
+          <p>Alta, consulta, edición de estado/roles y baja lógica.</p>
+        </div>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-siga" id="btn-new-record">+ Nuevo</button>
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <select id="admin-filter" class="form-select admin-filter">
+            <option value="">Todos los estados</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+            <option value="LOCKED">LOCKED</option>
+          </select>
+          <button type="button" class="btn btn-outline-secondary" id="btn-refresh-users">Actualizar</button>
         </div>
 
-        <section class="card-soft mb-3" aria-labelledby="create-user-title">
+        <section class="card-soft mb-3 d-none" aria-labelledby="create-user-title">
           <h3 id="create-user-title">Alta de usuario</h3>
           <form id="user-create-form" class="row g-2 align-items-end" novalidate>
             <div class="col-md-3">
@@ -98,7 +108,7 @@
           <p id="user-create-out" class="hint mt-2 mb-0"></p>
         </section>
 
-        <section class="card-soft mb-3" aria-labelledby="manage-title">
+        <section class="card-soft mb-3 d-none" aria-labelledby="manage-title">
           <h3 id="manage-title">Gestionar usuario</h3>
           <div class="row g-2 align-items-end">
             <div class="col-md-2">
@@ -121,6 +131,7 @@
               <button type="button" class="btn btn-outline-secondary" id="btn-user-status">Cambiar estado</button>
               <button type="button" class="btn btn-outline-secondary" id="btn-user-roles">Asignar roles</button>
               <button type="button" class="btn btn-outline-secondary" id="btn-user-delete">Baja lógica</button>
+              <button type="button" class="btn btn-outline-secondary" id="btn-user-password">Resetear clave</button>
             </div>
           </div>
           <p id="user-manage-out" class="hint mt-2 mb-0"></p>
@@ -139,10 +150,12 @@
                 <th scope="col">Correo</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Roles</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="users-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="admin-pager"></div>
         </section>
 
       </main>
@@ -152,6 +165,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/usuarios/usuarios.js"></script>

@@ -1,4 +1,4 @@
-/* global SigaApi, SigaAuth, SigaToast, SigaTable */
+/* global SigaApi, SigaAuth, SigaToast, SigaTable, SigaModal, SigaAdminTable */
 // Ref: PromptMaster FASE 6 | carrera → periodo → paralelo | attendance API
 (async function () {
   if (!(await SigaAuth.requireAuth())) return;
@@ -28,6 +28,79 @@
   const SESSION_COLS = ["id", "course_id", "session_date", "topic"];
   const MARK_COLS = ["id", "session_id", "student_id", "status", "notes"];
   const el = (id) => document.getElementById(id);
+  const sessionsTable = SigaAdminTable.bind({
+    tbody: el("sessions-tbody"),
+    columns: SESSION_COLS,
+    searchInput: el("admin-search"),
+    pager: el("pager-sessions"),
+    actions: () => SigaAdminTable.actionButtons(["view", "edit"]),
+    onAction: (act, row) => {
+      if (!row) return;
+      if (act === "view") {
+        SigaModal.open({
+          title: "Consulta de sesión",
+          body: SigaModal.viewDl(SESSION_COLS.map((k) => [k, row[k]])),
+          footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
+        });
+      }
+      if (act === "edit") {
+        if (el("att-session-id")) el("att-session-id").value = String(row.id);
+        openMarkForm();
+      }
+    },
+  });
+  const marksTable = SigaAdminTable.bind({
+    tbody: el("marks-tbody"),
+    columns: MARK_COLS,
+    searchInput: el("admin-search"),
+    pager: el("pager-marks"),
+    statusKeys: ["status"],
+    actions: () => SigaAdminTable.actionButtons(["view", "edit"]),
+    onAction: (act, row) => {
+      if (!row) return;
+      if (act === "view") {
+        SigaModal.open({
+          title: "Consulta de asistencia",
+          body: SigaModal.viewDl(MARK_COLS.map((k) => [k, row[k]])),
+          footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
+        });
+      }
+      if (act === "edit") {
+        if (el("att-session-id")) el("att-session-id").value = String(row.session_id);
+        if (el("att-student-id")) el("att-student-id").value = String(row.student_id);
+        if (el("att-status")) el("att-status").value = row.status;
+        if (el("att-notes")) el("att-notes").value = row.notes || "";
+        openMarkForm();
+      }
+    },
+  });
+
+  function openSessionForm() {
+    const wrap = el("session-form-wrap");
+    if (!wrap) return;
+    SigaModal.openParked({
+      title: "Nueva sesión",
+      node: wrap,
+      footer:
+        '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cancelar</button>' +
+        '<button type="button" class="btn btn-siga" id="btn-modal-save-session">Guardar</button>',
+    });
+    document.getElementById("btn-modal-save-session")?.addEventListener("click", () => createSession());
+  }
+
+  function openMarkForm() {
+    const wrap = el("mark-form-wrap");
+    if (!wrap) return;
+    SigaModal.openParked({
+      title: "Marcar asistencia",
+      node: wrap,
+      footer:
+        '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cancelar</button>' +
+        '<button type="button" class="btn btn-siga" id="btn-modal-save-mark">Guardar</button>',
+      wide: true,
+    });
+    document.getElementById("btn-modal-save-mark")?.addEventListener("click", () => markAttendance());
+  }
 
   function subjectName(id) {
     const s = state.context.subjects.find((x) => x.id === id);
@@ -115,12 +188,8 @@
   }
 
   function renderLogs() {
-    if (el("sessions-tbody")) {
-      fillTbody(el("sessions-tbody"), state.context.sessions, SESSION_COLS);
-    }
-    if (el("marks-tbody")) {
-      fillTbody(el("marks-tbody"), state.context.marks, MARK_COLS);
-    }
+    sessionsTable.setRows(state.context.sessions || []);
+    marksTable.setRows(state.context.marks || []);
   }
 
   function fillTerms() {
@@ -258,6 +327,7 @@
       session_id: sessionId,
       student_id: studentId,
       status: el("att-status").value,
+      notes: (el("att-notes")?.value || "").trim() || null,
     };
     const { ok, data } = await api("PUT", "/attendance/records", body);
     if (!ok) {
@@ -295,6 +365,7 @@
   const dateEl = el("att-date");
   if (dateEl && !dateEl.value) dateEl.value = new Date().toISOString().slice(0, 10);
 
+  el("btn-new-record")?.addEventListener("click", () => openSessionForm());
   el("btn-create-session")?.addEventListener("click", () => createSession());
   el("btn-mark-att")?.addEventListener("click", () => markAttendance());
   el("btn-att-pct")?.addEventListener("click", () => attendancePercent());

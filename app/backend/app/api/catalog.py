@@ -12,6 +12,7 @@ from app.permissions import constants as P
 from app.schemas.academic import (
     CareerCreate,
     CareerOut,
+    StatusUpdate,
     CurriculumCreate,
     CurriculumOut,
     CurriculumSubjectCreate,
@@ -64,6 +65,19 @@ def create_career(
         raise _map_err(exc) from exc
 
 
+@router.patch("/careers/{career_id}/status", response_model=CareerOut)
+def set_career_status(
+    career_id: int,
+    body: StatusUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.CAREERS_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return CatalogService(db).set_career_status(career_id, body.status)
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
 @router.get("/subjects", response_model=List[SubjectOut])
 def list_subjects(
     _: Annotated[CurrentUser, Depends(require_permission(P.SUBJECTS_VIEW))],
@@ -82,6 +96,19 @@ def create_subject(
     type_ = data.pop("type")
     try:
         return CatalogService(db).create_subject(**data, type_=type_)
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.patch("/subjects/{subject_id}/status", response_model=SubjectOut)
+def set_subject_status(
+    subject_id: int,
+    body: StatusUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.SUBJECTS_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return CatalogService(db).set_subject_status(subject_id, body.status)
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -121,6 +148,20 @@ def add_curriculum_subject(
         cur = next(
             c for c in CatalogService(db).list_curricula() if c.id == curriculum_id
         )
+        return curriculum_to_out(cur)
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.patch("/curricula/{curriculum_id}/status", response_model=CurriculumOut)
+def set_curriculum_status(
+    curriculum_id: int,
+    body: StatusUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.CURRICULUM_CREATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        cur = CatalogService(db).set_curriculum_status(curriculum_id, body.status)
         return curriculum_to_out(cur)
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
@@ -193,6 +234,19 @@ def create_student(
         raise _map_err(exc) from exc
 
 
+@router.patch("/students/{student_id}/status", response_model=StudentOut)
+def set_student_status(
+    student_id: int,
+    body: StatusUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.STUDENTS_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return CatalogService(db).set_student_status(student_id, body.status)
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
 @router.get("/teachers", response_model=List[TeacherOut])
 def list_teachers(
     _: Annotated[CurrentUser, Depends(require_permission(P.TEACHERS_VIEW))],
@@ -209,5 +263,18 @@ def create_teacher(
 ):
     try:
         return CatalogService(db).create_teacher(**body.model_dump())
+    except Exception as exc:  # noqa: BLE001
+        raise _map_err(exc) from exc
+
+
+@router.patch("/teachers/{teacher_id}/status", response_model=TeacherOut)
+def set_teacher_status(
+    teacher_id: int,
+    body: StatusUpdate,
+    _: Annotated[CurrentUser, Depends(require_permission(P.TEACHERS_UPDATE))],
+    db: Annotated[Session, Depends(get_db)],
+):
+    try:
+        return CatalogService(db).set_teacher_status(teacher_id, body.status)
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc

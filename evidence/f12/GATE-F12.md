@@ -30,3 +30,5 @@
 Laboratorio SIGA (siga-polkdev) — CERRADO CONDICIONADO
 No hay fase F13.
 ```
+
+Addendum 2026-09-22: la UI de notas/asistencia/catálogos quedó implementada en PromptMaster F2–F10. No reabre F13. Deuda que sigue: recuperación de contraseña y PDF (501).

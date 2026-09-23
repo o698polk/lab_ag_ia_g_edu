@@ -46,6 +46,9 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(String(64), unique=True, index=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    first_name: Mapped[Optional[str]] = mapped_column(String(80), default="")
+    last_name: Mapped[Optional[str]] = mapped_column(String(80), default="")
+    phone: Mapped[Optional[str]] = mapped_column(String(32), default="")
     password_hash: Mapped[str] = mapped_column(String(255))
     status: Mapped[str] = mapped_column(String(32), default="ACTIVE", index=True)
     last_login: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
@@ -79,6 +82,12 @@ class User(Base):
     def role_codes(self) -> list[str]:
         return [r.code for r in self.roles if r.is_active]
 
+    @property
+    def full_name(self) -> str:
+        parts = [self.first_name or "", self.last_name or ""]
+        name = " ".join(p for p in parts if p).strip()
+        return name or self.username
+
 
 class Role(Base):
     __tablename__ = "roles"
@@ -86,6 +95,7 @@ class Role(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     code: Mapped[str] = mapped_column(String(64), unique=True, index=True)
     name: Mapped[str] = mapped_column(String(128))
+    description: Mapped[str] = mapped_column(String(255), default="")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -106,6 +116,7 @@ class Permission(Base):
     code: Mapped[str] = mapped_column(String(128), unique=True, index=True)
     description: Mapped[str] = mapped_column(String(255), default="")
     module: Mapped[str] = mapped_column(String(64), index=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     roles: Mapped[List[Role]] = relationship(
         secondary="role_permissions", back_populates="permissions", lazy="selectin"

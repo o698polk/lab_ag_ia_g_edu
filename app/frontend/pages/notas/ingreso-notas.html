@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -56,12 +58,13 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Docente / administrador</p>
-            <p class="hint">Flujo corto: carrera → periodo → paralelo → evaluación → nota.</p>
-          </div>
-          <a class="btn btn-sm btn-outline-secondary" href="/ui/pages/notas/notas.html">Volver a notas</a>
+        <div class="module-head">
+          <h2>Ingreso de notas</h2>
+          <p>Flujo corto: carrera → periodo → paralelo → evaluación → nota.</p>
+        </div>
+        <div class="admin-toolbar">
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <a class="btn btn-outline-secondary" href="/ui/pages/notas/notas.html">Volver a notas</a>
         </div>
 
         <section class="card-soft mb-3" aria-labelledby="ingreso-cascade-title">
@@ -130,10 +133,12 @@
                 <th scope="col">Nota</th>
                 <th scope="col">Comentario</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="grades-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="pager-grades"></div>
         </section>
 
         <!-- Shared module expects these ids; keep hidden on ingreso page -->
@@ -150,6 +155,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/notas/notas.js"></script>

@@ -75,6 +75,38 @@ def _setup_grade_context(client, auth_header):
 
 
 @pytest.mark.unit
+def test_admin_can_create_evaluation_without_teacher_profile(client, auth_header):
+    base = _setup_grade_context(client, auth_header)
+    ev = client.post(
+        "/api/v1/evaluations",
+        headers=auth_header,
+        json={
+            "course_id": base["course"]["id"],
+            "name": "Admin Parcial",
+            "weight_percent": 20,
+        },
+    )
+    assert ev.status_code == 201, ev.text
+    assert ev.json()["name"] == "Admin Parcial"
+
+    kx = client.put(
+        "/api/v1/kardex",
+        headers=auth_header,
+        json={
+            "student_id": base["student"]["id"],
+            "term_id": base["term"]["id"],
+            "subject_id": base["subject"]["id"],
+            "course_id": base["course"]["id"],
+            "final_grade": 85,
+            "academic_status": "IN_PROGRESS",
+            "credits": 3,
+        },
+    )
+    assert kx.status_code == 200, kx.text
+    assert float(kx.json()["final_grade"]) == 85
+
+
+@pytest.mark.unit
 def test_teacher_can_grade_assigned_course(client, auth_header, teacher_header, student_header):
     base = _setup_grade_context(client, auth_header)
     ev = client.post(

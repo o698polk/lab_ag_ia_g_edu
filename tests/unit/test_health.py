@@ -8,7 +8,7 @@ import pytest
 def test_root(client):
     res = client.get("/", follow_redirects=False)
     assert res.status_code in (307, 302)
-    assert res.headers.get("location", "").endswith("/ui/")
+    assert "/ui/pages/home.html" in res.headers.get("location", "")
 
 
 @pytest.mark.unit

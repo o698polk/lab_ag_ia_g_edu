@@ -1,4 +1,4 @@
-/* global SigaApi, SigaAuth, SigaToast, SigaTable */
+/* global SigaApi, SigaAuth, SigaToast, SigaTable, SigaModal, SigaAdminTable */
 // Ref: PromptMaster FASE 5 | carrera → periodo → paralelo | endpoints existentes
 (async function () {
   if (!(await SigaAuth.requireAuth())) return;
@@ -29,6 +29,60 @@
   const KARDEX_COLS = ["id", "term_id", "subject_id", "final_grade", "academic_status", "credits"];
 
   const el = (id) => document.getElementById(id);
+  const gradesTable = SigaAdminTable.bind({
+    tbody: el("grades-tbody"),
+    columns: GRADE_COLS,
+    searchInput: el("admin-search"),
+    pager: el("pager-grades"),
+    actions: () => SigaAdminTable.actionButtons(["view", "edit"]),
+    onAction: (act, row) => {
+      if (!row) return;
+      if (act === "view") {
+        SigaModal.open({
+          title: "Consulta de nota",
+          body: SigaModal.viewDl(GRADE_COLS.map((k) => [k, row[k]])),
+          footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
+        });
+      }
+      if (act === "edit") {
+        if (el("grade-eval-id")) el("grade-eval-id").value = String(row.evaluation_id || "");
+        if (el("grade-student-id")) el("grade-student-id").value = String(row.student_id || "");
+        if (el("grade-score")) el("grade-score").value = row.score ?? "";
+        if (el("grade-comment")) el("grade-comment").value = row.comment || "";
+        openGradeForm();
+      }
+    },
+  });
+  const kardexTable = SigaAdminTable.bind({
+    tbody: el("kardex-tbody"),
+    columns: KARDEX_COLS,
+    searchInput: el("admin-search"),
+    pager: el("pager-kardex"),
+    statusKeys: ["academic_status"],
+    actions: () => SigaAdminTable.actionButtons(["view"]),
+    onAction: (act, row) => {
+      if (act !== "view" || !row) return;
+      SigaModal.open({
+        title: "Consulta de kardex",
+        body: SigaModal.viewDl(KARDEX_COLS.map((k) => [k, row[k]])),
+        footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
+      });
+    },
+  });
+
+  function openGradeForm() {
+    const wrap = el("grade-form-wrap");
+    if (!wrap) return;
+    SigaModal.openParked({
+      title: "Registrar nota",
+      node: wrap,
+      footer:
+        '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cancelar</button>' +
+        '<button type="button" class="btn btn-siga" id="btn-modal-save-grade">Guardar</button>',
+      wide: true,
+    });
+    document.getElementById("btn-modal-save-grade")?.addEventListener("click", () => upsertGrade());
+  }
 
   function subjectName(id) {
     const s = state.context.subjects.find((x) => x.id === id);
@@ -88,7 +142,7 @@
 
   function showGradeRows(rows) {
     showGradesPanel();
-    fillTbody(el("grades-tbody"), rows, GRADE_COLS);
+    gradesTable.setRows(Array.isArray(rows) ? rows : []);
   }
 
   function updateCascadePath() {
@@ -246,11 +300,11 @@
     if (!ok) {
       toast(formatError(data), "bad");
       showKardexPanel();
-      fillTbody(el("kardex-tbody"), [], KARDEX_COLS);
+      kardexTable.setRows([]);
       return;
     }
     showKardexPanel();
-    fillTbody(el("kardex-tbody"), Array.isArray(data) ? data : [data], KARDEX_COLS);
+    kardexTable.setRows(Array.isArray(data) ? data : [data]);
     toast("Kardex cargado.", "ok");
   }
 
@@ -288,6 +342,47 @@
     if (ok) await loadCourseGrades();
   }
 
+  async function createEvaluation() {
+    const courseId = Number(el("filter-parallel")?.value || 0);
+    const name = (el("eval-name")?.value || "").trim();
+    if (!courseId || !name) {
+      toast("Selecciona paralelo y nombre de evaluación.", "bad");
+      return;
+    }
+    const { ok, data } = await api("POST", "/evaluations", {
+      course_id: courseId,
+      name,
+      weight_percent: Number(el("eval-weight")?.value || 30),
+      due_date: el("eval-due")?.value || null,
+    });
+    toast(ok ? "Evaluación creada." : formatError(data), ok ? "ok" : "bad");
+    if (ok) await onParallelChange();
+  }
+
+  async function upsertKardex() {
+    const studentId = Number(el("kx-student")?.value || 0);
+    const termId = Number(el("kx-term")?.value || el("filter-term")?.value || 0);
+    const subjectId = Number(el("kx-subject")?.value || 0);
+    if (!studentId || !termId || !subjectId) {
+      toast("Indica estudiante, periodo y asignatura.", "bad");
+      return;
+    }
+    const { ok, data } = await api("PUT", "/kardex", {
+      student_id: studentId,
+      term_id: termId,
+      subject_id: subjectId,
+      course_id: Number(el("filter-parallel")?.value || 0) || null,
+      final_grade: el("kx-grade")?.value === "" ? null : Number(el("kx-grade").value),
+      academic_status: "IN_PROGRESS",
+      credits: Number(el("kx-credits")?.value || 0),
+    });
+    toast(ok ? "Kardex actualizado." : formatError(data), ok ? "ok" : "bad");
+    if (ok) await loadMyKardex();
+  }
+
+  el("btn-new-record")?.addEventListener("click", () => openGradeForm());
+  el("btn-create-eval")?.addEventListener("click", () => createEvaluation());
+  el("btn-upsert-kardex")?.addEventListener("click", () => upsertKardex());
   el("btn-my-grades")?.addEventListener("click", () => loadMyGrades());
   el("btn-my-kardex")?.addEventListener("click", () => loadMyKardex());
   el("btn-course-grades")?.addEventListener("click", () => loadCourseGrades());

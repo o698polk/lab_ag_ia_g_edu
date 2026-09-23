@@ -62,7 +62,7 @@ Skills **confirmadas** en F4 (ver matriz). Columna "Skill" = Skill primaria Assi
 | BL-O2-002 | Modelos careers/curriculum/subjects/prereqs | RF-CAR/CUR/SUB | K-014 | P0 | Done (F6-O2) |
 | BL-O2-003 | Modelos academic_terms + reglas CLOSED | RF-TRM-* | K-017 | P0 | Done (F6-O2) |
 | BL-O2-004 | APIs catálogo + validaciones | RF-* | K-013 (+K-017) | P0 | Done (F6-O2) |
-| BL-O2-005 | UI admin catálogo | RNF-UX-001 | K-022 | P1 | Backlog |
+| BL-O2-005 | UI admin catálogo | RNF-UX-001 | K-022 | P1 | Done (PromptMaster F7) |
 
 ### O3 — Operación académica
 
@@ -72,7 +72,7 @@ Skills **confirmadas** en F4 (ver matriz). Columna "Skill" = Skill primaria Assi
 | BL-O3-002 | Teaching assignments | RF-ASN-001 | K-017 | P0 | Done (F6-O3) |
 | BL-O3-003 | Enrollments | RF-ENR-* | K-017 | P0 | Done (F6-O3) |
 | BL-O3-004 | Schedules + conflictos | RF-SCH-001 | K-017 | P1 | Done (F6-O3) |
-| BL-O3-005 | APIs + UI operación | — | K-013 (+K-022) | P0 | Done API (UI P1) |
+| BL-O3-005 | APIs + UI operación | — | K-013 (+K-022) | P0 | Done API + UI (PromptMaster F5–F7) |
 
 ### O4 — Evaluación
 
@@ -118,7 +118,7 @@ Skills **confirmadas** en F4 (ver matriz). Columna "Skill" = Skill primaria Assi
 | BL-QA-003 | Suite security (IDOR, JWT, SQLi, XSS) | RNF-SEC-001 | K-007 | P0 | Done (F7) |
 | BL-QA-004 | E2E flujos críticos | — | K-006 | P1 | Done (F7) |
 | BL-QA-005 | Documentación API/arquitectura/seguridad | — | K-008 | P1 | Done (F9) |
-| BL-QA-006 | Validación Gate F10 | — | K-009 | P0 | Backlog |
+| BL-QA-006 | Validación Gate F10 | — | K-009 | P0 | Done (`evidence/f10`) |
 
 ---
 

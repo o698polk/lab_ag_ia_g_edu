@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -56,12 +58,12 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Flujo corto</p>
-            <p class="hint">Paralelo → crear sesión → marcar presente/ausente.</p>
-          </div>
-          <a class="btn btn-sm btn-outline-secondary" href="/ui/pages/asistencia/asistencia.html">Volver</a>
+        <div class="module-head">
+          <h2>Registro de asistencia</h2>
+          <p>Paralelo → crear sesión → marcar presente/ausente.</p>
+        </div>
+        <div class="admin-toolbar">
+          <a class="btn btn-outline-secondary" href="/ui/pages/asistencia/asistencia.html">Volver</a>
         </div>
 
         <section class="card-soft mb-3">
@@ -121,6 +123,10 @@
                 <option value="JUSTIFIED">Justificado</option>
               </select>
             </div>
+            <div class="col-md-8">
+              <label class="form-label" for="att-notes">Notas</label>
+              <input id="att-notes" class="form-control" placeholder="Opcional" />
+            </div>
             <div class="col-12 d-flex flex-wrap gap-2">
               <button type="button" class="btn btn-siga" id="btn-create-session" disabled>Crear sesión</button>
               <button type="button" class="btn btn-siga" id="btn-mark-att" disabled>Guardar asistencia</button>
@@ -155,6 +161,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/asistencia/asistencia.js"></script>

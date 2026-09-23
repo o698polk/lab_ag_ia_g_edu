@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -52,22 +54,17 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">Evaluación académica</p>
-            <p class="hint">Consulta propia o flujo carrera → periodo → paralelo. La UI no autoriza.</p>
-          </div>
-          <a class="btn btn-sm btn-outline-secondary" href="/ui/pages/notas/ingreso-notas.html" data-roles="TEACHER,ADMINISTRATOR">Ir a ingreso</a>
+        <div class="module-head">
+          <h2>Notas</h2>
+          <p>Consulta propia o flujo carrera → periodo → paralelo. Las operaciones se realizan en ventanas emergentes.</p>
         </div>
-
-        <section class="card-soft mb-3" aria-labelledby="self-grades-title">
-          <h3 id="self-grades-title">Mi consulta</h3>
-          <p class="hint mb-3">Disponible para el estudiante autenticado (y roles con permiso).</p>
-          <div class="d-flex flex-wrap gap-2">
-            <button type="button" class="btn btn-siga" id="btn-my-grades">Mis notas</button>
-            <button type="button" class="btn btn-outline-secondary" id="btn-my-kardex">Mi kardex</button>
-          </div>
-        </section>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-siga" id="btn-new-record" data-roles="TEACHER,ADMINISTRATOR">+ Nuevo</button>
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <button type="button" class="btn btn-outline-secondary" id="btn-my-grades">Mis notas</button>
+          <button type="button" class="btn btn-outline-secondary" id="btn-my-kardex">Mi kardex</button>
+          <a class="btn btn-outline-secondary" href="/ui/pages/notas/ingreso-notas.html" data-roles="TEACHER,ADMINISTRATOR">Ir a ingreso</a>
+        </div>
 
         <section class="card-soft mb-3" data-roles="TEACHER,ADMINISTRATOR" aria-labelledby="cascade-title">
           <h3 id="cascade-title">Seleccionar curso</h3>
@@ -98,7 +95,7 @@
           </div>
         </section>
 
-        <section class="card-soft mb-3" data-roles="TEACHER,ADMINISTRATOR" aria-labelledby="upsert-title">
+        <section class="card-soft mb-3 d-none" id="grade-form-wrap" data-roles="TEACHER,ADMINISTRATOR" aria-labelledby="upsert-title">
           <h3 id="upsert-title">Registrar nota</h3>
           <p class="hint mb-3">Evaluación y estudiante dependen del paralelo seleccionado.</p>
           <div class="row g-3">
@@ -128,6 +125,56 @@
           </div>
         </section>
 
+        <section class="card-soft mb-3 d-none" id="eval-form-wrap" data-roles="TEACHER,ADMINISTRATOR" aria-labelledby="eval-title">
+          <h3 id="eval-title">Crear evaluación del curso</h3>
+          <div class="row g-2 align-items-end">
+            <div class="col-md-4">
+              <label class="form-label" for="eval-name">Nombre</label>
+              <input id="eval-name" class="form-control" placeholder="Parcial 1" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="eval-weight">Peso %</label>
+              <input id="eval-weight" type="number" class="form-control" min="1" max="100" value="30" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="eval-due">Fecha</label>
+              <input id="eval-due" type="date" class="form-control" />
+            </div>
+            <div class="col-md-3">
+              <button type="button" class="btn btn-outline-secondary w-100" id="btn-create-eval">Crear evaluación</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card-soft mb-3 d-none" id="kardex-form-wrap" data-roles="ADMINISTRATOR" aria-labelledby="kx-title">
+          <h3 id="kx-title">Registrar kardex</h3>
+          <div class="row g-2 align-items-end">
+            <div class="col-md-2">
+              <label class="form-label" for="kx-student">Estudiante (id)</label>
+              <input id="kx-student" type="number" class="form-control" min="1" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="kx-term">Periodo (id)</label>
+              <input id="kx-term" type="number" class="form-control" min="1" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="kx-subject">Asignatura (id)</label>
+              <input id="kx-subject" type="number" class="form-control" min="1" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="kx-grade">Nota final</label>
+              <input id="kx-grade" type="number" class="form-control" min="0" max="100" step="0.01" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label" for="kx-credits">Créditos</label>
+              <input id="kx-credits" type="number" class="form-control" min="0" value="3" />
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-outline-secondary w-100" id="btn-upsert-kardex">Guardar kardex</button>
+            </div>
+          </div>
+        </section>
+
         <section class="table-wrap" id="panel-grades" aria-labelledby="results-grades-title">
           <div class="panel-head px-3 pt-3 mb-0">
             <h3 id="results-grades-title" class="section-title mb-0">Resultados · notas</h3>
@@ -142,10 +189,12 @@
                 <th scope="col">Nota</th>
                 <th scope="col">Comentario</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="grades-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="pager-grades"></div>
         </section>
 
         <section class="table-wrap mt-3 d-none" id="panel-kardex" aria-labelledby="results-kardex-title">
@@ -162,10 +211,12 @@
                 <th scope="col">Nota final</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Créditos</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="kardex-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="pager-kardex"></div>
         </section>
 
       </main>
@@ -175,6 +226,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/notas/notas.js"></script>

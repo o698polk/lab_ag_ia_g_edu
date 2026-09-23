@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -62,15 +64,38 @@
       </nav>
       <main class="app-content">
 
-        <div class="panel-head">
-          <div>
-            <p class="eyebrow">RBAC</p>
-            <p class="hint">GET /roles · GET /permissions · PUT /roles/{code}/permissions</p>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-roles">Actualizar</button>
+        <div class="module-head">
+          <h2>Roles y permisos</h2>
+          <p>Alta de rol, asignación de permisos y desactivación.</p>
+        </div>
+        <div class="admin-toolbar">
+          <button type="button" class="btn btn-siga" id="btn-new-record">+ Nuevo</button>
+          <input id="admin-search" class="form-control admin-search" type="search" placeholder="Buscar..." />
+          <button type="button" class="btn btn-outline-secondary" id="btn-refresh-roles">Actualizar</button>
         </div>
 
-        <section class="card-soft mb-3" aria-labelledby="assign-perm-title">
+        <section class="card-soft mb-3 d-none" aria-labelledby="create-role-title">
+          <h3 id="create-role-title">Alta de rol</h3>
+          <form id="role-create-form" class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label class="form-label" for="new-role-code">Código</label>
+              <input id="new-role-code" class="form-control" required minlength="2" />
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="new-role-name">Nombre</label>
+              <input id="new-role-name" class="form-control" required minlength="2" />
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-siga w-100">Crear</button>
+            </div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-outline-secondary w-100" id="btn-role-deactivate">Desactivar</button>
+            </div>
+          </form>
+          <p id="role-create-out" class="hint mt-2 mb-0"></p>
+        </section>
+
+        <section class="card-soft mb-3 d-none" aria-labelledby="assign-perm-title">
           <h3 id="assign-perm-title">Asignar permisos a un rol</h3>
           <div class="row g-2 align-items-end">
             <div class="col-md-3">
@@ -101,10 +126,12 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Activo</th>
                 <th scope="col">Permisos</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="roles-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="admin-pager"></div>
         </section>
 
         <section class="table-wrap" aria-labelledby="perms-title">
@@ -119,10 +146,12 @@
                 <th scope="col">Código</th>
                 <th scope="col">Módulo</th>
                 <th scope="col">Descripción</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="perms-tbody"></tbody>
           </table>
+          <div class="admin-pager" id="pager-perms"></div>
         </section>
 
       </main>
@@ -132,6 +161,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/usuarios/roles.js"></script>

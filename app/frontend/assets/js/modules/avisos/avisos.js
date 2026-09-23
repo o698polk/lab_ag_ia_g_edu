@@ -1,65 +1,86 @@
-/* global SigaApi, SigaAuth, SigaToast */
+/* global SigaApi, SigaAuth, SigaToast, SigaModal, SigaAdminTable */
 (async function () {
   if (!(await SigaAuth.requireAuth())) return;
   const { api, formatError, state } = SigaApi;
   const toast = SigaToast.toast;
   const roles = (state.user && state.user.roles) || [];
   const isAdmin = roles.includes("ADMINISTRATOR");
+  const el = (id) => document.getElementById(id);
+  let cache = [];
+
+  const table = SigaAdminTable.bind({
+    tbody: el("notif-tbody"),
+    columns: ["id", "title", "type", "status"],
+    searchInput: el("admin-search"),
+    pager: el("admin-pager"),
+    statusKeys: ["status"],
+    actions: (row) =>
+      SigaAdminTable.actionButtons(row.status === "No leído" ? ["view", "edit"] : ["view"]),
+    onAction: (act, row) => {
+      if (!row) return;
+      if (act === "view") {
+        SigaModal.open({
+          title: "Consulta de aviso",
+          body: SigaModal.viewDl([
+            ["Id", row.id],
+            ["Título", row.title],
+            ["Tipo", row.type],
+            ["Estado", row.status],
+            ["Cuerpo", row.body],
+          ]),
+          footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
+        });
+      }
+      if (act === "edit") markRead(row.id);
+    },
+  });
+
+  async function markRead(id) {
+    const res = await api("PUT", "/notifications/" + id + "/read");
+    if (!res.ok) {
+      toast(formatError(res.data), "bad");
+      return;
+    }
+    toast("Registro actualizado correctamente.", "ok");
+    await loadNotifications();
+  }
 
   async function loadNotifications() {
-    const unreadOnly = document.getElementById("filt-unread")?.checked;
+    const unreadOnly = el("filt-unread")?.checked;
     const qs = unreadOnly ? "?unread_only=true" : "";
+    const empty = el("notif-empty");
     const { ok, data } = await api("GET", "/notifications" + qs);
-    const list = document.getElementById("notif-list");
-    const empty = document.getElementById("notif-empty");
-    const tpl = document.getElementById("notif-item-tpl");
-    list.querySelectorAll(".notif-item").forEach((n) => n.remove());
     if (!ok) {
       if (empty) {
         empty.textContent = formatError(data);
         empty.classList.remove("d-none");
       }
       toast(formatError(data), "bad");
+      table.setRows([]);
       return;
     }
-    if (!Array.isArray(data) || !data.length) {
-      if (empty) {
-        empty.textContent = unreadOnly ? "No hay avisos sin leer." : "No tienes avisos.";
-        empty.classList.remove("d-none");
-      }
-      return;
+    cache = Array.isArray(data) ? data : [];
+    if (!cache.length && empty) {
+      empty.textContent = unreadOnly ? "No hay avisos sin leer." : "No tienes avisos.";
     }
-    if (empty) empty.classList.add("d-none");
-    data.forEach((n) => {
-      const node = tpl.content.cloneNode(true);
-      const root = node.querySelector(".notif-item");
-      if (n.read_flag) root.classList.add("read");
-      root.querySelector('[data-field="title"]').textContent = n.title || n.type || "";
-      root.querySelector('[data-field="type"]').textContent = n.type || "";
-      root.querySelector('[data-field="body"]').textContent = n.body || "";
-      const btn = root.querySelector('[data-action="read"]');
-      if (!n.read_flag) {
-        btn.classList.remove("d-none");
-        btn.addEventListener("click", async () => {
-          const res = await api("PUT", "/notifications/" + n.id + "/read");
-          if (!res.ok) {
-            toast(formatError(res.data), "bad");
-            return;
-          }
-          toast("Marcada como leída", "ok");
-          await loadNotifications();
-        });
-      }
-      list.appendChild(node);
-    });
+    table.setRows(
+      cache.map((n) => ({
+        id: n.id,
+        title: n.title || n.type || "",
+        type: n.type || "",
+        status: n.read_flag ? "Leído" : "No leído",
+        body: n.body || "",
+      }))
+    );
   }
 
   async function wireAdminCreate() {
-    const panel = document.getElementById("admin-create-notif");
-    if (!panel || !isAdmin) return;
-    panel.classList.remove("d-none");
+    const panel = el("admin-create-notif");
+    const btnNew = el("btn-new-record");
+    if (!isAdmin || !panel) return;
+    if (btnNew) btnNew.classList.remove("d-none");
 
-    const sel = document.getElementById("ntf-user");
+    const sel = el("ntf-user");
     const { ok, data } = await api("GET", "/users");
     if (ok && Array.isArray(data) && sel) {
       sel.innerHTML = "";
@@ -75,12 +96,12 @@
       });
     }
 
-    document.getElementById("notif-create-form")?.addEventListener("submit", async (ev) => {
+    el("notif-create-form")?.addEventListener("submit", async (ev) => {
       ev.preventDefault();
-      const userId = Number(document.getElementById("ntf-user").value);
-      const type = document.getElementById("ntf-type").value;
-      const title = document.getElementById("ntf-title").value.trim();
-      const body = document.getElementById("ntf-body").value.trim();
+      const userId = Number(el("ntf-user").value);
+      const type = el("ntf-type").value;
+      const title = el("ntf-title").value.trim();
+      const body = el("ntf-body").value.trim();
       if (!userId || !title) {
         toast("Usuario y título son obligatorios", "bad");
         return;
@@ -95,14 +116,24 @@
         toast(formatError(res.data), "bad");
         return;
       }
-      toast("Aviso creado", "ok");
+      toast("Registro creado correctamente.", "ok");
       ev.target.reset();
+      SigaModal.close();
       await loadNotifications();
+    });
+
+    btnNew?.addEventListener("click", () => {
+      SigaModal.openParked({
+        title: "Nuevo aviso",
+        node: panel,
+        footer: SigaModal.footerCancelSave("Guardar", "notif-create-form"),
+        wide: true,
+      });
     });
   }
 
-  document.getElementById("btn-refresh-notif")?.addEventListener("click", () => loadNotifications());
-  document.getElementById("filt-unread")?.addEventListener("change", () => loadNotifications());
+  el("btn-refresh-notif")?.addEventListener("click", () => loadNotifications());
+  el("filt-unread")?.addEventListener("change", () => loadNotifications());
   await wireAdminCreate();
   await loadNotifications();
 })();

@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="/ui/assets/css/components.css" />
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
+  <link rel="stylesheet" href="/ui/assets/css/admin.css" />
+
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
 </head>
 <body>
@@ -52,14 +54,17 @@
       </nav>
       <main class="app-content">
 
-        <section class="dash-welcome" aria-labelledby="welcome-title">
-          <div>
-            <p class="eyebrow" id="role-badge">Vista según tu rol</p>
-            <h2 id="welcome-title">Bienvenido</h2>
-            <p class="hint" id="welcome-hint">Indicadores calculados en el servidor según tu rol.</p>
-          </div>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-refresh-dash">Actualizar</button>
+        <section class="dash-welcome d-none" aria-hidden="true">
+          <div class="dash-shortcuts"></div>
         </section>
+        <div class="module-head">
+          <h2 id="welcome-title">Dashboard</h2>
+          <p id="welcome-hint">Indicadores calculados en el servidor según tu rol. La UI no autoriza.</p>
+        </div>
+        <div class="admin-toolbar">
+          <span class="siga-chip muted" id="role-badge">Vista según tu rol</span>
+          <button type="button" class="btn btn-outline-secondary" id="btn-refresh-dash">Actualizar</button>
+        </div>
 
         <section class="mt-3" aria-labelledby="metrics-title">
           <h3 id="metrics-title" class="section-title">Indicadores</h3>
@@ -111,55 +116,54 @@
           <p id="dash-loading" class="hint mt-2">Cargando indicadores…</p>
         </section>
 
-        <section class="mt-4" aria-labelledby="shortcuts-title">
-          <h3 id="shortcuts-title" class="section-title">Accesos rápidos</h3>
-          <div class="dash-shortcuts">
-            <a class="dash-shortcut" href="/ui/pages/notas/notas.html">
-              <strong>Notas</strong>
-              <span>Consulta e ingreso de calificaciones</span>
-            </a>
-            <a class="dash-shortcut" href="/ui/pages/asistencia/asistencia.html" data-roles="TEACHER,ADMINISTRATOR">
-              <strong>Asistencia</strong>
-              <span>Sesiones y registro diario</span>
-            </a>
-            <a class="dash-shortcut" href="/ui/pages/catalogos/catalogos.html" data-roles="ADMINISTRATOR">
-              <strong>Catálogos</strong>
-              <span>Carreras, periodos y personal</span>
-            </a>
-            <a class="dash-shortcut" href="/ui/pages/reportes/reportes.html" data-roles="TEACHER,ADMINISTRATOR">
-              <strong>Reportes</strong>
-              <span>Generar y consultar historial</span>
-            </a>
-            <a class="dash-shortcut" href="/ui/pages/avisos/avisos.html">
-              <strong>Avisos</strong>
-              <span>Bandeja de notificaciones</span>
-            </a>
-            <a class="dash-shortcut" href="/ui/pages/asistente/asistente.html">
-              <strong>Asistente</strong>
-              <span>Consultas con gateway Zero Trust</span>
-            </a>
+        <section class="table-wrap mt-3" aria-labelledby="shortcuts-title">
+          <div class="panel-head px-3 pt-3 mb-0">
+            <h3 id="shortcuts-title" class="section-title mb-0">Accesos rápidos</h3>
           </div>
+          <table class="table table-sm table-hover align-middle data-table">
+            <thead>
+              <tr>
+                <th scope="col">Módulo</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Notas</td><td>Consulta e ingreso de calificaciones</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/notas/notas.html">Abrir</a></td></tr>
+              <tr data-roles="TEACHER,ADMINISTRATOR"><td>Asistencia</td><td>Sesiones y registro diario</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/asistencia/asistencia.html">Abrir</a></td></tr>
+              <tr data-roles="ADMINISTRATOR"><td>Catálogos</td><td>Carreras, periodos y personal</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/catalogos/catalogos.html">Abrir</a></td></tr>
+              <tr data-roles="TEACHER,ADMINISTRATOR"><td>Reportes</td><td>Generar y consultar historial</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/reportes/reportes.html">Abrir</a></td></tr>
+              <tr><td>Avisos</td><td>Bandeja de notificaciones</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/avisos/avisos.html">Abrir</a></td></tr>
+              <tr><td>Asistente</td><td>Consultas con gateway Zero Trust</td><td class="col-actions"><a class="btn btn-outline-secondary" href="/ui/pages/asistente/asistente.html">Abrir</a></td></tr>
+            </tbody>
+          </table>
         </section>
 
         <div class="row g-3 mt-1">
           <div class="col-lg-5">
-            <section class="card-soft h-100" aria-labelledby="avisos-title">
-              <div class="panel-head mb-2">
+            <section class="table-wrap h-100" aria-labelledby="avisos-title" id="dash-notif-list">
+              <div class="panel-head px-3 pt-3 mb-0">
                 <h3 id="avisos-title" class="section-title mb-0">Avisos recientes</h3>
                 <a class="btn btn-sm btn-outline-secondary" href="/ui/pages/avisos/avisos.html">Ver todos</a>
               </div>
-              <div id="dash-notif-list">
-                <p class="empty-state mb-0" id="dash-notif-empty">Cargando avisos…</p>
-                <template id="dash-notif-tpl">
-                  <div class="notif-item">
-                    <div class="d-flex justify-content-between gap-2">
-                      <strong data-field="title"></strong>
-                      <span class="small text-secondary" data-field="type"></span>
-                    </div>
-                    <div class="small mt-1" data-field="body"></div>
-                  </div>
-                </template>
-              </div>
+              <p class="empty-state mb-0" id="dash-notif-empty" data-empty>Cargando avisos…</p>
+              <table class="table table-sm table-hover align-middle data-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Título</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="dash-notif-tbody"></tbody>
+              </table>
+              <template id="dash-notif-tpl">
+                <div class="notif-item d-none">
+                  <strong data-field="title"></strong>
+                  <span data-field="type"></span>
+                  <span data-field="body"></span>
+                </div>
+              </template>
             </section>
           </div>
           <div class="col-lg-7">
@@ -192,6 +196,9 @@
   <script src="/ui/assets/js/core/api.js"></script>
   <script src="/ui/assets/js/components/toast.js"></script>
   <script src="/ui/assets/js/components/table.js"></script>
+  <script src="/ui/assets/js/components/modal.js"></script>
+  <script src="/ui/assets/js/components/admin-table.js"></script>
+
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
   <script src="/ui/assets/js/modules/dashboard/dashboard.js"></script>

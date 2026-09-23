@@ -34,6 +34,9 @@ class Course(Base):
     term_id: Mapped[int] = mapped_column(ForeignKey("academic_terms.id"), index=True)
     parallel_code: Mapped[str] = mapped_column(String(16), default="A")
     capacity: Mapped[int] = mapped_column(Integer, default=40)
+    hours_theory: Mapped[int] = mapped_column(Integer, default=0)
+    hours_practical: Mapped[int] = mapped_column(Integer, default=0)
+    hours_autonomous: Mapped[int] = mapped_column(Integer, default=0)
     status: Mapped[str] = mapped_column(String(32), default="ACTIVE")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

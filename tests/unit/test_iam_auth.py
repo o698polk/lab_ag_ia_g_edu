@@ -96,3 +96,84 @@ def test_health_phase(client):
     res = client.get("/api/v1/health")
     assert res.status_code == 200
     assert res.json()["phase"].startswith("F12")
+
+
+@pytest.mark.unit
+def test_forgot_and_reset_password(client):
+    forgot = client.post(
+        "/api/v1/auth/forgot-password",
+        json={"username": "student1"},
+    )
+    assert forgot.status_code == 200
+    body = forgot.json()
+    assert body["accepted"] is True
+    assert body["reset_token"]
+
+    unknown = client.post(
+        "/api/v1/auth/forgot-password",
+        json={"username": "nobody-here"},
+    )
+    assert unknown.status_code == 200
+    assert unknown.json()["accepted"] is True
+    assert unknown.json()["reset_token"] is None
+
+    reset = client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": body["reset_token"], "new_password": "Student999!"},
+    )
+    assert reset.status_code == 204
+
+    old = client.post(
+        "/api/v1/auth/login",
+        json={"username": "student1", "password": "Student123!"},
+    )
+    assert old.status_code == 401
+    new = client.post(
+        "/api/v1/auth/login",
+        json={"username": "student1", "password": "Student999!"},
+    )
+    assert new.status_code == 200
+
+
+@pytest.mark.unit
+def test_admin_set_password(client, auth_header):
+    users = client.get("/api/v1/users", headers=auth_header).json()
+    student = next(u for u in users if u["username"] == "student1")
+    res = client.post(
+        f"/api/v1/users/{student['id']}/password",
+        headers=auth_header,
+        json={"new_password": "ResetByAdmin1!"},
+    )
+    assert res.status_code == 204
+    login = client.post(
+        "/api/v1/auth/login",
+        json={"username": "student1", "password": "ResetByAdmin1!"},
+    )
+    assert login.status_code == 200
+
+
+@pytest.mark.unit
+def test_role_create_and_protected_delete(client, auth_header, student_header):
+    created = client.post(
+        "/api/v1/roles",
+        headers=auth_header,
+        json={"code": "auditor", "name": "Auditor lab"},
+    )
+    assert created.status_code == 201, created.text
+    assert created.json()["code"] == "AUDITOR"
+    assert created.json()["is_active"] is True
+
+    denied = client.post(
+        "/api/v1/roles",
+        headers=student_header,
+        json={"code": "hacker", "name": "No"},
+    )
+    assert denied.status_code == 403
+
+    protected = client.delete("/api/v1/roles/ADMINISTRATOR", headers=auth_header)
+    assert protected.status_code == 400
+    assert protected.json()["detail"] == "ROLE_PROTECTED"
+
+    gone = client.delete("/api/v1/roles/AUDITOR", headers=auth_header)
+    assert gone.status_code == 200
+    assert gone.json()["is_active"] is False

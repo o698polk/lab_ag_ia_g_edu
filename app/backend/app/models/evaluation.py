@@ -12,6 +12,7 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
+    Integer,
     Numeric,
     String,
     Text,
@@ -29,6 +30,7 @@ class AttendanceSession(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     course_id: Mapped[int] = mapped_column(ForeignKey("courses.id"), index=True)
     session_date: Mapped[date] = mapped_column(Date)
+    hour_slot: Mapped[int] = mapped_column(Integer, default=1)
     topic: Mapped[Optional[str]] = mapped_column(String(255))
 
     records: Mapped[List["AttendanceRecord"]] = relationship(back_populates="session")
