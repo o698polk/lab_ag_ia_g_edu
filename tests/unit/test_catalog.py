@@ -79,6 +79,42 @@ def test_term_closed_not_writable(client, auth_header):
 
 
 @pytest.mark.unit
+def test_only_one_active_term(client, auth_header):
+    first = client.post(
+        "/api/v1/terms",
+        headers=auth_header,
+        json={
+            "code": "2026-A",
+            "name": "Activo A",
+            "start_date": "2026-01-01",
+            "end_date": "2026-05-31",
+            "status": "ACTIVE",
+        },
+    )
+    second = client.post(
+        "/api/v1/terms",
+        headers=auth_header,
+        json={
+            "code": "2026-B",
+            "name": "Activo B",
+            "start_date": "2026-06-01",
+            "end_date": "2026-10-31",
+            "status": "ACTIVE",
+        },
+    )
+    assert first.status_code == 201, first.text
+    assert second.status_code == 201, second.text
+    terms = client.get("/api/v1/terms", headers=auth_header).json()
+    active = [row for row in terms if row["status"] == "ACTIVE"]
+    assert len(active) == 1
+    assert active[0]["code"] == "2026-B"
+    assert active[0]["is_current"] is True
+    previous = next(row for row in terms if row["code"] == "2026-A")
+    assert previous["status"] == "CLOSED"
+    assert previous["is_current"] is False
+
+
+@pytest.mark.unit
 def test_student_profile(client, auth_header):
     # student1 user id from seed order: admin=1, student=2, blocked=3
     users = client.get("/api/v1/users", headers=auth_header).json()

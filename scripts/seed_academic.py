@@ -783,6 +783,9 @@ def _validate(db) -> None:
         errors.append(f"materias={len(subjects)}")
     if len(terms) != 3:
         errors.append(f"periodos={len(terms)}")
+    active_terms = [row for row in terms.values() if row.status == "ACTIVE"]
+    if len(active_terms) != 1:
+        errors.append(f"periodos_activos={len(active_terms)}")
     if len(teachers) < 16:
         errors.append(f"docentes={len(teachers)}")
     if len(official_students) < 300:

@@ -355,7 +355,7 @@ def test_teacher_sees_only_active_term_courses(client, auth_header, teacher_toke
             "status": "PLANNED",
         },
     ).json()
-    closed = client.post(
+    to_close = client.post(
         "/api/v1/terms",
         headers=auth_header,
         json={
@@ -363,11 +363,11 @@ def test_teacher_sees_only_active_term_courses(client, auth_header, teacher_toke
             "name": "Cerrado",
             "start_date": "2025-01-01",
             "end_date": "2025-05-31",
-            "status": "CLOSED",
+            "status": "PLANNED",
         },
     ).json()
     extra = []
-    for term, parallel in ((planned, "P"), (closed, "C")):
+    for term, parallel in ((planned, "P"), (to_close, "C")):
         course = client.post(
             "/api/v1/courses",
             headers=auth_header,
@@ -390,6 +390,13 @@ def test_teacher_sees_only_active_term_courses(client, auth_header, teacher_toke
             },
         )
         assert assigned.status_code in (200, 201), assigned.text
+    closed = client.patch(
+        f"/api/v1/terms/{to_close['id']}/status",
+        headers=auth_header,
+        json={"status": "CLOSED"},
+    )
+    assert closed.status_code == 200
+    assert closed.json()["status"] == "CLOSED"
     client.post(
         "/api/v1/teaching-assignments",
         headers=auth_header,
