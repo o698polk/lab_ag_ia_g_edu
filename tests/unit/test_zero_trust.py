@@ -133,6 +133,7 @@ def test_ai_get_grades_allow_with_current_user(
     assert body["proposal"]["tool"] == "get_grades"
     assert body["tool_result"]["parameters"]["student_id"] == student["id"]
     assert any(float(g["score"]) == 88 for g in body["tool_result"]["result"])
+    assert "88" in body["reply"]
 
 
 @pytest.mark.unit

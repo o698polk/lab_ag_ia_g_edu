@@ -416,3 +416,83 @@ def test_teacher_sees_only_active_term_courses(client, auth_header, teacher_toke
     assert extra[0]["id"] not in ids
     assert extra[1]["id"] not in ids
     assert all(row.get("term_name") == base["term"]["name"] for row in visible.json())
+
+
+@pytest.mark.unit
+def test_student_sees_only_active_term_academic(client, auth_header, student_token):
+    base = _setup_base(client, auth_header)
+    planned = client.post(
+        "/api/v1/terms",
+        headers=auth_header,
+        json={
+            "code": "2027-STU",
+            "name": "Planificado Est",
+            "start_date": "2027-01-01",
+            "end_date": "2027-05-31",
+            "status": "PLANNED",
+        },
+    ).json()
+    to_close = client.post(
+        "/api/v1/terms",
+        headers=auth_header,
+        json={
+            "code": "2025-STU",
+            "name": "Cerrado Est",
+            "start_date": "2025-01-01",
+            "end_date": "2025-05-31",
+            "status": "PLANNED",
+        },
+    ).json()
+    extra = []
+    for term, parallel in ((planned, "P"), (to_close, "C")):
+        course = client.post(
+            "/api/v1/courses",
+            headers=auth_header,
+            json={
+                "subject_id": base["subject"]["id"],
+                "term_id": term["id"],
+                "parallel_code": parallel,
+                "capacity": 20,
+            },
+        )
+        assert course.status_code == 201, course.text
+        extra.append(course.json())
+        enrolled = client.post(
+            "/api/v1/enrollments",
+            headers=auth_header,
+            json={
+                "student_id": base["student"]["id"],
+                "course_id": extra[-1]["id"],
+                "term_id": term["id"],
+            },
+        )
+        assert enrolled.status_code in (200, 201), enrolled.text
+    closed = client.patch(
+        f"/api/v1/terms/{to_close['id']}/status",
+        headers=auth_header,
+        json={"status": "CLOSED"},
+    )
+    assert closed.status_code == 200
+    current = client.post(
+        "/api/v1/enrollments",
+        headers=auth_header,
+        json={
+            "student_id": base["student"]["id"],
+            "course_id": base["course"]["id"],
+            "term_id": base["term"]["id"],
+        },
+    )
+    assert current.status_code in (200, 201), current.text
+    header = {"Authorization": f"Bearer {student_token}"}
+    courses = client.get("/api/v1/courses", headers=header)
+    assert courses.status_code == 200
+    course_ids = [row["id"] for row in courses.json()]
+    assert base["course"]["id"] in course_ids
+    assert extra[0]["id"] not in course_ids
+    assert extra[1]["id"] not in course_ids
+    academic = client.get("/api/v1/me/academic", headers=header)
+    assert academic.status_code == 200
+    terms = {row.get("term_name") for row in academic.json()}
+    assert terms == {base["term"]["name"]}
+    assert extra[0]["id"] not in [row["course_id"] for row in academic.json()]
+    assert extra[1]["id"] not in [row["course_id"] for row in academic.json()]

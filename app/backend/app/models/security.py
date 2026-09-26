@@ -102,6 +102,25 @@ class ToolRegistryEntry(Base):
     invocations: Mapped[List["ToolInvocation"]] = relationship(back_populates="tool")
 
 
+class AiProviderSetting(Base):
+    """Singleton DeepSeek credential — ciphertext only."""
+
+    __tablename__ = "ai_provider_settings"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    provider: Mapped[str] = mapped_column(String(32), unique=True, index=True, default="deepseek")
+    api_key_encrypted: Mapped[Optional[str]] = mapped_column(Text)
+    key_hint: Mapped[Optional[str]] = mapped_column(String(16))
+    model: Mapped[str] = mapped_column(String(64), default="deepseek-chat")
+    base_url: Mapped[str] = mapped_column(String(255), default="https://api.deepseek.com")
+    status: Mapped[str] = mapped_column(String(32), default="EMPTY")
+    last_validated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    updated_by_user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
 class ToolInvocation(Base):
     __tablename__ = "tool_invocations"
 

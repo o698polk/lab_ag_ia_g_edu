@@ -1,6 +1,8 @@
 # Ref: RF-AUTH / RNF-UX / PromptMaster F2+F3 | Skill: K-006/K-022
 """Multi-page UI with assets/ layout — API + structure tests."""
 
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -168,6 +170,7 @@ def test_ui_f2f3_architecture():
         PAGES / "reportes" / "reportes.html",
         PAGES / "avisos" / "avisos.html",
         PAGES / "asistente" / "asistente.html",
+        PAGES / "configuracion" / "agente.html",
         PAGES / "cuenta" / "perfil.html",
     ]
     for path in expected_pages:
@@ -196,6 +199,7 @@ def test_ui_f2f3_architecture():
 
     auth_js = (ASSETS / "js" / "core" / "auth.js").read_text(encoding="utf-8")
     assert "requireAuth" in auth_js
+    assert "paintSessionChip" in auth_js
     assert "hashchange" not in auth_js
 
     table_js = (ASSETS / "js" / "components" / "table.js").read_text(encoding="utf-8")
@@ -474,6 +478,17 @@ def test_ui_f10_avisos_asistente_polish():
     assert 'api("POST", "/ai/chat"' in aijs
     assert "textContent" in aijs
     assert "setBusy" in aijs
+    assert "??" not in aijs
+    assert "SigaAuth.requireAuth()" in aijs
+    node = shutil.which("node")
+    if node:
+        checked = subprocess.run(
+            [node, "--check", str(ASSETS / "js" / "modules" / "asistente" / "asistente.js")],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert checked.returncode == 0, checked.stderr
 
     # Legacy stubs still redirect
     assert "asistente/asistente.html" in (PAGES / "ai.html").read_text(encoding="utf-8")
@@ -543,7 +558,16 @@ def test_ui_complete_missing_functions():
 
     nav = (ASSETS / "js" / "core" / "navigation.js").read_text(encoding="utf-8")
     assert "ensureSeguridadNav" in nav
+    assert "ensureAgenteNav" in nav
     assert "ensureCatalogExtras" in nav
+
+    agente = (PAGES / "configuracion" / "agente.html").read_text(encoding="utf-8")
+    assert 'id="ai-settings-form"' in agente
+    assert 'type="password"' in agente
+    ajs = (ASSETS / "js" / "modules" / "configuracion" / "agente.js").read_text(encoding="utf-8")
+    assert 'api("GET", "/ai/settings")' in ajs
+    assert 'api("PUT", "/ai/settings"' in ajs
+    assert 'api("POST", "/ai/settings/validate")' in ajs
 
     extras = ["mallas", "aulas", "horarios", "asignaciones"]
     for slug in extras:

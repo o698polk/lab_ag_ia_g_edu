@@ -15,7 +15,7 @@ Se crean con `scripts/seed_iam.py` y el campus se puebla con `scripts/seed_acade
 | Usuario | Nombre | Rol | Uso |
 |---|---|---|---|
 | `admin` | Ana Administradora | ADMINISTRATOR | Catálogos, matrículas, reportes |
-| `teacher1` | Juan Pérez | TEACHER | IIPA 2026: Programación Web, Desarrollo Móvil y Seguridad Informática |
-| `student1` | María Fernanda López | STUDENT | DSW nivel 2: materias, notas y asistencia |
+| `teacher1` | Juan Pérez | TEACHER | Solo periodo ACTIVE (IIPA 2026): Web, Móvil y Seguridad |
+| `student1` | María Fernanda López | STUDENT | Solo periodo ACTIVE (IIPA 2026): Web y Móvil |
 
 En la pantalla de entrada, los botones Administrador, Docente y Estudiante rellenan `admin`, `teacher1` y `student1`.

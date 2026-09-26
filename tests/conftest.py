@@ -83,6 +83,8 @@ PERMISSIONS = [
     ("notifications.create", "notifications"),
     ("history.view", "history"),
     ("ai.use", "ai"),
+    ("ai.settings.view", "ai"),
+    ("ai.settings.update", "ai"),
     ("audit.view", "audit"),
 ]
 

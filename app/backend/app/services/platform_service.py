@@ -257,14 +257,20 @@ class PlatformService:
             my_courses = 0
             my_grades = 0
             my_kardex = 0
-            if student:
+            active = CatalogService(self.db).active_term()
+            if student and active:
                 my_courses = self._count(
                     Enrollment,
                     Enrollment.student_id == student.id,
                     Enrollment.status == "ACTIVE",
+                    Enrollment.term_id == active.id,
                 )
                 my_grades = self._count(Grade, Grade.student_id == student.id)
-                my_kardex = self._count(KardexEntry, KardexEntry.student_id == student.id)
+                my_kardex = self._count(
+                    KardexEntry,
+                    KardexEntry.student_id == student.id,
+                    KardexEntry.term_id == active.id,
+                )
             indicators = {
                 "my_courses": my_courses,
                 "my_grades": my_grades,

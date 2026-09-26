@@ -78,4 +78,6 @@ NOTIFICATIONS_CREATE = "notifications.create"
 HISTORY_VIEW = "history.view"
 
 AI_USE = "ai.use"
+AI_SETTINGS_VIEW = "ai.settings.view"
+AI_SETTINGS_UPDATE = "ai.settings.update"
 AUDIT_VIEW = "audit.view"

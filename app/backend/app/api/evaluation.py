@@ -148,7 +148,10 @@ def my_grades(
     svc = EvaluationService(db)
     try:
         student = svc.student_for_user(current.user.id)
-        return svc.list_grades_for_student(student.id)
+        active = svc.catalog.active_term()
+        return svc.list_grades_for_student(
+            student.id, term_id=active.id if active else -1
+        )
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -172,7 +175,8 @@ def grades_by_student(
             status_code=status.HTTP_403_FORBIDDEN,
             detail={"decision": "DENY", "reason_code": "RESOURCE_NOT_OWNED"},
         )
-    return svc.list_grades_for_student(student_id)
+    active = svc.catalog.active_term()
+    return svc.list_grades_for_student(student_id, term_id=active.id if active else -1)
 
 
 @router.post("/attendance/sessions", response_model=AttendanceSessionOut, status_code=201)
@@ -396,7 +400,11 @@ def my_kardex(
     svc = EvaluationService(db)
     try:
         student = svc.student_for_user(current.user.id)
-        return [_kardex_out(svc, row) for row in svc.list_kardex(student.id)]
+        active = svc.catalog.active_term()
+        return [
+            _kardex_out(svc, row)
+            for row in svc.list_kardex(student.id, term_id=active.id if active else -1)
+        ]
     except Exception as exc:  # noqa: BLE001
         raise _map_err(exc) from exc
 
@@ -419,4 +427,8 @@ def kardex_by_student(
             status_code=status.HTTP_403_FORBIDDEN,
             detail={"decision": "DENY", "reason_code": "RESOURCE_NOT_OWNED"},
         )
-    return [_kardex_out(svc, row) for row in svc.list_kardex(student_id)]
+    active = svc.catalog.active_term()
+    return [
+        _kardex_out(svc, row)
+        for row in svc.list_kardex(student_id, term_id=active.id if active else -1)
+    ]

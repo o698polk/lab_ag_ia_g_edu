@@ -12,7 +12,7 @@
     if (input) input.disabled = busy;
     if (sendBtn) sendBtn.disabled = busy;
     if (statusEl) {
-      statusEl.textContent = busy ? "Consultando políticas…" : "";
+      statusEl.textContent = busy ? "Consultando al agente…" : "";
       statusEl.classList.toggle("d-none", !busy);
     }
   }
@@ -38,8 +38,13 @@
     thread.scrollTop = thread.scrollHeight;
   }
 
+  function readMessage(message) {
+    if (message != null && String(message).trim()) return String(message).trim();
+    return String((input && input.value) || "").trim();
+  }
+
   async function sendAi(message) {
-    const msg = (message ?? (input && input.value) || "").trim();
+    const msg = readMessage(message);
     if (!msg || (sendBtn && sendBtn.disabled)) return;
     if (input) input.value = "";
     appendBubble("user", msg);
@@ -47,7 +52,7 @@
     const body = { message: msg };
     if (state.conversationId) body.conversation_id = state.conversationId;
     try {
-      const { ok, status, data } = await api("POST", "/ai/chat", body);
+      const { ok, status, data } = await api("POST", "/ai/chat", body, 45000);
       if (!ok) {
         appendBubble("bot", formatError(data), "HTTP " + status, "DENY");
         toast(formatError(data), "bad");
@@ -63,18 +68,20 @@
       if (data.decision === "DENY") toast("Acción denegada por política", "bad");
     } finally {
       setBusy(false);
-      input?.focus();
+      if (input) input.focus();
     }
   }
 
-  sendBtn?.addEventListener("click", () => sendAi());
-  input?.addEventListener("keydown", (ev) => {
-    if (ev.key === "Enter" && !ev.shiftKey) {
-      ev.preventDefault();
-      sendAi();
-    }
-  });
-  document.querySelectorAll(".ai-hint").forEach((btn) => {
-    btn.addEventListener("click", () => sendAi(btn.textContent));
+  if (sendBtn) sendBtn.addEventListener("click", function () { sendAi(); });
+  if (input) {
+    input.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" && !ev.shiftKey) {
+        ev.preventDefault();
+        sendAi();
+      }
+    });
+  }
+  document.querySelectorAll(".ai-hint").forEach(function (btn) {
+    btn.addEventListener("click", function () { sendAi(btn.textContent); });
   });
 })();

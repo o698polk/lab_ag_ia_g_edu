@@ -44,6 +44,7 @@ from app.models.platform import (
 from app.models.security import (
     AiConversation,
     AiMessage,
+    AiProviderSetting,
     AuditEvent,
     SecurityEvent,
     ToolInvocation,
@@ -85,6 +86,7 @@ __all__ = [
     "SecurityEvent",
     "AiConversation",
     "AiMessage",
+    "AiProviderSetting",
     "ToolRegistryEntry",
     "ToolInvocation",
 ]

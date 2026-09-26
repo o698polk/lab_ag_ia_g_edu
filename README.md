@@ -145,8 +145,12 @@ Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue |
 cd d:\PROYECTOS\lab_ag_ia_g_edu
 .\start-siga.bat
 # 3) Abrir http://127.0.0.1:8000/ui/
-#    login: admin / Admin123!
+#    admin     / Admin123!
+#    teacher1  / Teacher123!
+#    student1  / Student123!
 ```
+
+Docente y estudiante ven **solo el periodo ACTIVE** (hoy: IIPA 2026). El administrador ve todos los periodos.
 
 Guía ampliada: [`documentation/GUIA-ARRANQUE.md`](documentation/GUIA-ARRANQUE.md) · Instalación: [`documentation/deployment/INSTALACION.md`](documentation/deployment/INSTALACION.md)
 
@@ -175,6 +179,7 @@ Guía ampliada: [`documentation/GUIA-ARRANQUE.md`](documentation/GUIA-ARRANQUE.m
 - DB: MySQL 8+ (XAMPP) · SQLite en tests
 - Frontend: HTML/CSS/JS + Bootstrap 5 (`/ui/assets/` + `/ui/pages/`)
 - Seguridad: RBAC + ABAC + PAP/PDP + Tool Gateway · Deny-by-Default
+- Agente: DeepSeek. El admin registra la API Key en **Agente IA** (`/ui/pages/configuracion/agente.html`); se guarda cifrada y no se muestra.
 
 ## Documentación (F9)
 
@@ -204,3 +209,6 @@ Guía ampliada: [`documentation/GUIA-ARRANQUE.md`](documentation/GUIA-ARRANQUE.m
 - Ningún secreto en Git.
 - Ningún código de negocio sin Spec + Skill + Gate.
 - Despliegue solo **localhost** (ADR-009).
+
+
+sk-cd68c3acfddb445cb68a1b914fbe7f36

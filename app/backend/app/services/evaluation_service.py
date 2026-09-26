@@ -223,13 +223,22 @@ class EvaluationService:
         )
         return self.db.scalars(stmt).all()
 
-    def list_grades_for_student(self, student_id: int) -> Sequence[Grade]:
-        return self.db.scalars(
+    def list_grades_for_student(
+        self, student_id: int, *, term_id: Optional[int] = None
+    ) -> Sequence[Grade]:
+        stmt = (
             select(Grade)
             .where(Grade.student_id == student_id)
             .options(selectinload(Grade.evaluation))
             .order_by(Grade.id)
-        ).all()
+        )
+        if term_id is not None:
+            stmt = (
+                stmt.join(Evaluation, Grade.evaluation_id == Evaluation.id)
+                .join(Course, Evaluation.course_id == Course.id)
+                .where(Course.term_id == term_id)
+            )
+        return self.db.scalars(stmt).all()
 
     def gradebook(self, course_id: int, evaluation_id: Optional[int] = None) -> dict:
         self._course(course_id)
@@ -511,12 +520,15 @@ class EvaluationService:
         self.db.refresh(entry)
         return entry
 
-    def list_kardex(self, student_id: int) -> Sequence[KardexEntry]:
-        return self.db.scalars(
-            select(KardexEntry)
-            .where(KardexEntry.student_id == student_id)
-            .order_by(KardexEntry.id)
-        ).all()
+    def list_kardex(
+        self, student_id: int, *, term_id: Optional[int] = None
+    ) -> Sequence[KardexEntry]:
+        stmt = select(KardexEntry).where(KardexEntry.student_id == student_id).order_by(
+            KardexEntry.id
+        )
+        if term_id is not None:
+            stmt = stmt.where(KardexEntry.term_id == term_id)
+        return self.db.scalars(stmt).all()
 
     def kardex_for_course(self, course: Course, student_id: int) -> Optional[KardexEntry]:
         return self.db.scalar(
@@ -612,10 +624,14 @@ class EvaluationService:
         return self.list_final_grades(course_id)
 
     def student_academic(self, student_id: int) -> list[dict]:
+        active = self.catalog.active_term()
+        if active is None:
+            return []
         enrollments = self.db.scalars(
             select(Enrollment).where(
                 Enrollment.student_id == student_id,
                 Enrollment.status == "ACTIVE",
+                Enrollment.term_id == active.id,
             )
         ).all()
         out = []

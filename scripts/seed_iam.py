@@ -71,6 +71,8 @@ PERMISSIONS = [
     ("notifications.create", "Create notifications", "notifications"),
     ("history.view", "View user history", "history"),
     ("ai.use", "Use AI assistant", "ai"),
+    ("ai.settings.view", "View AI provider settings", "ai"),
+    ("ai.settings.update", "Update AI provider settings", "ai"),
     ("audit.view", "View audit", "audit"),
 ]
 

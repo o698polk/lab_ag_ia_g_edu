@@ -127,7 +127,7 @@ class OperationsService:
         student_id: Optional[int] = None,
     ) -> Sequence[Course]:
         stmt = select(Course).order_by(Course.id)
-        if teacher_id is not None:
+        if teacher_id is not None or student_id is not None:
             active = self.catalog.active_term()
             if active is None:
                 return []

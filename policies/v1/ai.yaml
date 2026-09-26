@@ -18,3 +18,10 @@ rules:
     roles: [STUDENT]
     permissions: []
     conditions: []
+  - id: R3
+    effect: ALLOW
+    actions: [ai.settings.view, ai.settings.update]
+    roles: [ADMINISTRATOR]
+    permissions: [ai.settings.view]
+    conditions:
+      - user.status == ACTIVE

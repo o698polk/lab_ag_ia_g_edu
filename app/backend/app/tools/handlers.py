@@ -14,18 +14,29 @@ from app.models import (
     AttendanceRecord,
     AttendanceSession,
     Grade,
-    KardexEntry,
     Schedule,
     Student,
 )
 from app.services.platform_service import PlatformService
 
 
+def _student_id(params: dict) -> int | dict[str, str]:
+    raw = params.get("student_id")
+    if raw in (None, "", "CURRENT_USER", "{{CURRENT_USER}}"):
+        return {"error": "STUDENT_PROFILE_REQUIRED"}
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return {"error": "STUDENT_NOT_FOUND"}
+
+
 def execute(
     db: Session, tool_name: str, params: dict, current: CurrentUser
 ) -> Any:
     if tool_name == "get_student_profile":
-        sid = int(params["student_id"])
+        sid = _student_id(params)
+        if isinstance(sid, dict):
+            return sid
         student = db.get(Student, sid)
         if student is None:
             return {"error": "STUDENT_NOT_FOUND"}
@@ -35,38 +46,88 @@ def execute(
             "status": student.status,
         }
     if tool_name == "get_grades":
-        sid = int(params["student_id"])
+        sid = _student_id(params)
+        if isinstance(sid, dict):
+            return sid
+        from app.services.evaluation_service import EvaluationService
+
         grades = list(db.scalars(select(Grade).where(Grade.student_id == sid)))
-        return [
+        items: list[dict[str, Any]] = [
             {
                 "id": g.id,
                 "evaluation_id": g.evaluation_id,
                 "student_id": g.student_id,
                 "score": str(g.score),
+                "source": "evaluation",
             }
             for g in grades
         ]
+        for row in EvaluationService(db).student_academic(sid):
+            official = row.get("official_grade")
+            average = row.get("final_average")
+            score = official if official is not None else average
+            items.append(
+                {
+                    "student_id": sid,
+                    "course_id": row.get("course_id"),
+                    "subject_name": row.get("subject_name") or "",
+                    "course_name": row.get("course_name") or "",
+                    "teacher_name": row.get("teacher_name") or "",
+                    "term_name": row.get("term_name") or "",
+                    "first_partial": row.get("first_partial"),
+                    "second_partial": row.get("second_partial"),
+                    "official_grade": official,
+                    "academic_status": row.get("academic_status"),
+                    "attendance_pct": row.get("attendance_pct"),
+                    "score": str(score if score is not None else 0),
+                    "source": "official",
+                }
+            )
+        return items
     if tool_name == "get_attendance":
-        sid = int(params["student_id"])
+        sid = _student_id(params)
+        if isinstance(sid, dict):
+            return sid
+        from app.services.evaluation_service import EvaluationService
+
         q = select(AttendanceRecord).where(AttendanceRecord.student_id == sid)
         if params.get("course_id"):
             q = q.join(AttendanceSession).where(
                 AttendanceSession.course_id == int(params["course_id"])
             )
         rows = list(db.scalars(q))
-        return [
+        items = [
             {"session_id": r.session_id, "student_id": r.student_id, "status": r.status}
             for r in rows
         ]
+        if items:
+            return items
+        return [
+            {
+                "student_id": sid,
+                "course_id": row.get("course_id"),
+                "subject_name": row.get("subject_name") or "",
+                "attendance_pct": row.get("attendance_pct"),
+                "status": row.get("academic_status") or "IN_PROGRESS",
+            }
+            for row in EvaluationService(db).student_academic(sid)
+        ]
     if tool_name == "get_kardex":
-        sid = int(params["student_id"])
-        rows = list(db.scalars(select(KardexEntry).where(KardexEntry.student_id == sid)))
+        sid = _student_id(params)
+        if isinstance(sid, dict):
+            return sid
+        from app.services.evaluation_service import EvaluationService
+
+        svc = EvaluationService(db)
+        rows = list(svc.list_kardex(sid))
         return [
             {
                 "id": k.id,
                 "subject_id": k.subject_id,
+                **svc.kardex_labels(k),
                 "final_grade": str(k.final_grade) if k.final_grade is not None else None,
                 "academic_status": k.academic_status,
+                "score": str(k.final_grade if k.final_grade is not None else 0),
             }
             for k in rows
         ]

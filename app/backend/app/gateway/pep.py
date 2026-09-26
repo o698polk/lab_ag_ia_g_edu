@@ -235,7 +235,7 @@ class ToolGateway:
                             Student.deleted_at.is_(None),
                         )
                     )
-                    out[key] = student.id if student else current.user.id
+                    out[key] = student.id if student else None
                 elif key == "teacher_id":
                     teacher = self.db.scalar(
                         select(Teacher).where(Teacher.user_id == current.user.id)

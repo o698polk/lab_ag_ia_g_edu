@@ -8,10 +8,12 @@ from typing import Any, Optional
 
 from sqlalchemy.orm import Session
 
+from app.ai.deepseek import propose_from_message
 from app.auth.deps import CurrentUser
 from app.gateway.pep import ToolGateway
 from app.models import AiConversation, AiMessage
 from app.policy.pdp import AuthzRequest, PDP, Subject
+from app.services.ai_settings_service import AiSettingsService
 
 
 class AIService:
@@ -59,11 +61,17 @@ class AIService:
         self.db.commit()
         self.db.refresh(user_msg)
 
+        llm_reply = None
         proposal = self._propose_tool(message)
-        if proposal is None:
-            reply = (
-                "Puedo ayudar con consultas de notas, asistencia, kardex o perfil. "
-                "No ejecuto SQL ni accedo a la base directamente."
+        if isinstance(proposal, dict) and proposal.get("_llm_reply"):
+            llm_reply = proposal.pop("_llm_reply")
+        if not proposal or not proposal.get("tool"):
+            reply = self._redact_secrets(
+                llm_reply
+                or (
+                    "Puedo ayudar con consultas de notas, asistencia, kardex o perfil. "
+                    "No ejecuto SQL ni accedo a la base directamente."
+                )
             )
             self._assistant_msg(conv.id, reply)
             return {
@@ -86,12 +94,13 @@ class AIService:
         )
 
         if gw.decision == "ALLOW":
-            reply = f"Tool `{gw.tool}` ejecutada (ALLOW / {gw.reason_code})."
+            reply = self._format_tool_reply(gw.tool, gw.result)
         else:
             reply = (
                 f"Solicitud denegada. Tool `{gw.tool}` → DENY "
                 f"({gw.reason_code}). No se modificó ningún dato."
             )
+        reply = self._redact_secrets(reply)
 
         self._assistant_msg(
             conv.id,
@@ -107,7 +116,95 @@ class AIService:
             "tool_result": gw.to_dict(),
         }
 
+    def _format_tool_reply(self, tool: str, result: Any) -> str:
+        if isinstance(result, dict) and result.get("error"):
+            errors = {
+                "STUDENT_PROFILE_REQUIRED": (
+                    "Esta consulta aplica a un estudiante. "
+                    "Inicie sesión como estudiante o indique el estudiante."
+                ),
+                "STUDENT_NOT_FOUND": "No encontré el perfil de estudiante.",
+            }
+            return errors.get(str(result["error"]), str(result["error"]))
+        items = result if isinstance(result, list) else []
+        if tool == "get_grades":
+            if not items:
+                return "No hay calificaciones registradas en el período activo."
+            lines = ["Calificaciones del período activo:"]
+            for row in items:
+                name = (
+                    row.get("subject_name")
+                    or row.get("course_name")
+                    or (f"Evaluación {row['evaluation_id']}" if row.get("evaluation_id") else "Evaluación")
+                )
+                score = row.get("official_grade")
+                if score is None:
+                    score = row.get("score")
+                status = row.get("academic_status") or ""
+                extra = f" ({status})" if status else ""
+                lines.append(f"- {name}: {score}{extra}")
+            return "\n".join(lines)
+        if tool == "get_attendance":
+            if not items:
+                return "No hay registros de asistencia en el período activo."
+            lines = ["Asistencia del período activo:"]
+            for row in items:
+                name = row.get("subject_name") or f"Sesión {row.get('session_id') or ''}"
+                pct = row.get("attendance_pct")
+                status = row.get("status") or ""
+                if pct is not None:
+                    lines.append(f"- {name}: {pct}%")
+                else:
+                    lines.append(f"- {name}: {status}".strip())
+            return "\n".join(lines)
+        if tool == "get_kardex":
+            if not items:
+                return "No hay registros en el kárdex."
+            lines = ["Kárdex académico:"]
+            for row in items:
+                name = row.get("subject_name") or f"Asignatura {row.get('subject_id')}"
+                grade = row.get("final_grade") or row.get("score") or "—"
+                status = row.get("academic_status") or ""
+                extra = f" ({status})" if status else ""
+                lines.append(f"- {name}: {grade}{extra}")
+            return "\n".join(lines)
+        if tool == "get_student_profile" and isinstance(result, dict):
+            code = result.get("student_code") or result.get("id")
+            return f"Perfil de estudiante {code}. Estado: {result.get('status') or '—'}."
+        if tool == "get_schedule":
+            if not items:
+                return "No hay horarios registrados."
+            return f"Encontré {len(items)} franjas de horario."
+        return f"Consulta `{tool}` completada."
+
+    def _redact_secrets(self, text: str) -> str:
+        cfg = AiSettingsService(self.db).runtime_config()
+        if cfg and cfg.api_key and cfg.api_key in text:
+            return text.replace(cfg.api_key, "[REDACTED]")
+        return text
+
     def _propose_tool(self, message: str) -> Optional[dict[str, Any]]:
+        cfg = AiSettingsService(self.db).runtime_config()
+        if cfg is not None:
+            try:
+                parsed = propose_from_message(
+                    api_key=cfg.api_key,
+                    message=message,
+                    model=cfg.model,
+                    base_url=cfg.base_url,
+                )
+                if parsed.get("tool"):
+                    out = {
+                        "tool": parsed["tool"],
+                        "parameters": parsed.get("parameters") or {},
+                    }
+                    if parsed.get("reply"):
+                        out["_llm_reply"] = self._redact_secrets(str(parsed["reply"]))
+                    return out
+                if parsed.get("reply"):
+                    return {"_llm_reply": self._redact_secrets(str(parsed["reply"]))}
+            except Exception:
+                pass
         text = message.lower()
         # Attack / grade mutation intent
         if re.search(r"(cambia|modifica|actualiza|pon|sube).*(nota|calific)", text) or (

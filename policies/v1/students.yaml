@@ -7,8 +7,15 @@ rules:
   - id: R1
     effect: ALLOW
     actions: [students.view, get_student_profile]
-    roles: [ADMINISTRATOR, TEACHER, STUDENT]
+    roles: [ADMINISTRATOR, TEACHER]
     permissions: [students.view]
+    conditions:
+      - user.status == ACTIVE
+  - id: R1b
+    effect: ALLOW
+    actions: [get_student_profile]
+    roles: [STUDENT]
+    permissions: [dashboard.view]
     conditions:
       - user.status == ACTIVE
   - id: R2
@@ -22,6 +29,6 @@ rules:
     effect: ALLOW
     actions: [schedules.view, get_schedule]
     roles: [ADMINISTRATOR, TEACHER, STUDENT]
-    permissions: [schedules.view]
+    permissions: [courses.view]
     conditions:
       - user.status == ACTIVE

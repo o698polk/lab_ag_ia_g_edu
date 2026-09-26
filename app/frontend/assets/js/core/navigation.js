@@ -81,6 +81,29 @@ function ensureCatalogExtras() {
   });
 }
 
+function ensureAgenteNav(user) {
+  const roles = (user && user.roles) || [];
+  if (!roles.includes("ADMINISTRATOR")) return;
+  const nav = document.querySelector(".app-sidebar .side-nav");
+  if (!nav || nav.querySelector('[data-nav="agente"]')) return;
+  const link = document.createElement("a");
+  link.className = "side-link";
+  link.href = "/ui/pages/configuracion/agente.html";
+  link.dataset.nav = "agente";
+  link.dataset.roles = "ADMINISTRATOR";
+  link.textContent = "Agente IA";
+  if (String(location.pathname || "").includes("/configuracion/")) {
+    link.classList.add("active");
+  }
+  const seguridad = nav.querySelector('[data-nav="seguridad"]');
+  if (seguridad) seguridad.insertAdjacentElement("beforebegin", link);
+  else {
+    const perfil = nav.querySelector('a[href*="/cuenta/perfil"]');
+    if (perfil) perfil.insertAdjacentElement("beforebegin", link);
+    else nav.appendChild(link);
+  }
+}
+
 function ensureSeguridadNav(user) {
   const roles = (user && user.roles) || [];
   if (!roles.includes("ADMINISTRATOR")) return;
@@ -171,4 +194,5 @@ window.SigaNav = {
   ensureSkipLink,
   ensureCatalogExtras,
   ensureSeguridadNav,
+  ensureAgenteNav,
 };
