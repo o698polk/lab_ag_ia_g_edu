@@ -53,11 +53,13 @@ function loadSession() {
 function clearSession() {
   try {
     localStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem("siga.lab.conversation");
   } catch (e) {
     /* ignore */
   }
   state.accessToken = null;
   state.refreshToken = null;
+  state.conversationId = null;
 }
 
 function savePanel(name) {

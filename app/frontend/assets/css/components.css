@@ -8,8 +8,18 @@
   border-radius: 999px; padding: 0.35rem 0.8rem;
   font-size: 0.85rem; font-weight: 600; text-decoration: none;
 }
+.impersonation-banner {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 45;
+  display: flex; align-items: center; justify-content: center; gap: 0.85rem;
+  padding: 0.55rem 1rem;
+  background: #8a4b08; color: #fff;
+  font-size: 0.9rem; font-weight: 600;
+  box-shadow: 0 6px 16px rgba(16, 26, 43, 0.16);
+}
+.impersonation-banner .btn { font-weight: 700; }
+body.has-impersonation-banner { padding-top: 3rem; }
 .siga-toast {
-  position: fixed; top: 16px; right: 16px; z-index: 40;
+  position: fixed; top: 16px; right: 16px; z-index: 50;
   max-width: min(420px, calc(100vw - 32px));
   padding: 0.85rem 1rem; border-radius: 14px;
   background: #142033; color: #fff; box-shadow: var(--shadow);
@@ -120,6 +130,19 @@
 .siga-bubble .meta { font-size: 0.75rem; margin-top: 0.35rem; }
 .siga-bubble.deny .meta { color: var(--deny); font-weight: 700; }
 .siga-bubble.allow .meta { color: var(--allow); font-weight: 700; }
+.siga-page-banner {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: #eef6f5;
+  color: var(--accent);
+}
+.siga-page-banner.warn {
+  background: #fdecec;
+  color: var(--deny);
+}
 .composer { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
 .composer .form-control { flex: 1; }
 .siga-log {

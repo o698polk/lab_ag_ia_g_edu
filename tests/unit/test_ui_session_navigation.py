@@ -384,7 +384,13 @@ def test_ui_f9_usuarios_roles():
     assert 'api("GET", "/users")' in ujs
     assert 'api("POST", "/users"' in ujs
     assert "/users/" in ujs
+    assert "login-as" in ujs
     assert "ADMINISTRATOR" in ujs
+
+    auth = (ASSETS / "js" / "core" / "auth.js").read_text(encoding="utf-8")
+    assert "returnToAdmin" in auth
+    assert "Regresar a mi cuenta" in auth
+    assert "/auth/return-to-admin" in auth
 
     rjs = (ASSETS / "js" / "modules" / "usuarios" / "roles.js").read_text(encoding="utf-8")
     assert 'api("GET", "/roles")' in rjs
@@ -471,11 +477,19 @@ def test_ui_f10_avisos_asistente_polish():
     assert 'for="ai-message"' in asi
     assert 'id="ai-status"' in asi
     assert 'id="ai-empty"' in asi
+    assert 'id="ai-guard-banner"' in asi
+    assert 'id="btn-guard-on"' in asi
+    assert "data-lab-guard" in asi
+    assert 'id="btn-ai-new"' in asi
+    assert 'id="ai-role-hints"' in asi
+    assert 'id="eval-root"' in asi
+    assert "eval-panel.js" in asi
 
     aijs = (ASSETS / "js" / "modules" / "asistente" / "asistente.js").read_text(
         encoding="utf-8"
     )
     assert 'api("POST", "/ai/chat"' in aijs
+    assert "sigaSendPageQuestion" in aijs
     assert "textContent" in aijs
     assert "setBusy" in aijs
     assert "??" not in aijs
@@ -563,11 +577,30 @@ def test_ui_complete_missing_functions():
 
     agente = (PAGES / "configuracion" / "agente.html").read_text(encoding="utf-8")
     assert 'id="ai-settings-form"' in agente
+    assert 'id="btn-guard-on"' in agente
+    assert 'id="btn-guard-off"' in agente
     assert 'type="password"' in agente
     ajs = (ASSETS / "js" / "modules" / "configuracion" / "agente.js").read_text(encoding="utf-8")
     assert 'api("GET", "/ai/settings")' in ajs
     assert 'api("PUT", "/ai/settings"' in ajs
     assert 'api("POST", "/ai/settings/validate")' in ajs
+    assert 'api("GET", "/ai/guard")' in ajs
+    assert 'api("PUT", "/ai/guard"' in ajs
+    assert (ASSETS / "js" / "components" / "chatbot.js").is_file()
+    assert (ASSETS / "css" / "chatbot.css").is_file()
+    assert (ASSETS / "img" / "agent-logo.svg").is_file()
+    chatbot = (ASSETS / "js" / "components" / "chatbot.js").read_text(encoding="utf-8")
+    assert "SigaChatbot" in chatbot
+    assert "canToggleGuard" in chatbot
+    assert "data-chat-tab" in chatbot
+    assert "eval-panel.js" in chatbot
+    assert 'api("POST", "/ai/chat"' in chatbot
+    assert "/ai/conversations" in chatbot
+    assert "agent-logo.svg" in chatbot
+    assert "??" not in chatbot
+    auth_js = (ASSETS / "js" / "core" / "auth.js").read_text(encoding="utf-8")
+    assert "mountFloatingChat" in auth_js
+    assert "chatbot.js" in auth_js
 
     extras = ["mallas", "aulas", "horarios", "asignaciones"]
     for slug in extras:
@@ -662,6 +695,7 @@ def test_ui_admin_crud_pattern():
     table = (ASSETS / "js" / "components" / "admin-table.js").read_text(encoding="utf-8")
     assert "SigaAdminTable" in table
     assert "actionButtons" in table
+    assert "loginAs" in table
 
     pages = [
         PAGES / "catalogos" / "carreras.html",

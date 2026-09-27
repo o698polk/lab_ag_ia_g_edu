@@ -41,6 +41,7 @@ from app.models.platform import (
     ReportLog,
     UserHistoryEvent,
 )
+from app.models.eval_run import EvalResult, EvalRun
 from app.models.security import (
     AiConversation,
     AiMessage,
@@ -89,4 +90,6 @@ __all__ = [
     "AiProviderSetting",
     "ToolRegistryEntry",
     "ToolInvocation",
+    "EvalRun",
+    "EvalResult",
 ]

@@ -78,7 +78,82 @@ async function _requireAuthImpl() {
   const logoutBtn = document.getElementById("btn-logout");
   if (logoutBtn) logoutBtn.addEventListener("click", () => logout());
   if (window.SigaNav) SigaNav.wire();
+  mountImpersonationBanner(me.data);
+  mountFloatingChat();
   return true;
+}
+
+function mountImpersonationBanner(user) {
+  const existing = document.getElementById("impersonation-banner");
+  if (!user || !user.impersonating) {
+    if (existing) existing.remove();
+    document.body.classList.remove("has-impersonation-banner");
+    return;
+  }
+  document.body.classList.add("has-impersonation-banner");
+  const who = user.username || user.full_name || "usuario";
+  if (existing) {
+    existing.querySelector("[data-impersonated]") &&
+      (existing.querySelector("[data-impersonated]").textContent = who);
+    return;
+  }
+  const bar = document.createElement("div");
+  bar.id = "impersonation-banner";
+  bar.className = "impersonation-banner";
+  bar.innerHTML =
+    '<span>Viendo como <strong data-impersonated></strong></span>' +
+    '<button type="button" class="btn btn-sm btn-light" id="btn-return-to-admin">Regresar a mi cuenta</button>';
+  bar.querySelector("[data-impersonated]").textContent = who;
+  document.body.prepend(bar);
+  document.getElementById("btn-return-to-admin")?.addEventListener("click", () => returnToAdmin());
+}
+
+async function returnToAdmin() {
+  const { state, api, saveSession, formatError } = SigaApi;
+  const toast = window.SigaToast && SigaToast.toast ? SigaToast.toast : () => {};
+  const { ok, data } = await api("POST", "/auth/return-to-admin", {
+    refresh_token: state.refreshToken || null,
+  });
+  if (!ok) {
+    toast(formatError ? formatError(data) : "No se pudo regresar a la cuenta original.", "bad");
+    return;
+  }
+  saveSession(data.access_token, data.refresh_token);
+  location.replace("/ui/pages/usuarios/usuarios.html");
+}
+
+function mountFloatingChat() {
+  if (document.getElementById("login-form")) return;
+  function boot() {
+    if (window.SigaChatbot && typeof SigaChatbot.mount === "function") {
+      SigaChatbot.mount();
+    }
+  }
+  if (window.SigaChatbot) {
+    boot();
+    return;
+  }
+  if (!document.querySelector("link[data-siga-chatbot-css]")) {
+    var css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = "/ui/assets/css/chatbot.css";
+    css.setAttribute("data-siga-chatbot-css", "1");
+    document.head.appendChild(css);
+  }
+  if (document.querySelector("script[data-siga-chatbot]")) {
+    return;
+  }
+  var script = document.createElement("script");
+  script.src = "/ui/assets/js/components/chatbot.js";
+  script.setAttribute("data-siga-chatbot", "1");
+  script.onload = boot;
+  document.body.appendChild(script);
+}
+
+function canTogglePolicies(user) {
+  if (!user) return false;
+  if (user.can_toggle_policies !== false) return true;
+  return ((user.permissions || []).indexOf("ai.use") >= 0);
 }
 
 function applyRoleVisibility(user) {
@@ -87,6 +162,9 @@ function applyRoleVisibility(user) {
     const wanted = String(el.getAttribute("data-roles") || "").split(",").map((r) => r.trim()).filter(Boolean);
     const show = !wanted.length || wanted.some((r) => roles.includes(r));
     el.classList.toggle("d-none", !show);
+  });
+  document.querySelectorAll("[data-lab-guard]").forEach((el) => {
+    el.classList.toggle("d-none", !canTogglePolicies(user));
   });
 }
 
@@ -104,7 +182,17 @@ function redirectIfAuthed() {
   }
 }
 
-window.SigaAuth = { requireAuth, logout, redirectIfAuthed, applyRoleVisibility, paintSessionChip, LOGIN_URL };
+window.SigaAuth = {
+  requireAuth,
+  logout,
+  redirectIfAuthed,
+  applyRoleVisibility,
+  paintSessionChip,
+  mountFloatingChat,
+  mountImpersonationBanner,
+  returnToAdmin,
+  LOGIN_URL,
+};
 
 if (document.getElementById("session-chip") && !document.getElementById("login-form")) {
   requireAuth();

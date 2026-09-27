@@ -1,0 +1,162 @@
+/* Floating SIGA agent — injected on authenticated pages */
+.siga-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 45;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 0 10px 28px rgba(12, 110, 106, 0.38);
+  cursor: pointer;
+  overflow: hidden;
+}
+.siga-fab img {
+  display: block;
+  width: 64px;
+  height: 64px;
+}
+.siga-fab:hover { transform: translateY(-2px); }
+.siga-fab.open { box-shadow: 0 0 0 3px rgba(12, 110, 106, 0.28); }
+.siga-chat-head-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.siga-chat-head-brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #0c6e6a;
+}
+.siga-chat-dock {
+  position: fixed;
+  right: 20px;
+  bottom: 88px;
+  z-index: 46;
+  width: min(380px, calc(100vw - 24px));
+  height: min(560px, calc(100vh - 120px));
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line, #d7e0ea);
+  border-radius: 18px;
+  box-shadow: 0 18px 48px rgba(16, 26, 43, 0.18);
+  overflow: hidden;
+}
+.siga-chat-dock[hidden] { display: none !important; }
+.siga-chat-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.85rem 0.95rem;
+  background: #142033;
+  color: #fff;
+}
+.siga-chat-head strong { display: block; font-size: 0.95rem; }
+.siga-chat-mode {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.siga-chat-mode.open { color: #ffd7d7; }
+.siga-chat-close {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.siga-chat-guard {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--line, #d7e0ea);
+  background: #f7fafc;
+}
+.siga-chat-guard p { margin: 0 0 0.45rem; font-size: 0.78rem; color: #4a5b6b; }
+.siga-chat-guard .btn-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.siga-chat-banner {
+  margin: 0;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: #eef6f5;
+  color: var(--accent, #0c6e6a);
+}
+.siga-chat-banner.warn {
+  background: #fdecec;
+  color: var(--deny, #b42318);
+}
+.siga-chat-thread {
+  flex: 1;
+  overflow: auto;
+  padding: 0.85rem;
+  background: #fff;
+}
+.siga-chat-thread .siga-bubble { max-width: 92%; }
+.siga-chat-composer {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.7rem;
+  border-top: 1px solid var(--line, #d7e0ea);
+  background: #fff;
+}
+.siga-chat-composer input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--line, #d7e0ea);
+  border-radius: 10px;
+  padding: 0.5rem 0.7rem;
+}
+.siga-page-banner {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: #eef6f5;
+  color: var(--accent, #0c6e6a);
+}
+.siga-page-banner.warn {
+  background: #fdecec;
+  color: var(--deny, #b42318);
+}
+.siga-chat-tabs {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid var(--line, #d7e0ea);
+  background: #f7fafc;
+}
+.siga-eval-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.45rem 0.7rem;
+  border-top: 1px solid var(--line, #d7e0ea);
+  background: #fbfcfe;
+}
+.siga-eval-hints .btn { font-size: 0.72rem; }
+.siga-chat-dock.eval-open {
+  width: min(720px, calc(100vw - 24px));
+  height: min(640px, calc(100vh - 110px));
+}
+.siga-eval-pane { flex: 1; overflow: auto; padding: 0.7rem; }
+.eval-lab h3 { font-size: 1rem; margin: 0 0 0.4rem; }
+.eval-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0.6rem 0; }
+.eval-table { max-height: 16rem; overflow: auto; }
+.eval-actions { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.6rem 0; }
+.eval-compare { font-size: 0.8rem; font-weight: 600; }
+@media (max-width: 640px) {
+  .siga-chat-dock {
+    right: 8px;
+    bottom: 80px;
+    height: min(70vh, calc(100vh - 96px));
+  }
+}

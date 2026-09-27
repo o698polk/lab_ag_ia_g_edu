@@ -52,6 +52,7 @@ class User(Base):
     phone: Mapped[Optional[str]] = mapped_column(String(32), default="")
     password_hash: Mapped[str] = mapped_column(String(255))
     status: Mapped[str] = mapped_column(String(32), default="ACTIVE", index=True)
+    policies_enforced: Mapped[bool] = mapped_column(Boolean, default=True)
     last_login: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     deleted_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(
@@ -65,7 +66,10 @@ class User(Base):
         secondary="user_roles", back_populates="users", lazy="selectin"
     )
     sessions: Mapped[List["SessionToken"]] = relationship(back_populates="user")
-    refresh_tokens: Mapped[List["RefreshToken"]] = relationship(back_populates="user")
+    refresh_tokens: Mapped[List["RefreshToken"]] = relationship(
+        back_populates="user",
+        foreign_keys="RefreshToken.user_id",
+    )
 
     @property
     def is_active(self) -> bool:
@@ -148,8 +152,12 @@ class RefreshToken(Base):
     token_hash: Mapped[str] = mapped_column(String(128), unique=True, index=True)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     revoked: Mapped[bool] = mapped_column(Boolean, default=False)
+    impersonator_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
 
-    user: Mapped[User] = relationship(back_populates="refresh_tokens")
+    user: Mapped[User] = relationship(
+        back_populates="refresh_tokens",
+        foreign_keys=[user_id],
+    )

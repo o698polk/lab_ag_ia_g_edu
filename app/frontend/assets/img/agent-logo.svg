@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Agente SIGA">
+  <defs>
+    <linearGradient id="sigaAgentFill" x1="10" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1aa39a"/>
+      <stop offset="1" stop-color="#0c6e6a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="32" fill="url(#sigaAgentFill)"/>
+  <circle cx="32" cy="32" r="29" fill="none" stroke="#ffffff" stroke-opacity=".28" stroke-width="2"/>
+  <rect x="31" y="11" width="2.4" height="6" rx="1.2" fill="#fff"/>
+  <circle cx="32.2" cy="11" r="2.4" fill="#fff"/>
+  <rect x="17" y="19" width="30" height="24" rx="9" fill="#fff"/>
+  <circle cx="26" cy="29" r="3.1" fill="#0c6e6a"/>
+  <circle cx="38" cy="29" r="3.1" fill="#0c6e6a"/>
+  <rect x="26" y="36" width="12" height="2.6" rx="1.3" fill="#0c6e6a"/>
+  <path d="M23 42.5 17 52l12.5-7.2z" fill="#fff"/>
+</svg>

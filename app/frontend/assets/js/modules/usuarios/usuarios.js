@@ -33,17 +33,41 @@
     fill(el("m-roles"));
   }
 
+  function canLoginAs(row) {
+    const me = state.user || {};
+    if (me.impersonating) return false;
+    if (!(me.permissions || []).includes("users.login-as")) return false;
+    if (Number(row.id) === Number(me.id)) return false;
+    const username = String(row.username || "").toLowerCase();
+    const email = String(row.email || "").toLowerCase();
+    if (
+      username === "admin" ||
+      email === "admin@general.com" ||
+      email === "admin@siga.local" ||
+      email === "admin@test.local"
+    ) {
+      return false;
+    }
+    if (row.status && row.status !== "ACTIVE") return false;
+    return true;
+  }
+
   const table = SigaAdminTable.bind({
     tbody: el("users-tbody"),
     columns: COLS,
     searchInput: el("admin-search"),
     filterInput: el("admin-filter"),
     pager: el("admin-pager"),
-    actions: () => SigaAdminTable.actionButtons(["view", "edit", "toggle", "del"]),
+    actions: (row) => {
+      const kinds = ["view", "edit", "toggle", "del"];
+      if (canLoginAs(row)) kinds.splice(2, 0, "loginAs");
+      return SigaAdminTable.actionButtons(kinds);
+    },
     onAction: (act, row) => {
       if (!row) return;
       if (act === "view") openView(row);
       if (act === "edit") openEdit(row);
+      if (act === "loginAs") confirmLoginAs(row);
       if (act === "toggle") {
         if (el("m-user-id")) el("m-user-id").value = row.id;
         if (el("m-status")) el("m-status").value = row.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
@@ -157,6 +181,25 @@
       node: manage,
       footer: '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cerrar</button>',
       wide: true,
+    });
+  }
+
+  function confirmLoginAs(row) {
+    const label = row.username || row.full_name || row.id;
+    SigaModal.confirm({
+      title: "Entrar a esta cuenta",
+      message: "¿Entrar a la cuenta de " + label + "? Verá el sistema como ese usuario. No se pide su clave.",
+      confirmLabel: "Entrar",
+      onYes: async () => {
+        const { ok, data, status } = await api("POST", `/users/${row.id}/login-as`);
+        if (!ok) {
+          const msg = status === 403 ? "DENY: sin permiso users.login-as" : formatError(data);
+          toast(msg, "bad");
+          return;
+        }
+        SigaApi.saveSession(data.access_token, data.refresh_token);
+        location.replace("/ui/pages/dashboard/dashboard.html");
+      },
     });
   }
 

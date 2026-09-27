@@ -1,0 +1,94 @@
+# Module CRUD / filters for the lab agent (Deny-by-Default; execution via Gateway)
+policy_id: POL-MOD-001
+version: v1
+module: modules
+effect_default: DENY
+description: Agent may query and mutate SIGA modules according to role
+rules:
+  - id: R-ADMIN
+    effect: ALLOW
+    actions:
+      - list_users
+      - get_user
+      - create_user
+      - update_user
+      - set_user_status
+      - delete_user
+      - assign_user_roles
+      - list_roles
+      - list_permissions
+      - create_role
+      - assign_role_permissions
+      - list_careers
+      - create_career
+      - set_career_status
+      - list_subjects
+      - create_subject
+      - set_subject_status
+      - list_curricula
+      - create_curriculum
+      - list_terms
+      - create_term
+      - set_term_status
+      - list_students
+      - create_student
+      - set_student_status
+      - list_teachers
+      - create_teacher
+      - set_teacher_status
+      - list_courses
+      - create_course
+      - update_course
+      - set_course_status
+      - list_assignments
+      - create_assignment
+      - list_enrollments
+      - list_classrooms
+      - create_classroom
+      - create_schedule
+      - delete_schedule
+      - list_evaluations
+      - create_evaluation
+      - create_attendance_session
+      - list_notifications
+      - create_notification
+      - get_dashboard
+      - list_audit
+    roles: [ADMINISTRATOR]
+    permissions: []
+    conditions:
+      - user.status == ACTIVE
+  - id: R-TEACHER
+    effect: ALLOW
+    actions:
+      - list_careers
+      - list_subjects
+      - list_curricula
+      - list_terms
+      - list_students
+      - list_teachers
+      - list_courses
+      - list_assignments
+      - list_enrollments
+      - list_classrooms
+      - list_evaluations
+      - create_evaluation
+      - create_attendance_session
+      - list_notifications
+      - get_dashboard
+    roles: [TEACHER]
+    permissions: []
+    conditions:
+      - user.status == ACTIVE
+  - id: R-STUDENT
+    effect: ALLOW
+    actions:
+      - list_subjects
+      - list_terms
+      - list_courses
+      - list_notifications
+      - get_dashboard
+    roles: [STUDENT]
+    permissions: []
+    conditions:
+      - user.status == ACTIVE

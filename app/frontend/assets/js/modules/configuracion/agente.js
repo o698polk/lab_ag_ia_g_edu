@@ -74,5 +74,63 @@
     toast("Clave eliminada.", "ok");
   });
 
+  async function loadGuard() {
+    if (window.SigaChatbot && typeof SigaChatbot.loadGuard === "function") {
+      await SigaChatbot.loadGuard();
+      return;
+    }
+    const { ok, data } = await api("GET", "/ai/guard");
+    if (!ok) return;
+    const enforced = data.policies_enforced !== false;
+    const label = data.label || (enforced ? "Mínimo privilegio activo" : "Políticas desactivadas");
+    document.querySelectorAll("[data-guard-mode]").forEach((node) => {
+      node.textContent = label;
+    });
+    const banner = el("ai-guard-banner");
+    if (banner) {
+      banner.textContent = enforced
+        ? "El agente aplica políticas de mínimo privilegio y autorizaciones."
+        : "Políticas desactivadas: el agente no aplica PDP ni controles de propiedad.";
+      banner.classList.toggle("warn", !enforced);
+    }
+    if (el("btn-guard-on")) el("btn-guard-on").disabled = enforced;
+    if (el("btn-guard-off")) el("btn-guard-off").disabled = !enforced;
+  }
+
+  if (el("btn-guard-on") && !el("btn-guard-on").getAttribute("data-wired")) {
+    el("btn-guard-on").setAttribute("data-wired", "1");
+    el("btn-guard-on").addEventListener("click", async () => {
+      if (window.SigaChatbot) {
+        await SigaChatbot.setGuard(true);
+        return;
+      }
+      const { ok, data } = await api("PUT", "/ai/guard", { policies_enforced: true });
+      if (!ok) {
+        toast(formatError(data), "bad");
+        return;
+      }
+      toast("Políticas de mínimo privilegio activadas.", "ok");
+      await loadGuard();
+    });
+  }
+  if (el("btn-guard-off") && !el("btn-guard-off").getAttribute("data-wired")) {
+    el("btn-guard-off").setAttribute("data-wired", "1");
+    el("btn-guard-off").addEventListener("click", async () => {
+      if (!window.confirm("¿Desactivar políticas de mínimo privilegio y controles de seguridad del agente?")) return;
+      if (window.SigaChatbot) {
+        await SigaChatbot.setGuard(false);
+        return;
+      }
+      const { ok, data } = await api("PUT", "/ai/guard", { policies_enforced: false });
+      if (!ok) {
+        toast(formatError(data), "bad");
+        return;
+      }
+      toast("Políticas desactivadas para comparación.", "bad");
+      await loadGuard();
+    });
+  }
+
   await load();
+  await loadGuard();
 })();

@@ -46,7 +46,12 @@
 
         <div class="module-head">
           <h2>Asistente</h2>
-          <p>Puede proponer acciones. Solo se ejecutan si la política lo permite (PDP).</p>
+          <p>Puede proponer acciones. Con políticas activas solo se ejecutan si el PDP lo permite.</p>
+        </div>
+        <p id="ai-guard-banner" class="siga-page-banner" data-guard-banner>El agente aplica políticas de mínimo privilegio y autorizaciones.</p>
+        <div class="d-flex flex-wrap gap-2 mb-3 d-none" data-lab-guard>
+          <button type="button" class="btn btn-sm btn-siga" id="btn-guard-on">Activar políticas</button>
+          <button type="button" class="btn btn-sm btn-outline-danger" id="btn-guard-off">Desactivar políticas</button>
         </div>
 
         <div id="ai-thread" class="siga-thread" aria-live="polite" aria-relevant="additions">
@@ -58,13 +63,11 @@
           <label class="visually-hidden" for="ai-message">Mensaje al asistente</label>
           <input id="ai-message" class="form-control" placeholder="Escribe tu consulta" maxlength="4000" autocomplete="off" />
           <button type="button" class="btn btn-siga" id="btn-ai-send">Enviar</button>
+          <button type="button" class="btn btn-outline-secondary" id="btn-ai-new">Nueva conversación</button>
         </div>
-        <div class="d-flex flex-wrap gap-2 mt-2" role="group" aria-label="Atajos">
-          <button type="button" class="btn btn-sm btn-outline-secondary ai-hint">Cuáles son mis calificaciones?</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary ai-hint">Cómo va mi asistencia?</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary ai-hint">Muéstrame mi kárdex</button>
-          <button type="button" class="btn btn-sm btn-outline-danger ai-hint">Cambia la nota del estudiante 2 a 100</button>
-        </div>
+        <div id="ai-role-hints" class="d-flex flex-wrap gap-2 mt-2" role="group" aria-label="Preguntas del rol"></div>
+
+        <section id="eval-root" class="card-soft mt-4" aria-label="Evaluación experimental Zero Trust"></section>
 
       </main>
     </div>
@@ -79,6 +82,7 @@
   <script src="/ui/assets/js/core/navigation.js"></script>
   <script src="/ui/assets/js/core/auth.js"></script>
 
+  <script src="/ui/assets/js/components/eval-panel.js"></script>
   <script src="/ui/assets/js/modules/asistente/asistente.js"></script>
 </body>
 </html>

@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from app.ai.deepseek import DEFAULT_BASE_URL, DEFAULT_MODEL, validate_key
 from app.core.config import get_settings
 from app.core.secret_box import decrypt_secret, encrypt_secret, key_hint
-from app.models import AiProviderSetting
+from app.models import AiProviderSetting, User
 
 PROVIDER = "deepseek"
 MIN_KEY_LEN = 20
@@ -144,6 +144,30 @@ class AiSettingsService:
         row.updated_at = datetime.now(timezone.utc)
         self.db.commit()
         return self.public_status()
+
+    def policies_enforced(self, user_id: int | None = None) -> bool:
+        if user_id is None:
+            return True
+        user = self.db.get(User, int(user_id))
+        if user is None:
+            return True
+        return bool(getattr(user, "policies_enforced", True))
+
+    def guard_status(self, user_id: int | None = None) -> dict:
+        enforced = self.policies_enforced(user_id)
+        return {
+            "policies_enforced": enforced,
+            "mode": "enforced" if enforced else "open",
+            "label": "Mínimo privilegio activo" if enforced else "Políticas desactivadas",
+        }
+
+    def set_policies_enforced(self, *, enabled: bool, user_id: int) -> dict:
+        user = self.db.get(User, int(user_id))
+        if user is None:
+            raise ValueError("USER_NOT_FOUND")
+        user.policies_enforced = bool(enabled)
+        self.db.commit()
+        return self.guard_status(user_id)
 
     def validate(self, *, user_id: int) -> dict:
         cfg = self.runtime_config()

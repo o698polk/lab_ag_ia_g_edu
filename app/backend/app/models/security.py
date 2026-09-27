@@ -114,6 +114,7 @@ class AiProviderSetting(Base):
     model: Mapped[str] = mapped_column(String(64), default="deepseek-chat")
     base_url: Mapped[str] = mapped_column(String(255), default="https://api.deepseek.com")
     status: Mapped[str] = mapped_column(String(32), default="EMPTY")
+    policies_enforced: Mapped[bool] = mapped_column(Boolean, default=True)
     last_validated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     updated_by_user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"))
     updated_at: Mapped[datetime] = mapped_column(

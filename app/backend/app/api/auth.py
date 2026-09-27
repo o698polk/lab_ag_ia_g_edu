@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from app.audit.service import AuditService
 from app.auth.deps import CurrentUser, get_current_user
 from app.db.session import get_db
+from app.repositories.user_repository import UserRepository
 from app.schemas.iam import (
     ChangePasswordRequest,
     ForgotPasswordOut,
@@ -18,6 +19,7 @@ from app.schemas.iam import (
     LogoutRequest,
     RefreshRequest,
     ResetPasswordRequest,
+    ReturnToAdminRequest,
     TokenResponse,
     UserOut,
     user_to_out,
@@ -85,9 +87,69 @@ def logout(body: LogoutRequest, db: Annotated[Session, Depends(get_db)]):
     return None
 
 
+def _tokens_out(tokens) -> TokenResponse:  # noqa: ANN001
+    return TokenResponse(
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        token_type=tokens.token_type,
+    )
+
+
+def _return_to_admin(
+    current: CurrentUser,
+    db: Session,
+    refresh_token: str | None,
+) -> TokenResponse:
+    svc = AuthService(db)
+    try:
+        tokens = svc.return_to_admin(current.impersonator_id, refresh_token)
+    except PermissionError as exc:
+        code = str(exc)
+        status_code = (
+            status.HTTP_403_FORBIDDEN
+            if code == "USER_INACTIVE"
+            else status.HTTP_400_BAD_REQUEST
+        )
+        raise HTTPException(status_code=status_code, detail=code) from exc
+    AuditService(db).record_security(
+        request_id=AuditService.new_request_id(),
+        user_id=current.impersonator_id,
+        event_type="IMPERSONATION_END",
+        severity="MED",
+        details={
+            "admin_id": current.impersonator_id,
+            "user_id": current.user.id,
+        },
+    )
+    return _tokens_out(tokens)
+
+
 @router.get("/me", response_model=UserOut)
-def me(current: Annotated[CurrentUser, Depends(get_current_user)]):
-    return user_to_out(current.user)
+def me(
+    current: Annotated[CurrentUser, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    impersonator = None
+    if current.impersonator_id:
+        impersonator = UserRepository(db).get_by_id(current.impersonator_id)
+    return user_to_out(current.user, impersonator=impersonator)
+
+
+@router.post("/return-to-admin", response_model=TokenResponse)
+def return_to_admin_post(
+    current: Annotated[CurrentUser, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+    body: ReturnToAdminRequest | None = None,
+):
+    return _return_to_admin(current, db, body.refresh_token if body else None)
+
+
+@router.get("/return-to-admin", response_model=TokenResponse)
+def return_to_admin_get(
+    current: Annotated[CurrentUser, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    return _return_to_admin(current, db, None)
 
 
 @router.post("/change-password", status_code=status.HTTP_204_NO_CONTENT)

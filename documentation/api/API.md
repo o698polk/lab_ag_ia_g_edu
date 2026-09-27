@@ -87,6 +87,12 @@ El JWT **no** autoriza por sí solo: el servidor revalida usuario, roles y permi
 | Recurso | Rutas | Notas |
 |---|---|---|
 | AI chat | POST `/ai/chat` | propone tools → Gateway → PDP |
+| AI guard | GET/PUT `/ai/guard` | escenario B on / A off **de la cuenta autenticada** (`ai.use`) |
+| Eval cases | GET `/ai/eval/cases` | 100 casos; `mine=true` filtra el rol |
+| Eval run | POST `/ai/eval/run` | un caso vía Tool Gateway |
+| Eval battery | POST `/ai/eval/battery` | batería del rol autenticado |
+| Eval runs | GET `/ai/eval/runs`, GET `/ai/eval/runs/{run_id}` | historial |
+| Eval export | GET `/ai/eval/export` | JSON o CSV (`fmt`) |
 | Policies | GET `/policies` | `audit.view` |
 | Tools | GET `/tools` | registry |
 | Audit | GET `/audit/events` | ≠ historial usuario |

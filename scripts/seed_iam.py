@@ -20,6 +20,7 @@ PERMISSIONS = [
     ("users.create", "Create users", "users"),
     ("users.update", "Update users", "users"),
     ("users.delete", "Delete users", "users"),
+    ("users.login-as", "Impersonate another user", "users"),
     ("roles.view", "View roles", "roles"),
     ("roles.create", "Create roles", "roles"),
     ("roles.update", "Update roles", "roles"),

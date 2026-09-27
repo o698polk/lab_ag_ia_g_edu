@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Optional
 
 
@@ -137,6 +137,11 @@ TOOLS: dict[str, ToolMeta] = {
         risk_level="HIGH",
     ),
 }
+
+
+from app.tools.module_ops import MODULE_TOOLS
+
+TOOLS.update(MODULE_TOOLS)
 
 
 def get_tool(name: str) -> Optional[ToolMeta]:

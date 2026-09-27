@@ -21,6 +21,7 @@
 | SEC-M | Guía operativa de seguridad | [`security/SEC-02-guia-operativa.md`](./security/SEC-02-guia-operativa.md) |
 | MU | Manual de usuario | [`manuals/MANUAL-USUARIO.md`](./manuals/MANUAL-USUARIO.md) |
 | MA | Manual de administrador | [`manuals/MANUAL-ADMINISTRADOR.md`](./manuals/MANUAL-ADMINISTRADOR.md) |
+| EVAL | Protocolo A/B Zero Trust | [`eval/PROTOCOLO-EVAL-ZT.md`](./eval/PROTOCOLO-EVAL-ZT.md) |
 
 ## Spec / Skills / Evidencia
 

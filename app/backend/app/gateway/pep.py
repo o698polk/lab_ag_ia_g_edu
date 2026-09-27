@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+from decimal import Decimal
 from typing import Any, Optional
 
 from sqlalchemy import select
@@ -13,13 +14,17 @@ from app.audit.service import AuditService
 from app.auth.deps import CurrentUser
 from app.models import (
     AcademicTerm,
+    Enrollment,
+    Evaluation,
     Student,
     Teacher,
     ToolInvocation,
     ToolRegistryEntry,
+    User,
 )
 from app.models.operations import Course
 from app.policy.pdp import AuthzRequest, PDP, Subject
+from app.services.ai_settings_service import AiSettingsService
 from app.services.operations_service import OperationsService
 from app.tools import handlers
 from app.tools.registry import TOOLS, ToolMeta, get_tool
@@ -124,6 +129,32 @@ class ToolGateway:
 
         # Identity resolution — bind CURRENT_USER (RF-AI-005)
         params = self._bind_current_user(current, meta, params)
+        enforced = AiSettingsService(self.db).policies_enforced(current.user.id)
+        if not enforced:
+            params = self._bind_open_scope(meta, params)
+            return self._execute_open(
+                current=current,
+                meta=meta,
+                tool_name=tool_name,
+                params=params,
+                rid=rid,
+                message_id=message_id,
+                ip=ip,
+                user_agent=user_agent,
+            )
+
+        role_denial = self._deny_if_role_or_permission_missing(
+            current=current,
+            meta=meta,
+            tool_name=tool_name,
+            params=params,
+            rid=rid,
+            message_id=message_id,
+            ip=ip,
+            user_agent=user_agent,
+        )
+        if role_denial:
+            return role_denial
 
         # Anti-IDOR for student-scoped reads
         idor = self._check_ownership(current, meta, params)
@@ -217,6 +248,190 @@ class ToolGateway:
             request_id=rid,
         )
 
+    def _execute_open(
+        self,
+        *,
+        current: CurrentUser,
+        meta: ToolMeta,
+        tool_name: str,
+        params: dict,
+        rid: str,
+        message_id: Optional[int],
+        ip: Optional[str],
+        user_agent: Optional[str],
+    ) -> GatewayResult:
+        try:
+            result = handlers.execute(self.db, tool_name, params, current, bypass=True)
+            status = "SUCCESS"
+        except Exception as exc:  # noqa: BLE001
+            result = {"error": str(exc)}
+            status = "ERROR"
+        self._persist_invocation(
+            tool_name=tool_name,
+            user_id=current.user.id,
+            message_id=message_id,
+            params=params,
+            decision="ALLOW",
+            reason_code="POLICIES_DISABLED",
+            policy_id="LAB-OPEN",
+            status=status,
+        )
+        self.audit.record_audit(
+            request_id=rid,
+            user_id=current.user.id,
+            role=current.roles[0] if current.roles else None,
+            action=tool_name,
+            module="gateway",
+            resource=meta.resource_type,
+            resource_id=str(params.get("student_id") or ""),
+            status=status,
+            reason="POLICIES_DISABLED",
+            new_value=params,
+            ip=ip,
+            user_agent=user_agent,
+        )
+        return GatewayResult(
+            decision="ALLOW",
+            reason_code="POLICIES_DISABLED",
+            policy_id="LAB-OPEN",
+            policy_version="lab",
+            tool=tool_name,
+            parameters=params,
+            result=result,
+            request_id=rid,
+        )
+
+    def _deny_if_role_or_permission_missing(
+        self,
+        *,
+        current: CurrentUser,
+        meta: ToolMeta,
+        tool_name: str,
+        params: dict,
+        rid: str,
+        message_id: Optional[int],
+        ip: Optional[str],
+        user_agent: Optional[str],
+    ) -> Optional[GatewayResult]:
+        roles = set(current.roles or [])
+        if meta.allowed_roles and not (roles & set(meta.allowed_roles)):
+            write = tool_name.startswith(("update_", "create_", "cancel_")) or meta.risk_level == "HIGH"
+            return self._deny(
+                current=current,
+                tool_name=tool_name,
+                params=params,
+                reason="TOOL_NOT_ALLOWED" if write else "ROLE_NOT_ALLOWED",
+                policy_id="POL-RBAC-001",
+                rid=rid,
+                message_id=message_id,
+                ip=ip,
+                user_agent=user_agent,
+                security_type="TOOL_DENY" if write else "ACCESS_DENY",
+            )
+        return None
+
+    def _lab_student(self) -> Optional[Student]:
+        preferred = self.db.scalar(
+            select(Student)
+            .join(User, User.id == Student.user_id)
+            .where(User.username == "student1", Student.deleted_at.is_(None))
+        )
+        if preferred:
+            return preferred
+        return self.db.scalar(
+            select(Student)
+            .where(Student.deleted_at.is_(None))
+            .order_by(Student.id.asc())
+        )
+
+    def _lab_evaluation(self, student_id: int) -> Optional[Evaluation]:
+        existing = self.db.scalar(
+            select(Evaluation)
+            .join(Course, Course.id == Evaluation.course_id)
+            .join(Enrollment, Enrollment.course_id == Course.id)
+            .where(
+                Enrollment.student_id == student_id,
+                Enrollment.status == "ACTIVE",
+            )
+            .order_by(Evaluation.id.asc())
+        )
+        if existing:
+            return existing
+        return self._ensure_lab_evaluation(student_id)
+
+    def _ensure_lab_evaluation(self, student_id: int) -> Optional[Evaluation]:
+        """Lab A needs a real evaluation or update_grade fails as ERROR, not ALLOW."""
+        enrollment = self.db.scalar(
+            select(Enrollment)
+            .join(Course, Course.id == Enrollment.course_id)
+            .join(AcademicTerm, AcademicTerm.id == Course.term_id)
+            .where(
+                Enrollment.student_id == student_id,
+                Enrollment.status == "ACTIVE",
+                AcademicTerm.status != "CLOSED",
+            )
+            .order_by(AcademicTerm.is_current.desc(), Enrollment.id.asc())
+        )
+        if enrollment is None:
+            enrollment = self.db.scalar(
+                select(Enrollment)
+                .where(
+                    Enrollment.student_id == student_id,
+                    Enrollment.status == "ACTIVE",
+                )
+                .order_by(Enrollment.id.asc())
+            )
+        if enrollment is None:
+            return None
+        ev = Evaluation(
+            course_id=enrollment.course_id,
+            name="Lab A/B",
+            weight_percent=Decimal("10.00"),
+            status="ACTIVE",
+        )
+        self.db.add(ev)
+        self.db.flush()
+        return ev
+
+    def _bind_open_scope(self, meta: ToolMeta, params: dict) -> dict:
+        """When policies are off, do not stop on CURRENT_USER / missing student."""
+        out = dict(params)
+        needs_student = meta.tool_name in {
+            "get_grades",
+            "get_kardex",
+            "get_attendance",
+            "get_student_profile",
+            "update_grade",
+            "update_attendance",
+        }
+        if needs_student and out.get("student_id") in (None, "", "CURRENT_USER", "{{CURRENT_USER}}"):
+            student = self._lab_student()
+            if student:
+                out["student_id"] = student.id
+        if meta.tool_name == "update_grade":
+            ev = None
+            sid = out.get("student_id")
+            try:
+                if out.get("evaluation_id") is not None:
+                    ev = self.db.get(Evaluation, int(out["evaluation_id"]))
+            except (TypeError, ValueError):
+                ev = None
+            if ev is not None and sid not in (None, ""):
+                enrolled = self.db.scalar(
+                    select(Enrollment).where(
+                        Enrollment.course_id == ev.course_id,
+                        Enrollment.student_id == int(sid),
+                        Enrollment.status == "ACTIVE",
+                    )
+                )
+                if enrolled is None:
+                    ev = None
+            if ev is None and sid not in (None, ""):
+                ev = self._lab_evaluation(int(sid))
+                if ev:
+                    out["evaluation_id"] = ev.id
+        return out
+
     def _bind_current_user(
         self, current: CurrentUser, meta: ToolMeta, params: dict
     ) -> dict:
@@ -235,7 +450,12 @@ class ToolGateway:
                             Student.deleted_at.is_(None),
                         )
                     )
-                    out[key] = student.id if student else None
+                    if student:
+                        out[key] = student.id
+                    elif "TEACHER" in current.roles or "ADMINISTRATOR" in current.roles:
+                        out.pop(key, None)
+                    else:
+                        out[key] = None
                 elif key == "teacher_id":
                     teacher = self.db.scalar(
                         select(Teacher).where(Teacher.user_id == current.user.id)

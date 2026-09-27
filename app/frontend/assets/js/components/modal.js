@@ -102,25 +102,46 @@
     return { body, foot, close };
   }
 
-  function confirmDelete(message, onYes) {
+  function confirm(opts) {
+    const cfg = Object.assign(
+      {
+        title: "Confirmar",
+        message: "¿Continuar?",
+        confirmLabel: "Confirmar",
+        danger: false,
+        onYes: async () => {},
+      },
+      opts || {}
+    );
     const foot = document.createElement("div");
     foot.className = "d-flex gap-2 justify-content-end";
     foot.innerHTML =
       '<button type="button" class="btn btn-outline-secondary" data-modal-close>Cancelar</button>' +
-      '<button type="button" class="btn btn-danger-admin" id="btn-modal-delete">Eliminar</button>';
+      '<button type="button" class="btn ' +
+      (cfg.danger ? "btn-danger-admin" : "btn-siga") +
+      '" id="btn-modal-confirm">' +
+      escapeHtml(cfg.confirmLabel) +
+      "</button>";
     const dlg = open({
-      title: "Confirmar eliminación",
-      body:
-        "<p class='mb-0'>" +
-        escapeHtml(message || "¿Está seguro de que desea eliminar este registro?") +
-        "</p>",
+      title: cfg.title,
+      body: "<p class='mb-0'>" + escapeHtml(cfg.message) + "</p>",
       footer: foot,
     });
-    foot.querySelector("#btn-modal-delete")?.addEventListener("click", async () => {
-      await onYes();
+    foot.querySelector("#btn-modal-confirm")?.addEventListener("click", async () => {
+      await cfg.onYes();
       dlg.close();
     });
     return dlg;
+  }
+
+  function confirmDelete(message, onYes) {
+    return confirm({
+      title: "Confirmar eliminación",
+      message: message || "¿Está seguro de que desea eliminar este registro?",
+      confirmLabel: "Eliminar",
+      danger: true,
+      onYes,
+    });
   }
 
   function footerCancelSave(saveLabel, formId) {
@@ -150,5 +171,5 @@
     return "<dl class='view-dl'>" + rows + "</dl>";
   }
 
-  window.SigaModal = { open, close, openParked, confirmDelete, footerCancelSave, escapeHtml, viewDl };
+  window.SigaModal = { open, close, openParked, confirm, confirmDelete, footerCancelSave, escapeHtml, viewDl };
 })();

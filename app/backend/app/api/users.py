@@ -3,15 +3,17 @@
 
 from typing import Annotated, List
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
+from app.audit.service import AuditService
 from app.auth.deps import CurrentUser, require_permission
 from app.db.session import get_db
 from app.permissions import constants as P
 from app.schemas.iam import (
     AdminSetPasswordRequest,
     AssignRolesRequest,
+    TokenResponse,
     UserCreate,
     UserOut,
     UserStatusUpdate,
@@ -79,6 +81,48 @@ def update_user(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
+@router.post("/{user_id}/login-as", response_model=TokenResponse)
+def login_as(
+    user_id: int,
+    current: Annotated[CurrentUser, Depends(require_permission(P.USERS_LOGIN_AS))],
+    request: Request,
+    db: Annotated[Session, Depends(get_db)],
+):
+    if current.impersonator_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ALREADY_IMPERSONATING",
+        )
+    try:
+        tokens = AuthService(db).login_as(current.user, user_id)
+    except LookupError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except PermissionError as exc:
+        code = str(exc)
+        status_code = (
+            status.HTTP_403_FORBIDDEN
+            if code == "USER_INACTIVE"
+            else status.HTTP_400_BAD_REQUEST
+        )
+        raise HTTPException(status_code=status_code, detail=code) from exc
+    AuditService(db).record_security(
+        request_id=AuditService.new_request_id(),
+        user_id=current.user.id,
+        event_type="IMPERSONATION_START",
+        severity="MED",
+        details={
+            "admin_id": current.user.id,
+            "user_id": user_id,
+            "ip": request.client.host if request.client else None,
+        },
+    )
+    return TokenResponse(
+        access_token=tokens.access_token,
+        refresh_token=tokens.refresh_token,
+        token_type=tokens.token_type,
+    )
 
 
 @router.patch("/{user_id}/status", response_model=UserOut)

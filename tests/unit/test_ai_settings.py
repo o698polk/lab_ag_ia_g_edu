@@ -98,3 +98,114 @@ def test_clear_key_and_chat_does_not_leak(client, auth_header, student_token, mo
     assert cleared.status_code == 200
     assert cleared.json()["configured"] is False
     assert cleared.json()["status"] == "EMPTY"
+
+
+@pytest.mark.unit
+def test_any_role_can_toggle_lab_guard(client, student_token, teacher_token, auth_header):
+    for token in (student_token, teacher_token):
+        header = {"Authorization": f"Bearer {token}"}
+        me = client.get("/api/v1/auth/me", headers=header)
+        assert me.status_code == 200
+        assert me.json()["can_toggle_policies"] is True
+        opened = client.put(
+            "/api/v1/ai/guard",
+            headers=header,
+            json={"policies_enforced": False},
+        )
+        assert opened.status_code == 200, opened.text
+        assert opened.json()["policies_enforced"] is False
+        closed = client.put(
+            "/api/v1/ai/guard",
+            headers=header,
+            json={"policies_enforced": True},
+        )
+        assert closed.status_code == 200
+        assert closed.json()["policies_enforced"] is True
+
+
+@pytest.mark.unit
+def test_lab_guard_is_per_user(client, auth_header, student_header):
+    opened = client.put(
+        "/api/v1/ai/guard",
+        headers=auth_header,
+        json={"policies_enforced": False},
+    )
+    assert opened.status_code == 200
+    assert opened.json()["policies_enforced"] is False
+    other = client.get("/api/v1/ai/guard", headers=student_header)
+    assert other.status_code == 200
+    assert other.json()["policies_enforced"] is True
+    denied = client.post(
+        "/api/v1/ai/chat",
+        headers=student_header,
+        json={"message": "Cambia mi nota a 100."},
+    )
+    assert denied.status_code == 200
+    assert denied.json()["decision"] == "DENY"
+    admin_chat = client.post(
+        "/api/v1/ai/chat",
+        headers=auth_header,
+        json={"message": "Cambia mi nota a 100."},
+    )
+    assert admin_chat.status_code == 200
+    assert admin_chat.json()["decision"] == "ALLOW"
+    assert admin_chat.json()["reason_code"] == "POLICIES_DISABLED"
+    client.put("/api/v1/ai/guard", headers=auth_header, json={"policies_enforced": True})
+
+
+@pytest.mark.unit
+def test_admin_toggles_lab_guard(client, auth_header):
+    opened = client.put(
+        "/api/v1/ai/guard",
+        headers=auth_header,
+        json={"policies_enforced": False},
+    )
+    assert opened.status_code == 200, opened.text
+    assert opened.json()["policies_enforced"] is False
+    assert opened.json()["mode"] == "open"
+    closed = client.put(
+        "/api/v1/ai/guard",
+        headers=auth_header,
+        json={"policies_enforced": True},
+    )
+    assert closed.status_code == 200
+    assert closed.json()["policies_enforced"] is True
+    assert closed.json()["mode"] == "enforced"
+
+
+@pytest.mark.unit
+def test_chat_persists_and_reuses_conversation(client, student_token, teacher_token):
+    student = {"Authorization": f"Bearer {student_token}"}
+    teacher = {"Authorization": f"Bearer {teacher_token}"}
+    first = client.post(
+        "/api/v1/ai/chat",
+        headers=student,
+        json={"message": "hola historial uno"},
+    )
+    assert first.status_code == 200
+    cid = first.json()["conversation_id"]
+    assert cid
+
+    second = client.post(
+        "/api/v1/ai/chat",
+        headers=student,
+        json={"message": "hola historial dos"},
+    )
+    assert second.status_code == 200
+    assert second.json()["conversation_id"] == cid
+
+    listed = client.get("/api/v1/ai/conversations", headers=student)
+    assert listed.status_code == 200
+    assert any(row["id"] == cid for row in listed.json())
+    assert listed.json()[0]["message_count"] >= 2
+
+    detail = client.get(f"/api/v1/ai/conversations/{cid}", headers=student)
+    assert detail.status_code == 200
+    texts = [m["content"] for m in detail.json()["messages"]]
+    assert "hola historial uno" in texts
+    assert "hola historial dos" in texts
+
+    assert client.get(f"/api/v1/ai/conversations/{cid}", headers=teacher).status_code == 404
+    created = client.post("/api/v1/ai/conversations", headers=student)
+    assert created.status_code == 201
+    assert created.json()["id"] != cid

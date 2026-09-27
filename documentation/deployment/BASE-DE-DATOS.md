@@ -25,6 +25,10 @@ Ubicación: `app/backend/alembic/versions/`
 | `0004_evaluation` | attendance, evaluations, grades, kardex |
 | `0005_platform` | reports, notifications, user_history |
 | `0006_zero_trust` | audit/security events, tools, AI messages |
+| `0011_lab_policy_guard` | `ai_provider_settings.policies_enforced` |
+| `0012_impersonator_refresh` | `refresh_tokens.impersonator_id` |
+| `0013_eval_runs` | `eval_runs`, `eval_results` |
+| `0014_user_policy_guard` | `users.policies_enforced` (interruptor por cuenta) |
 
 ```powershell
 cd app\backend

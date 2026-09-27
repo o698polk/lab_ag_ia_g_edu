@@ -23,6 +23,7 @@ def create_access_token(
     username: str,
     roles: list[str],
     permissions: list[str],
+    impersonator_id: int | None = None,
 ) -> str:
     settings = get_settings()
     exp = _now() + timedelta(minutes=settings.jwt_access_ttl_minutes)
@@ -36,6 +37,8 @@ def create_access_token(
         "iat": int(_now().timestamp()),
         "exp": int(exp.timestamp()),
     }
+    if impersonator_id:
+        payload["impersonator_id"] = int(impersonator_id)
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 

@@ -5,6 +5,7 @@ USERS_VIEW = "users.view"
 USERS_CREATE = "users.create"
 USERS_UPDATE = "users.update"
 USERS_DELETE = "users.delete"
+USERS_LOGIN_AS = "users.login-as"
 
 ROLES_VIEW = "roles.view"
 ROLES_CREATE = "roles.create"

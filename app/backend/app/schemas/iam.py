@@ -32,6 +32,12 @@ class LogoutRequest(BaseModel):
     refresh_token: str
 
 
+class ReturnToAdminRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    refresh_token: Optional[str] = None
+
+
 class ChangePasswordRequest(BaseModel):
     model_config = {"extra": "forbid"}
 
@@ -138,6 +144,10 @@ class UserOut(BaseModel):
     permissions: List[str] = []
     last_login: Optional[datetime] = None
     created_at: Optional[datetime] = None
+    impersonating: bool = False
+    impersonator_id: Optional[int] = None
+    impersonator_username: Optional[str] = None
+    can_toggle_policies: bool = False
 
     model_config = {"from_attributes": True}
 
@@ -214,7 +224,14 @@ class AssignPermissionsRequest(BaseModel):
     permission_codes: List[str]
 
 
-def user_to_out(user) -> UserOut:  # noqa: ANN001
+def _can_toggle_policies(user, impersonator=None) -> bool:  # noqa: ANN001
+    codes = set(user.permission_codes())
+    if impersonator is not None:
+        codes.update(impersonator.permission_codes())
+    return "ai.use" in codes
+
+
+def user_to_out(user, impersonator=None) -> UserOut:  # noqa: ANN001
     return UserOut(
         id=user.id,
         username=user.username,
@@ -229,6 +246,10 @@ def user_to_out(user) -> UserOut:  # noqa: ANN001
         permissions=sorted(user.permission_codes()),
         last_login=user.last_login,
         created_at=user.created_at,
+        impersonating=impersonator is not None,
+        impersonator_id=getattr(impersonator, "id", None),
+        impersonator_username=getattr(impersonator, "username", None),
+        can_toggle_policies=_can_toggle_policies(user, impersonator),
     )
 
 

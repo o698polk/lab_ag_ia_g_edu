@@ -180,6 +180,7 @@
       toggle: '<button type="button" class="btn btn-outline-secondary" data-act="toggle">Estado</button>',
       perms: '<button type="button" class="btn btn-outline-secondary" data-act="perms">Permisos</button>',
       roster: '<button type="button" class="btn btn-outline-secondary" data-act="roster">Matriculados</button>',
+      loginAs: '<button type="button" class="btn btn-outline-secondary" data-act="loginAs">Entrar</button>',
     };
     return (kinds || ["view", "edit", "del"]).map((k) => map[k] || "").join("");
   }
