@@ -6,14 +6,13 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
 from app.auth.deps import CurrentUser
 from app.models import (
     AttendanceRecord,
     AttendanceSession,
-    Grade,
     Schedule,
     Student,
     User,
@@ -106,21 +105,12 @@ def _scope_student_ids(
 def _grade_items_for_student(db: Session, sid: int) -> list[dict[str, Any]]:
     from app.services.evaluation_service import EvaluationService
 
-    grades = list(db.scalars(select(Grade).where(Grade.student_id == sid)))
-    items: list[dict[str, Any]] = [
-        {
-            "id": g.id,
-            "evaluation_id": g.evaluation_id,
-            "student_id": g.student_id,
-            "score": str(g.score),
-            "source": "evaluation",
-        }
-        for g in grades
-    ]
+    # Only subject partials / final / supletorio — no evaluation or homework rows.
+    items: list[dict[str, Any]] = []
     for row in EvaluationService(db).student_academic(sid):
         official = row.get("official_grade")
-        average = row.get("final_average")
-        score = official if official is not None else average
+        final = row.get("final_average")
+        score = official if official is not None else final
         items.append(
             {
                 "student_id": sid,
@@ -131,11 +121,13 @@ def _grade_items_for_student(db: Session, sid: int) -> list[dict[str, Any]]:
                 "term_name": row.get("term_name") or "",
                 "first_partial": row.get("first_partial"),
                 "second_partial": row.get("second_partial"),
+                "final_average": final,
+                "recovery_grade": row.get("recovery_grade"),
                 "official_grade": official,
                 "academic_status": row.get("academic_status"),
                 "attendance_pct": row.get("attendance_pct"),
                 "score": str(score if score is not None else 0),
-                "source": "official",
+                "source": "partials",
             }
         )
     return items
@@ -234,11 +226,19 @@ def execute(
             for s in rows
         ]
     if tool_name == "generate_report":
+        extra = {
+            key: value
+            for key, value in params.items()
+            if key not in {"report_type", "format", "parameters"}
+        }
+        nested = params.get("parameters")
+        if not isinstance(nested, dict):
+            nested = {}
         return PlatformService(db).generate_report(
             user=current.user,
             report_type=params.get("report_type", "students"),
             format_=params.get("format", "JSON"),
-            parameters=params.get("parameters"),
+            parameters={**extra, **nested} or None,
         )
     if tool_name == "update_grade":
         # Sensitive — only reached on ALLOW or lab-open bypass
@@ -293,9 +293,54 @@ def execute(
 
         enr = OperationsService(db).cancel_enrollment(int(params["enrollment_id"]))
         return {"id": enr.id, "status": enr.status}
+    if tool_name == "execute_sql":
+        return _execute_lab_sql(db, str(params.get("sql") or ""))
     from app.tools.module_handlers import execute_module
     from app.tools.module_ops import MODULE_TOOLS
 
     if tool_name in MODULE_TOOLS:
         return execute_module(db, tool_name, params, current, bypass=bypass)
     raise ValueError(f"UNKNOWN_TOOL:{tool_name}")
+
+
+_DDL_MARKERS = (
+    "DROP ",
+    "ALTER ",
+    "CREATE ",
+    "TRUNCATE ",
+    "GRANT ",
+    "REVOKE ",
+    "ATTACH ",
+    "DETACH ",
+    "REPLACE INTO",
+)
+
+
+def _execute_lab_sql(db: Session, raw_sql: str) -> dict[str, Any]:
+    """Lab-A open SQL: DML/SELECT only. Lab B is denied by the Gateway/PDP."""
+    sql = (raw_sql or "").strip().rstrip(";")
+    if not sql:
+        return {"error": "SQL_REQUIRED"}
+    if ";" in sql:
+        return {"error": "MULTI_STATEMENT_FORBIDDEN"}
+    upper = f" {sql.upper()} "
+    if any(marker in upper for marker in _DDL_MARKERS):
+        return {"error": "DDL_FORBIDDEN"}
+    head = sql.lstrip().upper()
+    if not head.startswith(("SELECT", "INSERT", "UPDATE", "DELETE", "WITH")):
+        return {"error": "STATEMENT_NOT_ALLOWED"}
+    try:
+        result = db.execute(text(sql))
+        if head.startswith("SELECT") or head.startswith("WITH"):
+            rows = [dict(row) for row in result.mappings().fetchmany(50)]
+            db.commit()
+            return {"sql": sql, "row_count": len(rows), "rows": rows}
+        db.commit()
+        return {
+            "sql": sql,
+            "row_count": int(result.rowcount or 0),
+            "status": "UPDATED",
+        }
+    except Exception as exc:  # noqa: BLE001
+        db.rollback()
+        return {"error": f"SQL_ERROR:{exc}"}

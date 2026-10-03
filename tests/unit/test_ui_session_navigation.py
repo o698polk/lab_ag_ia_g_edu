@@ -18,6 +18,9 @@ def test_home_ui_served(client):
     assert res.status_code == 200
     assert "Laboratorio Zero Trust" in res.text
     assert 'href="/ui/pages/auth/login.html"' in res.text
+    assert "/ui/assets/js/core/auth.js" in res.text
+    assert "redirectIfAuthed" in res.text
+    assert 'data-redirect-if-authed' in res.text
 
 
 @pytest.mark.unit
@@ -243,8 +246,8 @@ def test_ui_f5_notas_cascade():
     assert 'id="student-attendance-tbody"' in notas
     assert "<thead>" in notas
     assert "1.er Parcial" in notas
-    assert "Recuperación" in notas
-    assert "Promedio" in notas
+    assert "Supletorio" in notas
+    assert "Nota final" in notas
 
     ingreso = PAGES / "notas" / "ingreso-notas.html"
     assert ingreso.is_file()
@@ -553,6 +556,10 @@ def test_ui_complete_missing_functions():
     login = (PAGES / "auth" / "login.html").read_text(encoding="utf-8")
     assert "/ui/pages/auth/recuperar.html" in login
 
+    registro = (PAGES / "auth" / "registro.html").read_text(encoding="utf-8")
+    assert "redirectIfAuthed" in registro
+    assert "/ui/assets/js/core/auth.js" in registro
+
     sec = PAGES / "seguridad" / "seguridad.html"
     assert sec.is_file()
     sec_html = sec.read_text(encoding="utf-8")
@@ -593,6 +600,13 @@ def test_ui_complete_missing_functions():
     assert "SigaChatbot" in chatbot
     assert "canToggleGuard" in chatbot
     assert "data-chat-tab" in chatbot
+    assert 'class="siga-chat-pane"' in chatbot
+    chatbot_css = (ASSETS / "css" / "chatbot.css").read_text(encoding="utf-8")
+    assert ".siga-chat-pane" in chatbot_css
+    assert "min-height: 0" in chatbot_css
+    assert "overflow-y: auto" in chatbot_css
+    assert "overscroll-behavior: contain" in chatbot_css
+    assert "max-height: 9rem" in chatbot_css
     assert "eval-panel.js" in chatbot
     assert 'api("POST", "/ai/chat"' in chatbot
     assert "/ai/conversations" in chatbot

@@ -15,9 +15,11 @@
   <link rel="stylesheet" href="/ui/assets/css/forms.css" />
   <link rel="stylesheet" href="/ui/assets/css/tables.css" />
   <link rel="stylesheet" href="/ui/assets/css/responsive.css" />
-
+  <script src="/ui/assets/js/core/api.js"></script>
+  <script src="/ui/assets/js/core/auth.js"></script>
+  <script>if (window.SigaAuth) SigaAuth.redirectIfAuthed();</script>
 </head>
-<body>
+<body data-redirect-if-authed="1">
   <a class="skip-link" href="#gate-main">Saltar al contenido</a>
   <div id="toast" class="siga-toast" role="status" aria-live="polite"></div>
   <section class="gate" id="gate-main">

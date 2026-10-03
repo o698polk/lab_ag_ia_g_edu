@@ -6,23 +6,26 @@ from __future__ import annotations
 import csv
 import io
 import json
+import re
+import zipfile
 from typing import Any, Optional, Sequence
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models import (
+    AcademicTerm,
     AttendanceRecord,
     AttendanceSession,
     Career,
     Course,
     Enrollment,
-    Grade,
     KardexEntry,
     Notification,
     Report,
     ReportLog,
     Student,
+    Subject,
     Teacher,
     TeachingAssignment,
     User,
@@ -58,6 +61,104 @@ def _pdf_escape(text: str) -> str:
         .encode("latin-1", "replace")
         .decode("latin-1")
     )
+
+
+def _xml_escape(text: str) -> str:
+    cleaned = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", str(text))
+    return (
+        cleaned.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
+def _xlsx_col(index: int) -> str:
+    """1-based column index → Excel letters (1=A, 27=AA)."""
+    n = index
+    letters = ""
+    while n > 0:
+        n, rem = divmod(n - 1, 26)
+        letters = chr(65 + rem) + letters
+    return letters
+
+
+def _render_xlsx(rows: list[dict], title: str) -> str:
+    """Minimal OOXML .xlsx (ZIP) without extra dependencies."""
+    data = list(rows) if rows else [{"mensaje": "Sin datos"}]
+    headers = list(data[0].keys())
+    sheet_name = re.sub(r'[\\/*?:\[\]]', "-", (title or "Reporte"))[:31] or "Reporte"
+
+    row_xml: list[str] = []
+    header_cells = []
+    for col, header in enumerate(headers, start=1):
+        ref = f"{_xlsx_col(col)}1"
+        header_cells.append(
+            f'<c r="{ref}" t="inlineStr"><is><t>{_xml_escape(header)}</t></is></c>'
+        )
+    row_xml.append(f'<row r="1">{"".join(header_cells)}</row>')
+
+    for row_idx, row in enumerate(data, start=2):
+        cells = []
+        for col, header in enumerate(headers, start=1):
+            ref = f"{_xlsx_col(col)}{row_idx}"
+            value = row.get(header, "")
+            cells.append(
+                f'<c r="{ref}" t="inlineStr"><is><t>'
+                f"{_xml_escape('' if value is None else value)}"
+                f"</t></is></c>"
+            )
+        row_xml.append(f'<row r="{row_idx}">{"".join(cells)}</row>')
+
+    sheet = (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+        f'<sheetData>{"".join(row_xml)}</sheetData></worksheet>'
+    )
+    content_types = (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+        '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>'
+        '<Default Extension="xml" ContentType="application/xml"/>'
+        '<Override PartName="/xl/workbook.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+        '<Override PartName="/xl/worksheets/sheet1.xml" '
+        'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+        "</Types>"
+    )
+    root_rels = (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        '<Relationship Id="rId1" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" '
+        'Target="xl/workbook.xml"/>'
+        "</Relationships>"
+    )
+    workbook = (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" '
+        'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+        "<sheets>"
+        f'<sheet name="{_xml_escape(sheet_name)}" sheetId="1" r:id="rId1"/>'
+        "</sheets></workbook>"
+    )
+    workbook_rels = (
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        '<Relationship Id="rId1" '
+        'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" '
+        'Target="worksheets/sheet1.xml"/>'
+        "</Relationships>"
+    )
+
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        zf.writestr("[Content_Types].xml", content_types)
+        zf.writestr("_rels/.rels", root_rels)
+        zf.writestr("xl/workbook.xml", workbook)
+        zf.writestr("xl/_rels/workbook.xml.rels", workbook_rels)
+        zf.writestr("xl/worksheets/sheet1.xml", sheet)
+    return buf.getvalue().decode("latin-1")
 
 
 def _render_pdf(rows: list[dict], title: str) -> str:
@@ -204,7 +305,7 @@ class PlatformService:
                 "courses": self._count(Course),
                 "enrollments": self._count(Enrollment, Enrollment.status == "ACTIVE"),
                 "users": self._count(User, User.deleted_at.is_(None)),
-                "grades": self._count(Grade),
+                "grades": self._count(KardexEntry),
                 "attendance_sessions": self._count(AttendanceSession),
                 "careers": self._count(Career),
                 "unread_notifications": self._count(
@@ -244,7 +345,9 @@ class PlatformService:
             indicators = {
                 "assigned_courses": assigned,
                 "students": students,
-                "grades_recorded": self._count(Grade),
+                "grades_recorded": self._count(
+                    KardexEntry, KardexEntry.first_partial.is_not(None)
+                ),
                 "unread_notifications": self._count(
                     Notification,
                     Notification.user_id == user.id,
@@ -265,7 +368,12 @@ class PlatformService:
                     Enrollment.status == "ACTIVE",
                     Enrollment.term_id == active.id,
                 )
-                my_grades = self._count(Grade, Grade.student_id == student.id)
+                my_grades = self._count(
+                    KardexEntry,
+                    KardexEntry.student_id == student.id,
+                    KardexEntry.term_id == active.id,
+                    KardexEntry.first_partial.is_not(None),
+                )
                 my_kardex = self._count(
                     KardexEntry,
                     KardexEntry.student_id == student.id,
@@ -398,16 +506,23 @@ class PlatformService:
         if report_type == "grades":
             return [
                 {
-                    "id": g.id,
-                    "evaluation_id": g.evaluation_id,
-                    "student_id": g.student_id,
-                    "score": str(g.score),
+                    "id": k.id,
+                    "student_id": k.student_id,
+                    "subject_id": k.subject_id,
+                    "term_id": k.term_id,
+                    "first_partial": str(k.first_partial) if k.first_partial is not None else None,
+                    "second_partial": str(k.second_partial) if k.second_partial is not None else None,
+                    "final_grade": str(k.final_grade) if k.final_grade is not None else None,
+                    "recovery_grade": str(k.recovery_grade) if k.recovery_grade is not None else None,
+                    "academic_status": k.academic_status,
                 }
-                for g in self.db.scalars(select(Grade))
+                for k in self.db.scalars(select(KardexEntry))
             ]
         if report_type == "averages":
             rows = self.db.execute(
-                select(Grade.student_id, func.avg(Grade.score)).group_by(Grade.student_id)
+                select(KardexEntry.student_id, func.avg(KardexEntry.final_grade)).group_by(
+                    KardexEntry.student_id
+                )
             ).all()
             return [
                 {"student_id": sid, "average": str(round(float(avg), 2)) if avg is not None else "0"}
@@ -423,7 +538,9 @@ class PlatformService:
                     "academic_status": k.academic_status,
                 }
                 for k in self.db.scalars(
-                    select(KardexEntry).where(KardexEntry.academic_status == "FAILED")
+                    select(KardexEntry).where(
+                        KardexEntry.academic_status.in_(["FAILED", "REPROBADO"])
+                    )
                 )
             ]
         if report_type == "kardex":
@@ -450,19 +567,37 @@ class PlatformService:
             return [{"teacher_id": tid, "active_courses": cnt} for tid, cnt in rows]
         if report_type == "term_academic":
             term_id = params.get("term_id")
+            if term_id is None:
+                active = CatalogService(self.db).active_term()
+                term_id = active.id if active else None
             q = select(Enrollment)
             if term_id is not None:
                 q = q.where(Enrollment.term_id == int(term_id))
-            return [
-                {
-                    "id": e.id,
-                    "student_id": e.student_id,
-                    "course_id": e.course_id,
-                    "term_id": e.term_id,
-                    "status": e.status,
-                }
-                for e in self.db.scalars(q)
-            ]
+            enrollments = list(self.db.scalars(q))
+            students = {s.id: s for s in self.db.scalars(select(Student))}
+            courses = {c.id: c for c in self.db.scalars(select(Course))}
+            subjects = {s.id: s for s in self.db.scalars(select(Subject))}
+            terms = {t.id: t for t in self.db.scalars(select(AcademicTerm))}
+            rows = []
+            for e in enrollments:
+                student = students.get(e.student_id)
+                course = courses.get(e.course_id)
+                subject = subjects.get(course.subject_id) if course else None
+                term = terms.get(e.term_id)
+                rows.append(
+                    {
+                        "id": e.id,
+                        "student_id": e.student_id,
+                        "student_code": student.student_code if student else None,
+                        "course_id": e.course_id,
+                        "subject_name": subject.name if subject else None,
+                        "term_id": e.term_id,
+                        "term_name": term.name if term else None,
+                        "term_code": term.code if term else None,
+                        "status": e.status,
+                    }
+                )
+            return rows
         if report_type == "career":
             return [
                 {
@@ -492,26 +627,7 @@ class PlatformService:
             writer.writerows(rows)
             return buf.getvalue()
         if format_ == "XLSX":
-            title = REPORT_TYPES.get(report_type, report_type)
-            if not rows:
-                rows = [{"mensaje": "Sin datos"}]
-            headers = list(rows[0].keys())
-
-            def cell(v: object) -> str:
-                text = str(v if v is not None else "").replace("&", "&amp;").replace("<", "&lt;")
-                return f'<Cell><Data ss:Type="String">{text}</Data></Cell>'
-
-            header_row = "<Row>" + "".join(cell(h) for h in headers) + "</Row>"
-            data_rows = "".join(
-                "<Row>" + "".join(cell(row.get(h, "")) for h in headers) + "</Row>" for row in rows
-            )
-            return (
-                '<?xml version="1.0"?>'
-                '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"'
-                ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
-                f"<Worksheet ss:Name=\"{title[:31]}\"><Table>"
-                f"{header_row}{data_rows}</Table></Worksheet></Workbook>"
-            )
+            return _render_xlsx(rows, REPORT_TYPES.get(report_type, report_type))
         if format_ == "PDF":
             return _render_pdf(rows, REPORT_TYPES.get(report_type, report_type))
         # HTML

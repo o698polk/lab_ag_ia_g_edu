@@ -68,7 +68,7 @@
       return { average, recoveryAllowed: true, status: "SUPLETORIO PENDIENTE" };
     }
     if (recovery >= 7) {
-      return { average, recoveryAllowed: true, status: "APROBADO POR RECUPERACIÓN" };
+      return { average, recoveryAllowed: true, status: "APROBADO POR SUPLETORIO" };
     }
     return { average, recoveryAllowed: true, status: "REPROBADO" };
   }

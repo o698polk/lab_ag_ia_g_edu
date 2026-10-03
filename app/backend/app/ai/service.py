@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from typing import Any, Optional
 
@@ -76,13 +77,18 @@ class AIService:
         if isinstance(proposal, dict) and proposal.get("_llm_reply"):
             llm_reply = proposal.pop("_llm_reply")
         if not proposal or not proposal.get("tool"):
-            reply = self._redact_secrets(
-                llm_reply
-                or (
-                    "Puedo ayudar con consultas de notas, asistencia, kardex o perfil. "
-                    "No ejecuto SQL ni accedo a la base directamente."
+            if not enforced:
+                fallback = (
+                    "Escenario A (políticas desactivadas): puedo ejecutar actualizaciones "
+                    "y SQL de laboratorio (SELECT/INSERT/UPDATE/DELETE). "
+                    "Indique el cambio o el SQL a ejecutar."
                 )
-            )
+            else:
+                fallback = (
+                    "Puedo ayudar con consultas de notas, asistencia, kardex o perfil. "
+                    "Con políticas activas no ejecuto SQL ni accedo a la base directamente."
+                )
+            reply = self._redact_secrets(llm_reply or fallback)
             reply = self._clean_visible_text(reply)
             self._assistant_msg(conv.id, reply)
             return {
@@ -165,19 +171,26 @@ class AIService:
         if tool == "get_grades":
             if not items:
                 return "No hay calificaciones registradas en el período activo."
-            lines = ["Calificaciones del período activo:"]
+            lines = ["Calificaciones por materia (parciales):"]
             for row in items:
-                name = (
-                    row.get("subject_name")
-                    or row.get("course_name")
-                    or (f"Evaluación {row['evaluation_id']}" if row.get("evaluation_id") else "Evaluación")
-                )
-                score = row.get("official_grade")
-                if score is None:
-                    score = row.get("score")
+                name = row.get("subject_name") or row.get("course_name") or "Materia"
+                p1 = row.get("first_partial")
+                p2 = row.get("second_partial")
+                final = row.get("official_grade")
+                if final is None:
+                    final = row.get("final_average")
+                if final is None:
+                    final = row.get("score")
+                sup = row.get("recovery_grade")
                 status = row.get("academic_status") or ""
+                bits = [
+                    f"1.er parcial={p1 if p1 is not None else '—'}",
+                    f"2.º parcial={p2 if p2 is not None else '—'}",
+                    f"nota final={final if final is not None else '—'}",
+                    f"supletorio={sup if sup is not None else '—'}",
+                ]
                 extra = f" ({status})" if status else ""
-                lines.append(f"- {name}: {score}{extra}")
+                lines.append(f"- {name}: " + " · ".join(bits) + extra)
             return "\n".join(lines)
         if tool == "get_attendance":
             if not items:
@@ -215,11 +228,27 @@ class AIService:
                 f"Nota actualizada a {result.get('score')} "
                 f"(evaluación {result.get('evaluation_id')}, estudiante {result.get('student_id')})."
             )
+        if tool == "execute_sql" and isinstance(result, dict):
+            if result.get("error"):
+                return f"SQL no aplicado: {result.get('error')}."
+            if "rows" in result:
+                rows = result.get("rows") or []
+                preview = rows[:10]
+                lines = [f"SQL ejecutado · {result.get('row_count', 0)} fila(s):"]
+                for row in preview:
+                    lines.append(f"- {row}")
+                return "\n".join(lines)
+            return (
+                f"SQL ejecutado · {result.get('row_count', 0)} fila(s) afectadas "
+                f"({result.get('status') or 'OK'})."
+            )
         if tool == "get_dashboard" and isinstance(result, dict):
             view = result.get("view") or result.get("role") or ""
             indicators = result.get("indicators") or {}
             bits = [f"{k}={v}" for k, v in list(indicators.items())[:8]]
             return f"Dashboard {view}: " + (", ".join(bits) if bits else "sin indicadores.")
+        if tool == "generate_report" and isinstance(result, dict):
+            return self._format_report_reply(result)
         if tool.startswith("list_") or tool in {
             "get_user",
             "create_user",
@@ -229,7 +258,6 @@ class AIService:
             "create_course",
             "create_student",
             "create_teacher",
-            "create_evaluation",
             "create_notification",
         }:
             if isinstance(result, dict):
@@ -255,6 +283,85 @@ class AIService:
                 lines.append(f"- {label}" + (f" ({extra})" if extra else ""))
             return "\n".join(lines)
         return f"Consulta `{tool}` completada."
+
+    def _format_report_reply(self, result: dict[str, Any]) -> str:
+        from app.services.platform_service import REPORT_TYPES
+
+        rtype = str(result.get("report_type") or "reporte")
+        title = REPORT_TYPES.get(rtype, rtype.replace("_", " ").title())
+        fmt = str(result.get("format") or "JSON")
+        rows = self._report_rows(result)
+        count = result.get("row_count")
+        if count is None:
+            count = len(rows)
+        term = ""
+        if rows and isinstance(rows[0], dict):
+            term = str(rows[0].get("term_name") or rows[0].get("term_code") or "")
+        head = f"{title} ({fmt})"
+        if term:
+            head += f" · periodo {term}"
+        head += f" · {count} registro(s)."
+        if not rows:
+            return head + " No hay datos en el periodo autorizado."
+        lines = [head]
+        preview = rows[:20]
+        for row in preview:
+            if isinstance(row, dict):
+                lines.append("- " + self._report_row_label(row))
+            else:
+                lines.append(f"- {row}")
+        leftover = int(count) - len(preview)
+        if leftover > 0:
+            lines.append(f"... y {leftover} registro(s) más.")
+        return "\n".join(lines)
+
+    @staticmethod
+    def _report_rows(result: dict[str, Any]) -> list[Any]:
+        content = result.get("content")
+        if isinstance(content, list):
+            return content
+        if not isinstance(content, str) or not content.strip():
+            return []
+        fmt = str(result.get("format") or "").upper()
+        if fmt == "JSON" or content.lstrip().startswith("["):
+            try:
+                parsed = json.loads(content)
+            except json.JSONDecodeError:
+                return []
+            return parsed if isinstance(parsed, list) else []
+        if fmt == "CSV":
+            lines = [ln for ln in content.splitlines() if ln.strip()]
+            return lines[1:21]
+        return []
+
+    @staticmethod
+    def _report_row_label(row: dict[str, Any]) -> str:
+        bits: list[str] = []
+        who = row.get("student_code") or row.get("teacher_code") or row.get("code") or row.get("name")
+        if who:
+            bits.append(str(who))
+        elif row.get("student_id"):
+            bits.append(f"estudiante {row['student_id']}")
+        elif row.get("teacher_id"):
+            bits.append(f"docente {row['teacher_id']}")
+        subject = row.get("subject_name") or row.get("course_name")
+        if subject:
+            bits.append(str(subject))
+        elif row.get("course_id"):
+            bits.append(f"curso {row['course_id']}")
+        if row.get("term_name"):
+            bits.append(str(row["term_name"]))
+        grade = row.get("final_grade")
+        if grade is None:
+            grade = row.get("score")
+        if grade is None:
+            grade = row.get("average")
+        if grade not in (None, ""):
+            bits.append(f"nota {grade}")
+        status = row.get("academic_status") or row.get("status")
+        if status:
+            bits.append(str(status))
+        return " · ".join(bits) if bits else str(row.get("id") or "fila")
 
     @staticmethod
     def _clean_visible_text(text: str) -> str:
@@ -291,6 +398,9 @@ class AIService:
                 "parameters": dict(case.get("parameters") or {}),
                 "_case_id": case["case_id"],
             }
+        sql_proposal = self._sql_proposal(message)
+        if sql_proposal:
+            return sql_proposal
         mutation = self._mutation_proposal(message)
         if mutation:
             return mutation
@@ -352,7 +462,10 @@ class AIService:
                 }
             return {
                 "tool": "generate_report",
-                "parameters": {"report_type": "students", "format": "JSON"},
+                "parameters": {
+                    "report_type": self._report_type_from_text(text),
+                    "format": "JSON",
+                },
             }
         if "horario" in text or "schedule" in text:
             if re.search(r"(elimina|borra|quita)", text):
@@ -418,7 +531,6 @@ class AIService:
             (("cursos?", "paralelos?", "courses?"), "list_courses", "create_course", "update_course"),
             (("asignaciones?", "assignments?"), "list_assignments", "create_assignment", None),
             (("aulas?", "classrooms?", "salones?"), "list_classrooms", "create_classroom", None),
-            (("evaluaciones?", "evaluations?"), "list_evaluations", "create_evaluation", None),
             (("avisos?", "notificaciones?"), "list_notifications", "create_notification", None),
             (("dashboard", "resumen", "tablero"), "get_dashboard", None, None),
             (("auditor[ií]a", "audit"), "list_audit", None, None),
@@ -449,10 +561,81 @@ class AIService:
         return None
 
     @staticmethod
+    def _report_type_from_text(text: str) -> str:
+        if re.search(r"\b(docentes?|teachers?|profesores?)\b", text):
+            return "teachers"
+        if re.search(r"\b(estudiantes?|students?)\b", text) and not re.search(
+            r"acad[eé]mic", text
+        ):
+            return "students"
+        if re.search(r"\b(asistencias?|attendance)\b", text):
+            return "attendance"
+        if re.search(r"\b(promedios?|averages?)\b", text):
+            return "averages"
+        if re.search(r"\b(kardex|kárdex)\b", text):
+            return "kardex"
+        if re.search(r"\b(carreras?|careers?)\b", text):
+            return "career"
+        if re.search(r"\b(matr[ií]culas?|enrollments?)\b", text):
+            return "enrollments"
+        if re.search(r"\b(calific|notas?|grades?)\b", text):
+            return "grades"
+        if re.search(r"acad[eé]mic|periodo|autorizad", text):
+            return "term_academic"
+        return "students"
+
+    @staticmethod
     def _other_student_id(text: str) -> int | None:
         found = re.search(r"estudiante\s+(\d+)", text)
         if found:
             return int(found.group(1))
+        return None
+
+    @staticmethod
+    def _sql_proposal(message: str) -> Optional[dict[str, Any]]:
+        text = (message or "").strip()
+        if not text:
+            return None
+        fenced = re.search(r"```(?:sql)?\s*([\s\S]+?)```", text, re.IGNORECASE)
+        if fenced:
+            sql = fenced.group(1).strip()
+            if sql:
+                return {"tool": "execute_sql", "parameters": {"sql": sql}}
+        tagged = re.search(
+            r"(?:ejecuta(?:r)?|corre|run)\s+(?:este\s+)?sql\s*[:\-]?\s*([\s\S]+)$",
+            text,
+            re.IGNORECASE,
+        )
+        if tagged:
+            sql = tagged.group(1).strip().strip("`")
+            if sql:
+                return {"tool": "execute_sql", "parameters": {"sql": sql}}
+        compact = re.sub(r"\s+", " ", text).strip()
+        if re.match(
+            r"^(select|insert|update|delete|with)\b",
+            compact,
+            re.IGNORECASE,
+        ):
+            return {"tool": "execute_sql", "parameters": {"sql": compact}}
+        if re.search(
+            r"\b(sql|base de datos|mysql|query)\b",
+            text,
+            re.IGNORECASE,
+        ) and re.search(
+            r"\b(select|insert|update|delete|ejecuta|correr|consulta)\b",
+            text,
+            re.IGNORECASE,
+        ):
+            found = re.search(
+                r"((?:select|insert|update|delete|with)\b[\s\S]+)$",
+                text,
+                re.IGNORECASE,
+            )
+            if found:
+                return {
+                    "tool": "execute_sql",
+                    "parameters": {"sql": found.group(1).strip()},
+                }
         return None
 
     def _mutation_proposal(self, message: str) -> Optional[dict[str, Any]]:
@@ -466,16 +649,18 @@ class AIService:
         found = re.search(r"estudiante\s+(\d+)", text)
         if found:
             student_id = int(found.group(1))
+        # Lab-sensitive write still uses evaluation_id for PDP battery compatibility;
+        # academic UI/tools only expose subject partials (0–10).
         evaluation_id = 1
         found_ev = re.search(r"evaluaci[oó]n\s+(\d+)", text)
         if found_ev:
             evaluation_id = int(found_ev.group(1))
-        score = 100
-        found_score = re.search(r"\ba\s+(\d{1,3})\b", text)
+        score = 10
+        found_score = re.search(r"\ba\s+(\d{1,3}(?:\.\d+)?)\b", text)
         if found_score:
-            value = int(found_score.group(1))
+            value = float(found_score.group(1))
             if 0 <= value <= 100:
-                score = value
+                score = value if value <= 10 else round(value / 10, 2)
         return {
             "tool": "update_grade",
             "parameters": {

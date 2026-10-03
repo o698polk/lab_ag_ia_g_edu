@@ -2,9 +2,20 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=/ui/pages/home.html" />
   <title>SIGA</title>
-  <script>location.replace("/ui/pages/home.html");</script>
+  <script>
+    (function () {
+      var dest = "/ui/pages/home.html";
+      try {
+        var raw = localStorage.getItem("siga.lab.session");
+        var data = raw ? JSON.parse(raw) : null;
+        if (data && (data.accessToken || data.refreshToken)) {
+          dest = "/ui/pages/dashboard/dashboard.html";
+        }
+      } catch (e) {}
+      location.replace(dest);
+    })();
+  </script>
 </head>
 <body><p><a href="/ui/pages/home.html">Ir a SIGA</a></p></body>
 </html>

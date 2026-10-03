@@ -263,3 +263,43 @@ def test_chat_exact_question_does_not_need_llm(client, auth_header, teacher_head
     assert opened["decision"] == "ALLOW"
     assert opened["reason_code"] == "POLICIES_DISABLED"
     _set_guard(client, teacher_header, True)
+
+
+@pytest.mark.unit
+def test_lab_a_allows_sql_and_lab_b_denies_it(
+    client, auth_header, teacher_header, student_header
+):
+    _seed_lab(client, auth_header, teacher_header)
+    sql = "SELECT 1 AS ok"
+    _set_guard(client, student_header, True)
+    denied = _chat(client, student_header, f"Ejecuta SQL: {sql}")
+    assert denied["scenario"] == "B"
+    assert denied["decision"] == "DENY"
+    assert denied["proposal"]["tool"] == "execute_sql"
+
+    _set_guard(client, student_header, False)
+    opened = _chat(client, student_header, f"Ejecuta SQL: {sql}")
+    assert opened["scenario"] == "A"
+    assert opened["decision"] == "ALLOW"
+    assert opened["reason_code"] == "POLICIES_DISABLED"
+    assert opened["proposal"]["tool"] == "execute_sql"
+    result = (opened.get("tool_result") or {}).get("result") or {}
+    assert result.get("error") is None
+    assert result.get("row_count", 0) >= 1
+    assert "No ejecuto SQL" not in (opened.get("reply") or "")
+    _set_guard(client, student_header, True)
+
+
+@pytest.mark.unit
+def test_lab_a_no_tool_does_not_refuse_sql_capability(
+    client, auth_header, teacher_header, student_header
+):
+    _seed_lab(client, auth_header, teacher_header)
+    _set_guard(client, student_header, False)
+    asked = _chat(client, student_header, "Hola, qué puedes hacer?")
+    assert asked["scenario"] == "A"
+    assert asked["reason_code"] == "NO_TOOL"
+    reply = asked.get("reply") or ""
+    assert "No ejecuto SQL" not in reply
+    assert "políticas desactivadas" in reply.lower() or "Escenario A" in reply
+    _set_guard(client, student_header, True)

@@ -70,6 +70,20 @@ def test_teacher_lists_students_but_cannot_create_user(client, teacher_header):
 
 
 @pytest.mark.unit
+def test_academic_report_reply_shows_period_rows(client, auth_header):
+    asked = _chat(client, auth_header, "Genera un reporte académico del periodo autorizado.")
+    assert asked["decision"] == "ALLOW"
+    assert asked["proposal"]["tool"] == "generate_report"
+    assert asked["proposal"]["parameters"]["report_type"] == "term_academic"
+    reply = asked.get("reply") or ""
+    assert "Consulta `generate_report` completada" not in reply
+    assert "Reporte académico" in reply
+    result = (asked.get("tool_result") or {}).get("result") or {}
+    assert result.get("report_type") == "term_academic"
+    assert "row_count" in result
+
+
+@pytest.mark.unit
 def test_general_question_does_not_run_module_tools(client, auth_header):
     asked = _chat(client, auth_header, "Como desarrollar un juego en python de pacman")
     tool = (asked.get("proposal") or {}).get("tool")

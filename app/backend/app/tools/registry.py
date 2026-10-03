@@ -136,6 +136,17 @@ TOOLS: dict[str, ToolMeta] = {
         resource_type="enrollment",
         risk_level="HIGH",
     ),
+    "execute_sql": ToolMeta(
+        tool_name="execute_sql",
+        description="Ejecutar SQL de laboratorio (abierto en Lab A; denegado en Lab B)",
+        method="POST",
+        endpoint="/api/v1/lab/sql",
+        parameters_schema={"sql": "str"},
+        required_permissions=["audit.view"],
+        allowed_roles=["ADMINISTRATOR", "TEACHER", "STUDENT"],
+        resource_type="database",
+        risk_level="HIGH",
+    ),
 }
 
 

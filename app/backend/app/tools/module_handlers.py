@@ -336,42 +336,6 @@ def _dispatch(db: Session, tool: str, params: dict, current: CurrentUser, *, byp
     if tool == "delete_schedule":
         sch = ops.delete_schedule(int(params["schedule_id"]))
         return {"id": sch.id, "status": "DELETED"}
-    if tool == "list_evaluations":
-        from app.models.evaluation import Evaluation
-        from app.services.evaluation_service import EvaluationService
-
-        course_id = _opt_int(params, "course_id")
-        if course_id:
-            rows = EvaluationService(db).list_evaluations(course_id)
-        else:
-            rows = list(db.scalars(select(Evaluation).order_by(Evaluation.id.asc()).limit(50)))
-        return _filter(
-            [
-                {
-                    "id": ev.id,
-                    "course_id": ev.course_id,
-                    "name": ev.name,
-                    "weight_percent": str(ev.weight_percent),
-                    "status": ev.status,
-                }
-                for ev in rows
-            ],
-            params,
-        )
-    if tool == "create_evaluation":
-        from app.services.evaluation_service import EvaluationService
-
-        svc = EvaluationService(db)
-        as_admin = bypass or "ADMINISTRATOR" in current.roles
-        teacher = None if as_admin else svc.teacher_for_user(current.user.id)
-        ev = svc.create_evaluation(
-            teacher=teacher,
-            course_id=int(params["course_id"]),
-            name=str(params["name"]),
-            weight_percent=Decimal(str(params.get("weight_percent") or "20")),
-            as_admin=as_admin,
-        )
-        return {"id": ev.id, "name": ev.name, "course_id": ev.course_id, "status": ev.status}
     if tool == "create_attendance_session":
         from app.services.evaluation_service import EvaluationService
 

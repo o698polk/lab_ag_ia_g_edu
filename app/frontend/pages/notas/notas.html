@@ -56,8 +56,8 @@
 
         <div class="module-head">
           <h2>Notas</h2>
-          <p data-roles="TEACHER,ADMINISTRATOR">Registre primer y segundo parcial. El promedio y el estado se calculan automáticamente. La recuperación solo se habilita si el promedio es menor a 7.00.</p>
-          <p data-roles="STUDENT">Consulta tus materias, parciales, promedio, recuperación y estado. No puedes modificar calificaciones.</p>
+          <p data-roles="TEACHER,ADMINISTRATOR">Solo se registran las notas finales de cada parcial por materia. La nota final se obtiene de ambos parciales. Si es menor a 7.00 debe calificar el supletorio; con 7.00 o más el estudiante aprueba. No hay gestión de evaluaciones ni deberes.</p>
+          <p data-roles="STUDENT">Consulta tus materias, parciales, nota final, supletorio y estado. No puedes modificar calificaciones.</p>
         </div>
 
         <section class="table-wrap mb-3" data-roles="STUDENT" aria-labelledby="my-subjects-title">
@@ -88,8 +88,8 @@
                 <th scope="col">Materia</th>
                 <th scope="col">1.er Parcial</th>
                 <th scope="col">2.º Parcial</th>
-                <th scope="col">Promedio</th>
-                <th scope="col">Recuperación</th>
+                <th scope="col">Nota final</th>
+                <th scope="col">Supletorio</th>
                 <th scope="col">Estado</th>
               </tr>
             </thead>
@@ -141,8 +141,8 @@
                 <th scope="col">Estudiante</th>
                 <th scope="col">1.er Parcial</th>
                 <th scope="col">2.º Parcial</th>
-                <th scope="col">Promedio</th>
-                <th scope="col">Recuperación</th>
+                <th scope="col">Nota final</th>
+                <th scope="col">Supletorio</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>

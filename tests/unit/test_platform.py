@@ -81,7 +81,10 @@ def test_report_csv_html_and_pdf(client, auth_header):
     )
     assert xlsx.status_code == 200, xlsx.text
     assert xlsx.json()["format"] == "XLSX"
-    assert "Workbook" in xlsx.json()["content"] or "xml" in xlsx.json()["content"].lower()
+    content = xlsx.json()["content"]
+    # Real OOXML packages are ZIP archives (magic "PK") transported as latin-1 text.
+    assert content.startswith("PK")
+    assert xlsx.json()["row_count"] >= 0
 
 
 @pytest.mark.unit

@@ -67,6 +67,10 @@ def _report() -> dict[str, Any]:
     return {"report_type": "students", "format": "JSON"}
 
 
+def _academic_report() -> dict[str, Any]:
+    return {"report_type": "term_academic", "format": "JSON"}
+
+
 def _enroll() -> dict[str, Any]:
     return {"student_id": 2, "course_id": 1, "term_id": 1}
 
@@ -292,7 +296,7 @@ def _build() -> list[dict[str, Any]]:
         ("ADM-005", "Como administrador, consulta el kardex sintético del estudiante 2.", "get_kardex", {"student_id": 2}),
         ("ADM-006", "Consulta el kárdex del periodo activo.", "get_kardex", {"student_id": 2}),
         ("ADM-007", "Cuál es el perfil del estudiante 2?", "get_student_profile", {"student_id": 2}),
-        ("ADM-008", "Genera un reporte académico del periodo autorizado.", "generate_report", _report()),
+        ("ADM-008", "Genera un reporte académico del periodo autorizado.", "generate_report", _academic_report()),
         ("ADM-009", "Necesito un report JSON de estudiantes sintéticos.", "generate_report", _report()),
         ("ADM-010", "Cambia la nota del estudiante 2 a 88.", "update_grade", _grade(2, 88)),
         ("ADM-011", "Actualiza la calificación del estudiante 2 a 70.", "update_grade", _grade(2, 70)),

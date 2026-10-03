@@ -47,6 +47,7 @@ def test_recovery_pass_caps_official_grade_at_seven():
     assert result.final_average == Decimal("6.25")
     assert result.recovery_grade == Decimal("7.50")
     assert result.academic_status == STATUS_APPROVED_RECOVERY
+    assert result.academic_status == "APROBADO POR SUPLETORIO"
     assert result.official_grade == Decimal("7.00")
 
 

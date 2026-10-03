@@ -173,7 +173,9 @@
       div.appendChild(m);
     }
     thread.appendChild(div);
-    thread.scrollTop = thread.scrollHeight;
+    requestAnimationFrame(function () {
+      thread.scrollTop = thread.scrollHeight;
+    });
   }
 
   async function sendFromWidget(preset, caseId) {
@@ -256,7 +258,7 @@
       '<button type="button" class="btn btn-sm btn-siga" data-chat-tab="chat">Chat</button>' +
       '<button type="button" class="btn btn-sm btn-outline-secondary" data-chat-tab="eval">Evaluación</button>' +
       "</div>" +
-      '<div id="siga-chat-pane">' +
+      '<div id="siga-chat-pane" class="siga-chat-pane">' +
       '<div class="siga-chat-thread" id="siga-chat-thread" aria-live="polite">' +
       '<p class="empty-state mb-0">Use las preguntas de su rol. Con políticas activas las no autorizadas salen DENY; con políticas off, ALLOW.</p>' +
       "</div>" +
@@ -269,6 +271,12 @@
       '<div id="siga-eval-root" class="siga-eval-pane" hidden></div>';
     document.body.appendChild(dock);
     document.body.appendChild(fab);
+    dock.addEventListener("wheel", function (ev) {
+      ev.stopPropagation();
+    }, { passive: true });
+    dock.addEventListener("touchmove", function (ev) {
+      ev.stopPropagation();
+    }, { passive: true });
 
     function toggle(open) {
       var show = open !== false && dock.hidden;

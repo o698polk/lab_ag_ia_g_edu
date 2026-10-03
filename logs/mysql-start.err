@@ -1,0 +1,53 @@
+2026-10-03 11:06:59 0 [Note] Using unique option prefix 'key_buffer' is error-prone and can break in the future. Please use the full name 'key_buffer_size' instead.
+2026-10-03 11:06:59 0 [Note] Starting MariaDB 10.4.32-MariaDB source revision c4143f909528e3fab0677a28631d10389354c491 as process 21296
+2026-10-03 11:06:59 0 [Note] InnoDB: Mutexes and rw_locks use Windows interlocked functions
+2026-10-03 11:06:59 0 [Note] InnoDB: Uses event mutexes
+2026-10-03 11:06:59 0 [Note] InnoDB: Compressed tables use zlib 1.3
+2026-10-03 11:06:59 0 [Note] InnoDB: Number of pools: 1
+2026-10-03 11:06:59 0 [Note] InnoDB: Using SSE2 crc32 instructions
+2026-10-03 11:06:59 0 [Note] InnoDB: Initializing buffer pool, total size = 16M, instances = 1, chunk size = 16M
+2026-10-03 11:06:59 0 [Note] InnoDB: Completed initialization of buffer pool
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=3] log sequence number 468396932 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=507] log sequence number 181215256 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=404] log sequence number 181215178 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=438] log sequence number 41462146 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=460] log sequence number 446550576 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=508] log sequence number 429017289 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=509] log sequence number 429017289 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=340] log sequence number 467780960 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Page [page id: space=0, page number=359] log sequence number 595234432 is in the future! Current system log sequence number 20484176.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Your database may be corrupt or you may have copied the InnoDB tablespace but not the InnoDB log files. Please refer to https://mariadb.com/kb/en/library/innodb-recovery-modes/ for information about forcing recovery.
+2026-10-03 11:06:59 0 [Note] InnoDB: 128 out of 128 rollback segments are active.
+2026-10-03 11:06:59 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2026-10-03 11:06:59 0 [Note] InnoDB: Setting file '\xampp\mysql\data\ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2026-10-03 11:06:59 0 [Note] InnoDB: File '\xampp\mysql\data\ibtmp1' size is now 12 MB.
+2026-10-03 11:06:59 0 [Note] InnoDB: 10.4.32 started; log sequence number 20484167; transaction id 470495
+2026-10-03 11:06:59 0 [Note] InnoDB: Loading buffer pool(s) from C:\xampp\mysql\data\ib_buffer_pool
+2026-10-03 11:06:59 0 [Note] Plugin 'FEEDBACK' is disabled.
+2026-10-03 11:06:59 0 [Note] Server socket created on IP: '::'.
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Database page corruption on disk or a failed file read of tablespace mysql/transaction_registry page [page id: space=3, page number=0]. You may have to recover from a backup.
+2026-10-03 11:06:59 0 [Note] InnoDB: Page dump (16384 bytes):
+2026-10-03 11:06:59 0 [Note] InnoDB: ecefa36b00000000000000000000000000000000000203bc0008000000000000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000030000000300000000000000090000004000000021000000070000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000ffffffff0000ffffffff00000000000100000000009e00000000009e0000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000ffffffff0000ffffffff0000000000000000000900000000ffffffff0000
+2026-10-03 11:06:59 0 [Note] InnoDB: ffffffff0000000000010000000200260000000200260000000000000000ffff
+2026-10-03 11:06:59 0 [Note] InnoDB: ffff0000ffffffff000000000002aaeaffffffffffffffffffffffffffff0000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000000000000000000000000000000000000000000000000000000000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000000000000000000000000000000000000000000000000000000000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000000000000000000000000000000000000000000000000000000000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000000000000000000000000000000000000000000000000000000000
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000000000000000000000000000000000000000000000000000000000
+2026-10-03 11:06:59 0 [ERROR] Fatal error: Can't open and lock privilege tables: Incorrect file format 'roles_mapping'
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000000000000000000000000000000000000000000000000000000000
+2026-10-03 11:06:59 0 [ERROR] Aborting
+2026-10-03 11:06:59 0 [Note] InnoDB: 0000000000000000000000000000000000000000000000000000000000000000
+2026-10-03 11:06:59 0 [ERROR] InnoDB: Background Page read failed to read or decrypt [page id: space=3, page number=0]

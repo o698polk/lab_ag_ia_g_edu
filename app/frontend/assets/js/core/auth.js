@@ -175,11 +175,13 @@ async function logout() {
 }
 
 function redirectIfAuthed() {
-  if (!window.SigaApi) return;
+  if (!window.SigaApi) return false;
   SigaApi.applyStoredTokens();
   if (SigaApi.state.accessToken || SigaApi.state.refreshToken) {
     location.replace("/ui/pages/dashboard/dashboard.html");
+    return true;
   }
+  return false;
 }
 
 window.SigaAuth = {

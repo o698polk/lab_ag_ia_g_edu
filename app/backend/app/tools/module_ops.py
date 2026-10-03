@@ -105,8 +105,6 @@ MODULE_TOOLS: dict[str, ToolMeta] = {
         _t("create_classroom", "Crear aula", "POST", "/classrooms", {"code": "str", "name": "str", "capacity": "int?"}, ["schedules.create"], A, "classroom", "HIGH"),
         _t("create_schedule", "Crear horario", "POST", "/schedules", {"course_id": "int", "teacher_id": "int", "classroom_id": "int", "term_id": "int", "day_of_week": "str", "start_time": "str", "end_time": "str"}, ["schedules.create"], A, "schedule", "HIGH"),
         _t("delete_schedule", "Eliminar horario", "DELETE", "/schedules/{id}", {"schedule_id": "int"}, ["schedules.delete"], A, "schedule", "HIGH"),
-        _t("list_evaluations", "Listar evaluaciones", "GET", "/evaluations", {**_FILTER, "course_id": "int?"}, ["grades.view"], AT, "evaluation"),
-        _t("create_evaluation", "Crear evaluación", "POST", "/evaluations", {"course_id": "int", "name": "str", "weight_percent": "str"}, ["grades.update"], AT, "evaluation", "HIGH"),
         _t("create_attendance_session", "Crear sesión de asistencia", "POST", "/attendance/sessions", {"course_id": "int", "session_date": "str", "topic": "str?"}, ["attendance.update"], AT, "attendance", "HIGH"),
         _t("list_notifications", "Listar avisos", "GET", "/notifications", {"unread_only": "bool?"}, ["notifications.view"], ATS, "notification"),
         _t("create_notification", "Crear aviso", "POST", "/notifications", {"title": "str", "body": "str", "user_id": "int?"}, ["notifications.create"], A, "notification", "HIGH"),
