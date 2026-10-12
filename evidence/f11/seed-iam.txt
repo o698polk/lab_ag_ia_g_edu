@@ -1,3 +1,0 @@
-﻿OK: IAM seed completed
-  users: admin / teacher1 / student1
-  default passwords: Admin123! / Teacher123! / Student123!

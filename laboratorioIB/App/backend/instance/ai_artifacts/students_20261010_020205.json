@@ -1,0 +1,3376 @@
+{
+  "title": "Reporte de Estudiantes",
+  "generated_at": "2026-10-10T02:02:05.373898",
+  "filters": {},
+  "headers": [
+    "Código",
+    "Nombre",
+    "Email",
+    "Carrera",
+    "Teléfono",
+    "Estado"
+  ],
+  "rows": [
+    [
+      "E-0420",
+      "Carolina Mendoza",
+      "est0420@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000420",
+      "active"
+    ],
+    [
+      "E-0419",
+      "Lucía Herrera",
+      "est0419@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000419",
+      "active"
+    ],
+    [
+      "E-0418",
+      "José Romero",
+      "est0418@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000418",
+      "active"
+    ],
+    [
+      "E-0417",
+      "Ana Gómez",
+      "est0417@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000417",
+      "active"
+    ],
+    [
+      "E-0416",
+      "Lucía Reyes",
+      "est0416@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000416",
+      "active"
+    ],
+    [
+      "E-0415",
+      "Patricia Chávez",
+      "est0415@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000415",
+      "active"
+    ],
+    [
+      "E-0414",
+      "Sebastián Medina",
+      "est0414@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000414",
+      "active"
+    ],
+    [
+      "E-0413",
+      "Natalia García",
+      "est0413@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000413",
+      "active"
+    ],
+    [
+      "E-0412",
+      "Patricia Chávez",
+      "est0412@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000412",
+      "active"
+    ],
+    [
+      "E-0411",
+      "Lucía Medina",
+      "est0411@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000411",
+      "active"
+    ],
+    [
+      "E-0410",
+      "Andrea Cruz",
+      "est0410@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000410",
+      "active"
+    ],
+    [
+      "E-0409",
+      "Luis Sánchez",
+      "est0409@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000409",
+      "active"
+    ],
+    [
+      "E-0408",
+      "Elena Cruz",
+      "est0408@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000408",
+      "active"
+    ],
+    [
+      "E-0407",
+      "Paula Gutiérrez",
+      "est0407@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000407",
+      "active"
+    ],
+    [
+      "E-0406",
+      "Pedro Cruz",
+      "est0406@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000406",
+      "active"
+    ],
+    [
+      "E-0405",
+      "Valentina Martínez",
+      "est0405@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000405",
+      "active"
+    ],
+    [
+      "E-0404",
+      "Sofía Jiménez",
+      "est0404@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000404",
+      "active"
+    ],
+    [
+      "E-0403",
+      "Lucía Jiménez",
+      "est0403@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000403",
+      "active"
+    ],
+    [
+      "E-0402",
+      "Sofía Ramírez",
+      "est0402@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000402",
+      "active"
+    ],
+    [
+      "E-0401",
+      "María González",
+      "est0401@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000401",
+      "active"
+    ],
+    [
+      "E-0400",
+      "Carolina Gutiérrez",
+      "est0400@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000400",
+      "active"
+    ],
+    [
+      "E-0399",
+      "Paula Rivera",
+      "est0399@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000399",
+      "active"
+    ],
+    [
+      "E-0398",
+      "Andrés Torres",
+      "est0398@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000398",
+      "active"
+    ],
+    [
+      "E-0397",
+      "Natalia Flores",
+      "est0397@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000397",
+      "active"
+    ],
+    [
+      "E-0396",
+      "Elena Martínez",
+      "est0396@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000396",
+      "active"
+    ],
+    [
+      "E-0395",
+      "Andrés Torres",
+      "est0395@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000395",
+      "active"
+    ],
+    [
+      "E-0394",
+      "Jorge Vargas",
+      "est0394@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000394",
+      "active"
+    ],
+    [
+      "E-0393",
+      "Patricia Ortiz",
+      "est0393@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000393",
+      "active"
+    ],
+    [
+      "E-0392",
+      "Camila Romero",
+      "est0392@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000392",
+      "active"
+    ],
+    [
+      "E-0391",
+      "Andrea Vargas",
+      "est0391@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000391",
+      "active"
+    ],
+    [
+      "E-0390",
+      "Patricia Ramírez",
+      "est0390@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000390",
+      "active"
+    ],
+    [
+      "E-0389",
+      "Elena Torres",
+      "est0389@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000389",
+      "active"
+    ],
+    [
+      "E-0388",
+      "Sebastián Reyes",
+      "est0388@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000388",
+      "active"
+    ],
+    [
+      "E-0387",
+      "Diego Moreno",
+      "est0387@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000387",
+      "active"
+    ],
+    [
+      "E-0386",
+      "Elena Medina",
+      "est0386@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000386",
+      "active"
+    ],
+    [
+      "E-0385",
+      "Felipe Gutiérrez",
+      "est0385@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000385",
+      "active"
+    ],
+    [
+      "E-0384",
+      "Pedro Mendoza",
+      "est0384@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000384",
+      "active"
+    ],
+    [
+      "E-0383",
+      "Carolina Ortiz",
+      "est0383@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000383",
+      "active"
+    ],
+    [
+      "E-0382",
+      "Andrea Moreno",
+      "est0382@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000382",
+      "active"
+    ],
+    [
+      "E-0381",
+      "Elena Ramos",
+      "est0381@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000381",
+      "active"
+    ],
+    [
+      "E-0380",
+      "Patricia Medina",
+      "est0380@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000380",
+      "active"
+    ],
+    [
+      "E-0379",
+      "Ricardo Rivera",
+      "est0379@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000379",
+      "active"
+    ],
+    [
+      "E-0378",
+      "Daniela Gutiérrez",
+      "est0378@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000378",
+      "active"
+    ],
+    [
+      "E-0377",
+      "Elena Castillo",
+      "est0377@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000377",
+      "active"
+    ],
+    [
+      "E-0376",
+      "Sofía Alvarez",
+      "est0376@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000376",
+      "active"
+    ],
+    [
+      "E-0375",
+      "Carlos Morales",
+      "est0375@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000375",
+      "active"
+    ],
+    [
+      "E-0374",
+      "Andrés Herrera",
+      "est0374@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000374",
+      "active"
+    ],
+    [
+      "E-0373",
+      "Luis Gutiérrez",
+      "est0373@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000373",
+      "active"
+    ],
+    [
+      "E-0372",
+      "Daniela Morales",
+      "est0372@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000372",
+      "active"
+    ],
+    [
+      "E-0371",
+      "Roberto Jiménez",
+      "est0371@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000371",
+      "active"
+    ],
+    [
+      "E-0370",
+      "Andrés Pérez",
+      "est0370@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000370",
+      "active"
+    ],
+    [
+      "E-0369",
+      "Patricia Cruz",
+      "est0369@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000369",
+      "active"
+    ],
+    [
+      "E-0368",
+      "Carolina López",
+      "est0368@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000368",
+      "active"
+    ],
+    [
+      "E-0367",
+      "Sebastián Romero",
+      "est0367@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000367",
+      "active"
+    ],
+    [
+      "E-0366",
+      "Carolina Romero",
+      "est0366@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000366",
+      "active"
+    ],
+    [
+      "E-0365",
+      "Natalia García",
+      "est0365@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000365",
+      "active"
+    ],
+    [
+      "E-0364",
+      "Sofía Vargas",
+      "est0364@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000364",
+      "active"
+    ],
+    [
+      "E-0363",
+      "Lucía Ramírez",
+      "est0363@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000363",
+      "active"
+    ],
+    [
+      "E-0362",
+      "Lucía Reyes",
+      "est0362@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000362",
+      "active"
+    ],
+    [
+      "E-0361",
+      "Natalia Jiménez",
+      "est0361@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000361",
+      "active"
+    ],
+    [
+      "E-0360",
+      "Isabel Sánchez",
+      "est0360@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000360",
+      "active"
+    ],
+    [
+      "E-0359",
+      "Carolina Vargas",
+      "est0359@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000359",
+      "active"
+    ],
+    [
+      "E-0358",
+      "Elena Cruz",
+      "est0358@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000358",
+      "active"
+    ],
+    [
+      "E-0357",
+      "Patricia Martínez",
+      "est0357@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000357",
+      "active"
+    ],
+    [
+      "E-0356",
+      "Ricardo Herrera",
+      "est0356@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000356",
+      "active"
+    ],
+    [
+      "E-0355",
+      "Andrés Reyes",
+      "est0355@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000355",
+      "active"
+    ],
+    [
+      "E-0354",
+      "Ana Rodríguez",
+      "est0354@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000354",
+      "active"
+    ],
+    [
+      "E-0353",
+      "Valentina González",
+      "est0353@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000353",
+      "active"
+    ],
+    [
+      "E-0352",
+      "Andrés Alvarez",
+      "est0352@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000352",
+      "active"
+    ],
+    [
+      "E-0351",
+      "Héctor Flores",
+      "est0351@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000351",
+      "active"
+    ],
+    [
+      "E-0350",
+      "Patricia Ramírez",
+      "est0350@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000350",
+      "active"
+    ],
+    [
+      "E-0349",
+      "María Mendoza",
+      "est0349@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000349",
+      "active"
+    ],
+    [
+      "E-0348",
+      "Ricardo Rivera",
+      "est0348@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000348",
+      "active"
+    ],
+    [
+      "E-0347",
+      "Héctor Vargas",
+      "est0347@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000347",
+      "active"
+    ],
+    [
+      "E-0346",
+      "José Ortiz",
+      "est0346@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000346",
+      "active"
+    ],
+    [
+      "E-0345",
+      "Héctor Martínez",
+      "est0345@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000345",
+      "active"
+    ],
+    [
+      "E-0344",
+      "Óscar Pérez",
+      "est0344@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000344",
+      "active"
+    ],
+    [
+      "E-0343",
+      "Carolina Alvarez",
+      "est0343@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000343",
+      "active"
+    ],
+    [
+      "E-0342",
+      "Jorge Alvarez",
+      "est0342@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000342",
+      "active"
+    ],
+    [
+      "E-0341",
+      "Valentina Ortiz",
+      "est0341@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000341",
+      "active"
+    ],
+    [
+      "E-0340",
+      "Elena Castillo",
+      "est0340@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000340",
+      "active"
+    ],
+    [
+      "E-0339",
+      "Elena Morales",
+      "est0339@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000339",
+      "active"
+    ],
+    [
+      "E-0338",
+      "Gabriela Rivera",
+      "est0338@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000338",
+      "active"
+    ],
+    [
+      "E-0337",
+      "Isabel Ramos",
+      "est0337@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000337",
+      "active"
+    ],
+    [
+      "E-0336",
+      "Pedro Alvarez",
+      "est0336@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000336",
+      "active"
+    ],
+    [
+      "E-0335",
+      "José Sánchez",
+      "est0335@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000335",
+      "active"
+    ],
+    [
+      "E-0334",
+      "Ana Flores",
+      "est0334@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000334",
+      "active"
+    ],
+    [
+      "E-0333",
+      "Fernando Mendoza",
+      "est0333@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000333",
+      "active"
+    ],
+    [
+      "E-0332",
+      "José Díaz",
+      "est0332@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000332",
+      "active"
+    ],
+    [
+      "E-0331",
+      "Ricardo Chávez",
+      "est0331@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000331",
+      "active"
+    ],
+    [
+      "E-0330",
+      "Carolina Pérez",
+      "est0330@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000330",
+      "active"
+    ],
+    [
+      "E-0329",
+      "Héctor Moreno",
+      "est0329@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000329",
+      "active"
+    ],
+    [
+      "E-0328",
+      "Héctor Díaz",
+      "est0328@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000328",
+      "active"
+    ],
+    [
+      "E-0327",
+      "Valentina Cruz",
+      "est0327@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000327",
+      "active"
+    ],
+    [
+      "E-0326",
+      "Fernando González",
+      "est0326@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000326",
+      "active"
+    ],
+    [
+      "E-0325",
+      "Natalia Flores",
+      "est0325@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000325",
+      "active"
+    ],
+    [
+      "E-0324",
+      "Paula Díaz",
+      "est0324@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000324",
+      "active"
+    ],
+    [
+      "E-0323",
+      "Héctor Cruz",
+      "est0323@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000323",
+      "active"
+    ],
+    [
+      "E-0322",
+      "Daniela Flores",
+      "est0322@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000322",
+      "active"
+    ],
+    [
+      "E-0321",
+      "Carolina Flores",
+      "est0321@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000321",
+      "active"
+    ],
+    [
+      "E-0320",
+      "Carlos Moreno",
+      "est0320@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000320",
+      "active"
+    ],
+    [
+      "E-0319",
+      "Héctor Herrera",
+      "est0319@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000319",
+      "active"
+    ],
+    [
+      "E-0318",
+      "Ricardo Rivera",
+      "est0318@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000318",
+      "active"
+    ],
+    [
+      "E-0317",
+      "Héctor Rivera",
+      "est0317@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000317",
+      "active"
+    ],
+    [
+      "E-0316",
+      "Pedro Martínez",
+      "est0316@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000316",
+      "active"
+    ],
+    [
+      "E-0315",
+      "Valentina Gómez",
+      "est0315@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000315",
+      "active"
+    ],
+    [
+      "E-0314",
+      "Óscar Castillo",
+      "est0314@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000314",
+      "active"
+    ],
+    [
+      "E-0313",
+      "Óscar Moreno",
+      "est0313@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000313",
+      "active"
+    ],
+    [
+      "E-0312",
+      "Fernando Castillo",
+      "est0312@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000312",
+      "active"
+    ],
+    [
+      "E-0311",
+      "Felipe Alvarez",
+      "est0311@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000311",
+      "active"
+    ],
+    [
+      "E-0310",
+      "Ana Ortiz",
+      "est0310@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000310",
+      "active"
+    ],
+    [
+      "E-0309",
+      "Natalia Cruz",
+      "est0309@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000309",
+      "active"
+    ],
+    [
+      "E-0308",
+      "Camila Rodríguez",
+      "est0308@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000308",
+      "active"
+    ],
+    [
+      "E-0307",
+      "Isabel Sánchez",
+      "est0307@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000307",
+      "active"
+    ],
+    [
+      "E-0306",
+      "Lucía Medina",
+      "est0306@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000306",
+      "active"
+    ],
+    [
+      "E-0305",
+      "Daniela López",
+      "est0305@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000305",
+      "active"
+    ],
+    [
+      "E-0304",
+      "Pedro Ramos",
+      "est0304@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000304",
+      "active"
+    ],
+    [
+      "E-0303",
+      "Roberto Rivera",
+      "est0303@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000303",
+      "active"
+    ],
+    [
+      "E-0302",
+      "Miguel Moreno",
+      "est0302@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000302",
+      "active"
+    ],
+    [
+      "E-0301",
+      "Ricardo Cruz",
+      "est0301@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000301",
+      "active"
+    ],
+    [
+      "E-0300",
+      "Luis López",
+      "est0300@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000300",
+      "active"
+    ],
+    [
+      "E-0299",
+      "Isabel Torres",
+      "est0299@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000299",
+      "active"
+    ],
+    [
+      "E-0298",
+      "Camila Pérez",
+      "est0298@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000298",
+      "active"
+    ],
+    [
+      "E-0297",
+      "Carlos Medina",
+      "est0297@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000297",
+      "active"
+    ],
+    [
+      "E-0296",
+      "Paula García",
+      "est0296@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000296",
+      "active"
+    ],
+    [
+      "E-0295",
+      "Andrea Gutiérrez",
+      "est0295@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000295",
+      "active"
+    ],
+    [
+      "E-0294",
+      "Lucía Castillo",
+      "est0294@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000294",
+      "active"
+    ],
+    [
+      "E-0293",
+      "Gabriela Ortiz",
+      "est0293@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000293",
+      "active"
+    ],
+    [
+      "E-0292",
+      "Camila Gómez",
+      "est0292@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000292",
+      "active"
+    ],
+    [
+      "E-0291",
+      "María Romero",
+      "est0291@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000291",
+      "active"
+    ],
+    [
+      "E-0290",
+      "Camila Herrera",
+      "est0290@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000290",
+      "active"
+    ],
+    [
+      "E-0289",
+      "Lucía Rivera",
+      "est0289@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000289",
+      "active"
+    ],
+    [
+      "E-0288",
+      "Héctor Sánchez",
+      "est0288@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000288",
+      "active"
+    ],
+    [
+      "E-0287",
+      "Andrés García",
+      "est0287@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000287",
+      "active"
+    ],
+    [
+      "E-0286",
+      "Sebastián Ramírez",
+      "est0286@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000286",
+      "active"
+    ],
+    [
+      "E-0285",
+      "Andrea Alvarez",
+      "est0285@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000285",
+      "active"
+    ],
+    [
+      "E-0284",
+      "Miguel Flores",
+      "est0284@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000284",
+      "active"
+    ],
+    [
+      "E-0283",
+      "Andrea Morales",
+      "est0283@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000283",
+      "active"
+    ],
+    [
+      "E-0282",
+      "Andrés Sánchez",
+      "est0282@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000282",
+      "active"
+    ],
+    [
+      "E-0281",
+      "Sebastián Reyes",
+      "est0281@estudiante.edu",
+      "Mecanización Agrícola",
+      "0920000281",
+      "active"
+    ],
+    [
+      "E-0280",
+      "Sebastián Rodríguez",
+      "est0280@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000280",
+      "active"
+    ],
+    [
+      "E-0279",
+      "Carlos Díaz",
+      "est0279@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000279",
+      "active"
+    ],
+    [
+      "E-0278",
+      "Roberto Jiménez",
+      "est0278@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000278",
+      "active"
+    ],
+    [
+      "E-0277",
+      "Camila Pérez",
+      "est0277@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000277",
+      "active"
+    ],
+    [
+      "E-0276",
+      "Roberto Ramírez",
+      "est0276@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000276",
+      "active"
+    ],
+    [
+      "E-0275",
+      "Sebastián Moreno",
+      "est0275@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000275",
+      "active"
+    ],
+    [
+      "E-0274",
+      "Roberto Castillo",
+      "est0274@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000274",
+      "active"
+    ],
+    [
+      "E-0273",
+      "Roberto Cruz",
+      "est0273@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000273",
+      "active"
+    ],
+    [
+      "E-0272",
+      "Felipe Rivera",
+      "est0272@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000272",
+      "active"
+    ],
+    [
+      "E-0271",
+      "Diego Moreno",
+      "est0271@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000271",
+      "active"
+    ],
+    [
+      "E-0270",
+      "Pedro García",
+      "est0270@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000270",
+      "active"
+    ],
+    [
+      "E-0269",
+      "Diego Medina",
+      "est0269@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000269",
+      "active"
+    ],
+    [
+      "E-0268",
+      "Roberto Alvarez",
+      "est0268@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000268",
+      "active"
+    ],
+    [
+      "E-0267",
+      "Sebastián Pérez",
+      "est0267@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000267",
+      "active"
+    ],
+    [
+      "E-0266",
+      "Felipe Ramírez",
+      "est0266@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000266",
+      "active"
+    ],
+    [
+      "E-0265",
+      "Óscar González",
+      "est0265@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000265",
+      "active"
+    ],
+    [
+      "E-0264",
+      "Pedro Ramos",
+      "est0264@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000264",
+      "active"
+    ],
+    [
+      "E-0263",
+      "Carolina Herrera",
+      "est0263@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000263",
+      "active"
+    ],
+    [
+      "E-0262",
+      "Patricia Gutiérrez",
+      "est0262@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000262",
+      "active"
+    ],
+    [
+      "E-0261",
+      "Carlos Gómez",
+      "est0261@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000261",
+      "active"
+    ],
+    [
+      "E-0260",
+      "Andrés Castillo",
+      "est0260@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000260",
+      "active"
+    ],
+    [
+      "E-0259",
+      "Valentina Castillo",
+      "est0259@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000259",
+      "active"
+    ],
+    [
+      "E-0258",
+      "Carolina Gómez",
+      "est0258@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000258",
+      "active"
+    ],
+    [
+      "E-0257",
+      "Sebastián Rodríguez",
+      "est0257@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000257",
+      "active"
+    ],
+    [
+      "E-0256",
+      "Felipe Alvarez",
+      "est0256@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000256",
+      "active"
+    ],
+    [
+      "E-0255",
+      "Miguel Medina",
+      "est0255@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000255",
+      "active"
+    ],
+    [
+      "E-0254",
+      "Luis Flores",
+      "est0254@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000254",
+      "active"
+    ],
+    [
+      "E-0253",
+      "Pedro González",
+      "est0253@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000253",
+      "active"
+    ],
+    [
+      "E-0252",
+      "Fernando González",
+      "est0252@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000252",
+      "active"
+    ],
+    [
+      "E-0251",
+      "Miguel Chávez",
+      "est0251@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000251",
+      "active"
+    ],
+    [
+      "E-0250",
+      "Luis Mendoza",
+      "est0250@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000250",
+      "active"
+    ],
+    [
+      "E-0249",
+      "Sofía Gutiérrez",
+      "est0249@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000249",
+      "active"
+    ],
+    [
+      "E-0248",
+      "Natalia Medina",
+      "est0248@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000248",
+      "active"
+    ],
+    [
+      "E-0247",
+      "María Medina",
+      "est0247@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000247",
+      "active"
+    ],
+    [
+      "E-0246",
+      "Ana López",
+      "est0246@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000246",
+      "active"
+    ],
+    [
+      "E-0245",
+      "Pedro Gutiérrez",
+      "est0245@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000245",
+      "active"
+    ],
+    [
+      "E-0244",
+      "Fernando Jiménez",
+      "est0244@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000244",
+      "active"
+    ],
+    [
+      "E-0243",
+      "Óscar Morales",
+      "est0243@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000243",
+      "active"
+    ],
+    [
+      "E-0242",
+      "Camila Pérez",
+      "est0242@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000242",
+      "active"
+    ],
+    [
+      "E-0241",
+      "Sofía Vargas",
+      "est0241@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000241",
+      "active"
+    ],
+    [
+      "E-0240",
+      "Paula Romero",
+      "est0240@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000240",
+      "active"
+    ],
+    [
+      "E-0239",
+      "Luis García",
+      "est0239@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000239",
+      "active"
+    ],
+    [
+      "E-0238",
+      "Andrea Torres",
+      "est0238@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000238",
+      "active"
+    ],
+    [
+      "E-0237",
+      "Gabriela Cruz",
+      "est0237@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000237",
+      "active"
+    ],
+    [
+      "E-0236",
+      "Luis Martínez",
+      "est0236@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000236",
+      "active"
+    ],
+    [
+      "E-0235",
+      "Carolina Herrera",
+      "est0235@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000235",
+      "active"
+    ],
+    [
+      "E-0234",
+      "Jorge Torres",
+      "est0234@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000234",
+      "active"
+    ],
+    [
+      "E-0233",
+      "Camila Ortiz",
+      "est0233@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000233",
+      "active"
+    ],
+    [
+      "E-0232",
+      "Gabriela Herrera",
+      "est0232@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000232",
+      "active"
+    ],
+    [
+      "E-0231",
+      "Valentina Castillo",
+      "est0231@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000231",
+      "active"
+    ],
+    [
+      "E-0230",
+      "Natalia Rivera",
+      "est0230@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000230",
+      "active"
+    ],
+    [
+      "E-0229",
+      "Ricardo Sánchez",
+      "est0229@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000229",
+      "active"
+    ],
+    [
+      "E-0228",
+      "Camila Flores",
+      "est0228@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000228",
+      "active"
+    ],
+    [
+      "E-0227",
+      "Fernando González",
+      "est0227@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000227",
+      "active"
+    ],
+    [
+      "E-0226",
+      "Carlos Moreno",
+      "est0226@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000226",
+      "active"
+    ],
+    [
+      "E-0225",
+      "Carlos Medina",
+      "est0225@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000225",
+      "active"
+    ],
+    [
+      "E-0224",
+      "Sofía Torres",
+      "est0224@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000224",
+      "active"
+    ],
+    [
+      "E-0223",
+      "Carlos Medina",
+      "est0223@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000223",
+      "active"
+    ],
+    [
+      "E-0222",
+      "José Castillo",
+      "est0222@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000222",
+      "active"
+    ],
+    [
+      "E-0221",
+      "Andrea Gutiérrez",
+      "est0221@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000221",
+      "active"
+    ],
+    [
+      "E-0220",
+      "Ana Castillo",
+      "est0220@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000220",
+      "active"
+    ],
+    [
+      "E-0219",
+      "Gabriela Ortiz",
+      "est0219@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000219",
+      "active"
+    ],
+    [
+      "E-0218",
+      "Ricardo Alvarez",
+      "est0218@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000218",
+      "active"
+    ],
+    [
+      "E-0217",
+      "Natalia Flores",
+      "est0217@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000217",
+      "active"
+    ],
+    [
+      "E-0216",
+      "Andrea Gutiérrez",
+      "est0216@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000216",
+      "active"
+    ],
+    [
+      "E-0215",
+      "Diego Morales",
+      "est0215@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000215",
+      "active"
+    ],
+    [
+      "E-0214",
+      "Miguel Flores",
+      "est0214@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000214",
+      "active"
+    ],
+    [
+      "E-0213",
+      "Carolina Ramírez",
+      "est0213@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000213",
+      "active"
+    ],
+    [
+      "E-0212",
+      "Carolina Martínez",
+      "est0212@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000212",
+      "active"
+    ],
+    [
+      "E-0211",
+      "Sofía Gómez",
+      "est0211@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000211",
+      "active"
+    ],
+    [
+      "E-0210",
+      "Daniela Torres",
+      "est0210@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000210",
+      "active"
+    ],
+    [
+      "E-0209",
+      "Fernando Sánchez",
+      "est0209@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000209",
+      "active"
+    ],
+    [
+      "E-0208",
+      "Carlos Martínez",
+      "est0208@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000208",
+      "active"
+    ],
+    [
+      "E-0207",
+      "Ricardo Chávez",
+      "est0207@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000207",
+      "active"
+    ],
+    [
+      "E-0206",
+      "Ana Morales",
+      "est0206@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000206",
+      "active"
+    ],
+    [
+      "E-0205",
+      "Felipe Martínez",
+      "est0205@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000205",
+      "active"
+    ],
+    [
+      "E-0204",
+      "Paula Romero",
+      "est0204@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000204",
+      "active"
+    ],
+    [
+      "E-0203",
+      "José Morales",
+      "est0203@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000203",
+      "active"
+    ],
+    [
+      "E-0202",
+      "Héctor Vargas",
+      "est0202@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000202",
+      "active"
+    ],
+    [
+      "E-0201",
+      "Lucía González",
+      "est0201@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000201",
+      "active"
+    ],
+    [
+      "E-0200",
+      "Andrés Torres",
+      "est0200@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000200",
+      "active"
+    ],
+    [
+      "E-0199",
+      "Natalia Rivera",
+      "est0199@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000199",
+      "active"
+    ],
+    [
+      "E-0198",
+      "Valentina Castillo",
+      "est0198@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000198",
+      "active"
+    ],
+    [
+      "E-0197",
+      "Paula Torres",
+      "est0197@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000197",
+      "active"
+    ],
+    [
+      "E-0196",
+      "Isabel Ortiz",
+      "est0196@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000196",
+      "active"
+    ],
+    [
+      "E-0195",
+      "Héctor Chávez",
+      "est0195@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000195",
+      "active"
+    ],
+    [
+      "E-0194",
+      "María Cruz",
+      "est0194@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000194",
+      "active"
+    ],
+    [
+      "E-0193",
+      "Luis Ramos",
+      "est0193@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000193",
+      "active"
+    ],
+    [
+      "E-0192",
+      "Isabel Ramos",
+      "est0192@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000192",
+      "active"
+    ],
+    [
+      "E-0191",
+      "Isabel Ramírez",
+      "est0191@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000191",
+      "active"
+    ],
+    [
+      "E-0190",
+      "Carlos Medina",
+      "est0190@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000190",
+      "active"
+    ],
+    [
+      "E-0189",
+      "Andrés Díaz",
+      "est0189@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000189",
+      "active"
+    ],
+    [
+      "E-0188",
+      "Héctor Herrera",
+      "est0188@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000188",
+      "active"
+    ],
+    [
+      "E-0187",
+      "Ricardo Martínez",
+      "est0187@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000187",
+      "active"
+    ],
+    [
+      "E-0186",
+      "Diego Martínez",
+      "est0186@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000186",
+      "active"
+    ],
+    [
+      "E-0185",
+      "María Herrera",
+      "est0185@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000185",
+      "active"
+    ],
+    [
+      "E-0184",
+      "Luis Ortiz",
+      "est0184@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000184",
+      "active"
+    ],
+    [
+      "E-0183",
+      "Daniela Pérez",
+      "est0183@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000183",
+      "active"
+    ],
+    [
+      "E-0182",
+      "Daniela Herrera",
+      "est0182@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000182",
+      "active"
+    ],
+    [
+      "E-0181",
+      "Isabel Reyes",
+      "est0181@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000181",
+      "active"
+    ],
+    [
+      "E-0180",
+      "Luis Rodríguez",
+      "est0180@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000180",
+      "active"
+    ],
+    [
+      "E-0179",
+      "Óscar Rivera",
+      "est0179@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000179",
+      "active"
+    ],
+    [
+      "E-0178",
+      "Fernando Rodríguez",
+      "est0178@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000178",
+      "active"
+    ],
+    [
+      "E-0177",
+      "Isabel Moreno",
+      "est0177@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000177",
+      "active"
+    ],
+    [
+      "E-0176",
+      "Valentina Rodríguez",
+      "est0176@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000176",
+      "active"
+    ],
+    [
+      "E-0175",
+      "Valentina Flores",
+      "est0175@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000175",
+      "active"
+    ],
+    [
+      "E-0174",
+      "Jorge González",
+      "est0174@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000174",
+      "active"
+    ],
+    [
+      "E-0173",
+      "Héctor Jiménez",
+      "est0173@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000173",
+      "active"
+    ],
+    [
+      "E-0172",
+      "Roberto Gutiérrez",
+      "est0172@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000172",
+      "active"
+    ],
+    [
+      "E-0171",
+      "Natalia Moreno",
+      "est0171@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000171",
+      "active"
+    ],
+    [
+      "E-0170",
+      "José Cruz",
+      "est0170@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000170",
+      "active"
+    ],
+    [
+      "E-0169",
+      "Roberto Morales",
+      "est0169@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000169",
+      "active"
+    ],
+    [
+      "E-0168",
+      "Felipe Alvarez",
+      "est0168@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000168",
+      "active"
+    ],
+    [
+      "E-0167",
+      "Lucía Torres",
+      "est0167@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000167",
+      "active"
+    ],
+    [
+      "E-0166",
+      "Lucía García",
+      "est0166@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000166",
+      "active"
+    ],
+    [
+      "E-0165",
+      "Luis Pérez",
+      "est0165@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000165",
+      "active"
+    ],
+    [
+      "E-0164",
+      "Lucía Medina",
+      "est0164@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000164",
+      "active"
+    ],
+    [
+      "E-0163",
+      "Valentina Herrera",
+      "est0163@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000163",
+      "active"
+    ],
+    [
+      "E-0162",
+      "Jorge Reyes",
+      "est0162@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000162",
+      "active"
+    ],
+    [
+      "E-0161",
+      "Diego Cruz",
+      "est0161@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000161",
+      "active"
+    ],
+    [
+      "E-0160",
+      "Sebastián Ramírez",
+      "est0160@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000160",
+      "active"
+    ],
+    [
+      "E-0159",
+      "Felipe Romero",
+      "est0159@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000159",
+      "active"
+    ],
+    [
+      "E-0158",
+      "Ana Martínez",
+      "est0158@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000158",
+      "active"
+    ],
+    [
+      "E-0157",
+      "Fernando Mendoza",
+      "est0157@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000157",
+      "active"
+    ],
+    [
+      "E-0156",
+      "Luis Vargas",
+      "est0156@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000156",
+      "active"
+    ],
+    [
+      "E-0155",
+      "Fernando López",
+      "est0155@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000155",
+      "active"
+    ],
+    [
+      "E-0154",
+      "Sebastián Herrera",
+      "est0154@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000154",
+      "active"
+    ],
+    [
+      "E-0153",
+      "Elena Alvarez",
+      "est0153@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000153",
+      "active"
+    ],
+    [
+      "E-0152",
+      "Sebastián Martínez",
+      "est0152@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000152",
+      "active"
+    ],
+    [
+      "E-0151",
+      "Elena Ramírez",
+      "est0151@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000151",
+      "active"
+    ],
+    [
+      "E-0150",
+      "Diego Torres",
+      "est0150@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000150",
+      "active"
+    ],
+    [
+      "E-0149",
+      "Sofía Cruz",
+      "est0149@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000149",
+      "active"
+    ],
+    [
+      "E-0148",
+      "Fernando Morales",
+      "est0148@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000148",
+      "active"
+    ],
+    [
+      "E-0147",
+      "Valentina Sánchez",
+      "est0147@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000147",
+      "active"
+    ],
+    [
+      "E-0146",
+      "Carlos Ramírez",
+      "est0146@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000146",
+      "active"
+    ],
+    [
+      "E-0145",
+      "Roberto Herrera",
+      "est0145@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000145",
+      "active"
+    ],
+    [
+      "E-0144",
+      "Óscar Rivera",
+      "est0144@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000144",
+      "active"
+    ],
+    [
+      "E-0143",
+      "Luis Díaz",
+      "est0143@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000143",
+      "active"
+    ],
+    [
+      "E-0142",
+      "Gabriela López",
+      "est0142@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000142",
+      "active"
+    ],
+    [
+      "E-0141",
+      "Héctor Vargas",
+      "est0141@estudiante.edu",
+      "Mecánica Automotriz",
+      "0920000141",
+      "active"
+    ],
+    [
+      "E-0140",
+      "Óscar Rodríguez",
+      "est0140@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000140",
+      "active"
+    ],
+    [
+      "E-0139",
+      "Elena Herrera",
+      "est0139@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000139",
+      "active"
+    ],
+    [
+      "E-0138",
+      "Pedro Cruz",
+      "est0138@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000138",
+      "active"
+    ],
+    [
+      "E-0137",
+      "Pedro Gómez",
+      "est0137@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000137",
+      "active"
+    ],
+    [
+      "E-0136",
+      "Carlos Castillo",
+      "est0136@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000136",
+      "active"
+    ],
+    [
+      "E-0135",
+      "Valentina López",
+      "est0135@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000135",
+      "active"
+    ],
+    [
+      "E-0134",
+      "Roberto Cruz",
+      "est0134@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000134",
+      "active"
+    ],
+    [
+      "E-0133",
+      "Roberto Reyes",
+      "est0133@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000133",
+      "active"
+    ],
+    [
+      "E-0132",
+      "Jorge Ramírez",
+      "est0132@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000132",
+      "active"
+    ],
+    [
+      "E-0131",
+      "Isabel Chávez",
+      "est0131@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000131",
+      "active"
+    ],
+    [
+      "E-0130",
+      "Felipe Medina",
+      "est0130@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000130",
+      "active"
+    ],
+    [
+      "E-0129",
+      "Sofía Moreno",
+      "est0129@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000129",
+      "active"
+    ],
+    [
+      "E-0128",
+      "Valentina Gutiérrez",
+      "est0128@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000128",
+      "active"
+    ],
+    [
+      "E-0127",
+      "Héctor Reyes",
+      "est0127@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000127",
+      "active"
+    ],
+    [
+      "E-0126",
+      "Andrés Torres",
+      "est0126@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000126",
+      "active"
+    ],
+    [
+      "E-0125",
+      "María Ortiz",
+      "est0125@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000125",
+      "active"
+    ],
+    [
+      "E-0124",
+      "Sebastián Rivera",
+      "est0124@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000124",
+      "active"
+    ],
+    [
+      "E-0123",
+      "Carolina Rodríguez",
+      "est0123@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000123",
+      "active"
+    ],
+    [
+      "E-0122",
+      "Andrés Martínez",
+      "est0122@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000122",
+      "active"
+    ],
+    [
+      "E-0121",
+      "Gabriela Rodríguez",
+      "est0121@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000121",
+      "active"
+    ],
+    [
+      "E-0120",
+      "María Jiménez",
+      "est0120@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000120",
+      "active"
+    ],
+    [
+      "E-0119",
+      "Andrés García",
+      "est0119@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000119",
+      "active"
+    ],
+    [
+      "E-0118",
+      "Andrés Chávez",
+      "est0118@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000118",
+      "active"
+    ],
+    [
+      "E-0117",
+      "Isabel Gutiérrez",
+      "est0117@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000117",
+      "active"
+    ],
+    [
+      "E-0116",
+      "Paula García",
+      "est0116@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000116",
+      "active"
+    ],
+    [
+      "E-0115",
+      "Andrés Martínez",
+      "est0115@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000115",
+      "active"
+    ],
+    [
+      "E-0114",
+      "Carlos Ramírez",
+      "est0114@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000114",
+      "active"
+    ],
+    [
+      "E-0113",
+      "Daniela Morales",
+      "est0113@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000113",
+      "active"
+    ],
+    [
+      "E-0112",
+      "Elena Medina",
+      "est0112@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000112",
+      "active"
+    ],
+    [
+      "E-0111",
+      "Gabriela Gómez",
+      "est0111@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000111",
+      "active"
+    ],
+    [
+      "E-0110",
+      "Lucía Castillo",
+      "est0110@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000110",
+      "active"
+    ],
+    [
+      "E-0109",
+      "Natalia Flores",
+      "est0109@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000109",
+      "active"
+    ],
+    [
+      "E-0108",
+      "Natalia Sánchez",
+      "est0108@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000108",
+      "active"
+    ],
+    [
+      "E-0107",
+      "Patricia Moreno",
+      "est0107@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000107",
+      "active"
+    ],
+    [
+      "E-0106",
+      "Felipe Gutiérrez",
+      "est0106@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000106",
+      "active"
+    ],
+    [
+      "E-0105",
+      "Pedro Sánchez",
+      "est0105@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000105",
+      "active"
+    ],
+    [
+      "E-0104",
+      "Sebastián Ramos",
+      "est0104@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000104",
+      "active"
+    ],
+    [
+      "E-0103",
+      "Camila Ortiz",
+      "est0103@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000103",
+      "active"
+    ],
+    [
+      "E-0102",
+      "Fernando Pérez",
+      "est0102@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000102",
+      "active"
+    ],
+    [
+      "E-0101",
+      "Héctor Reyes",
+      "est0101@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000101",
+      "active"
+    ],
+    [
+      "E-0100",
+      "Sofía González",
+      "est0100@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000100",
+      "active"
+    ],
+    [
+      "E-0099",
+      "Fernando Romero",
+      "est0099@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000099",
+      "active"
+    ],
+    [
+      "E-0098",
+      "María Romero",
+      "est0098@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000098",
+      "active"
+    ],
+    [
+      "E-0097",
+      "Jorge Mendoza",
+      "est0097@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000097",
+      "active"
+    ],
+    [
+      "E-0096",
+      "María Moreno",
+      "est0096@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000096",
+      "active"
+    ],
+    [
+      "E-0095",
+      "Isabel Martínez",
+      "est0095@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000095",
+      "active"
+    ],
+    [
+      "E-0094",
+      "Andrés Medina",
+      "est0094@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000094",
+      "active"
+    ],
+    [
+      "E-0093",
+      "Andrés Rodríguez",
+      "est0093@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000093",
+      "active"
+    ],
+    [
+      "E-0092",
+      "Roberto Flores",
+      "est0092@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000092",
+      "active"
+    ],
+    [
+      "E-0091",
+      "Carolina Mendoza",
+      "est0091@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000091",
+      "active"
+    ],
+    [
+      "E-0090",
+      "Carlos Gómez",
+      "est0090@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000090",
+      "active"
+    ],
+    [
+      "E-0089",
+      "Jorge García",
+      "est0089@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000089",
+      "active"
+    ],
+    [
+      "E-0088",
+      "Ricardo Rivera",
+      "est0088@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000088",
+      "active"
+    ],
+    [
+      "E-0087",
+      "Felipe García",
+      "est0087@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000087",
+      "active"
+    ],
+    [
+      "E-0086",
+      "Felipe Ortiz",
+      "est0086@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000086",
+      "active"
+    ],
+    [
+      "E-0085",
+      "Fernando Romero",
+      "est0085@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000085",
+      "active"
+    ],
+    [
+      "E-0084",
+      "Patricia Pérez",
+      "est0084@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000084",
+      "active"
+    ],
+    [
+      "E-0083",
+      "Sofía Gómez",
+      "est0083@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000083",
+      "active"
+    ],
+    [
+      "E-0082",
+      "Ricardo Sánchez",
+      "est0082@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000082",
+      "active"
+    ],
+    [
+      "E-0081",
+      "Gabriela Ortiz",
+      "est0081@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000081",
+      "active"
+    ],
+    [
+      "E-0080",
+      "José Mendoza",
+      "est0080@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000080",
+      "active"
+    ],
+    [
+      "E-0079",
+      "Sebastián Vargas",
+      "est0079@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000079",
+      "active"
+    ],
+    [
+      "E-0078",
+      "Daniela López",
+      "est0078@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000078",
+      "active"
+    ],
+    [
+      "E-0077",
+      "Patricia Pérez",
+      "est0077@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000077",
+      "active"
+    ],
+    [
+      "E-0076",
+      "Camila Ortiz",
+      "est0076@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000076",
+      "active"
+    ],
+    [
+      "E-0075",
+      "Carolina Moreno",
+      "est0075@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000075",
+      "active"
+    ],
+    [
+      "E-0074",
+      "Ana Moreno",
+      "est0074@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000074",
+      "active"
+    ],
+    [
+      "E-0073",
+      "Diego Morales",
+      "est0073@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000073",
+      "active"
+    ],
+    [
+      "E-0072",
+      "José Cruz",
+      "est0072@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000072",
+      "active"
+    ],
+    [
+      "E-0071",
+      "Paula López",
+      "est0071@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000071",
+      "active"
+    ],
+    [
+      "E-0070",
+      "Patricia Vargas",
+      "est0070@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000070",
+      "active"
+    ],
+    [
+      "E-0069",
+      "Patricia Torres",
+      "est0069@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000069",
+      "active"
+    ],
+    [
+      "E-0068",
+      "Carolina Gutiérrez",
+      "est0068@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000068",
+      "active"
+    ],
+    [
+      "E-0067",
+      "Carlos Castillo",
+      "est0067@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000067",
+      "active"
+    ],
+    [
+      "E-0066",
+      "Héctor Moreno",
+      "est0066@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000066",
+      "active"
+    ],
+    [
+      "E-0065",
+      "Sebastián García",
+      "est0065@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000065",
+      "active"
+    ],
+    [
+      "E-0064",
+      "Camila Gutiérrez",
+      "est0064@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000064",
+      "active"
+    ],
+    [
+      "E-0063",
+      "Elena Ortiz",
+      "est0063@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000063",
+      "active"
+    ],
+    [
+      "E-0062",
+      "Lucía Ramos",
+      "est0062@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000062",
+      "active"
+    ],
+    [
+      "E-0061",
+      "María Díaz",
+      "est0061@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000061",
+      "active"
+    ],
+    [
+      "E-0060",
+      "Pedro Ramos",
+      "est0060@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000060",
+      "active"
+    ],
+    [
+      "E-0059",
+      "Roberto Castillo",
+      "est0059@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000059",
+      "active"
+    ],
+    [
+      "E-0058",
+      "Gabriela Pérez",
+      "est0058@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000058",
+      "active"
+    ],
+    [
+      "E-0057",
+      "Carlos González",
+      "est0057@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000057",
+      "active"
+    ],
+    [
+      "E-0056",
+      "Luis Herrera",
+      "est0056@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000056",
+      "active"
+    ],
+    [
+      "E-0055",
+      "María Romero",
+      "est0055@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000055",
+      "active"
+    ],
+    [
+      "E-0054",
+      "Daniela Reyes",
+      "est0054@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000054",
+      "active"
+    ],
+    [
+      "E-0053",
+      "Andrés González",
+      "est0053@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000053",
+      "active"
+    ],
+    [
+      "E-0052",
+      "Lucía Gómez",
+      "est0052@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000052",
+      "active"
+    ],
+    [
+      "E-0051",
+      "Carolina Chávez",
+      "est0051@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000051",
+      "active"
+    ],
+    [
+      "E-0050",
+      "Isabel Cruz",
+      "est0050@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000050",
+      "active"
+    ],
+    [
+      "E-0049",
+      "Camila Moreno",
+      "est0049@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000049",
+      "active"
+    ],
+    [
+      "E-0048",
+      "Fernando Gutiérrez",
+      "est0048@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000048",
+      "active"
+    ],
+    [
+      "E-0047",
+      "Andrés Moreno",
+      "est0047@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000047",
+      "active"
+    ],
+    [
+      "E-0046",
+      "Camila González",
+      "est0046@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000046",
+      "active"
+    ],
+    [
+      "E-0045",
+      "Elena González",
+      "est0045@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000045",
+      "active"
+    ],
+    [
+      "E-0044",
+      "Felipe Vargas",
+      "est0044@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000044",
+      "active"
+    ],
+    [
+      "E-0043",
+      "Lucía Medina",
+      "est0043@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000043",
+      "active"
+    ],
+    [
+      "E-0042",
+      "Gabriela Reyes",
+      "est0042@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000042",
+      "active"
+    ],
+    [
+      "E-0041",
+      "Paula Sánchez",
+      "est0041@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000041",
+      "active"
+    ],
+    [
+      "E-0040",
+      "Carolina Jiménez",
+      "est0040@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000040",
+      "active"
+    ],
+    [
+      "E-0039",
+      "Felipe Chávez",
+      "est0039@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000039",
+      "active"
+    ],
+    [
+      "E-0038",
+      "María Sánchez",
+      "est0038@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000038",
+      "active"
+    ],
+    [
+      "E-0037",
+      "Lucía Torres",
+      "est0037@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000037",
+      "active"
+    ],
+    [
+      "E-0036",
+      "Roberto Rivera",
+      "est0036@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000036",
+      "active"
+    ],
+    [
+      "E-0035",
+      "Andrea Rodríguez",
+      "est0035@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000035",
+      "active"
+    ],
+    [
+      "E-0034",
+      "Luis Ramírez",
+      "est0034@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000034",
+      "active"
+    ],
+    [
+      "E-0033",
+      "Patricia Romero",
+      "est0033@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000033",
+      "active"
+    ],
+    [
+      "E-0032",
+      "Paula Mendoza",
+      "est0032@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000032",
+      "active"
+    ],
+    [
+      "E-0031",
+      "Andrés Castillo",
+      "est0031@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000031",
+      "active"
+    ],
+    [
+      "E-0030",
+      "Natalia Gutiérrez",
+      "est0030@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000030",
+      "active"
+    ],
+    [
+      "E-0029",
+      "Felipe Vargas",
+      "est0029@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000029",
+      "active"
+    ],
+    [
+      "E-0028",
+      "Lucía Torres",
+      "est0028@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000028",
+      "active"
+    ],
+    [
+      "E-0027",
+      "Diego Morales",
+      "est0027@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000027",
+      "active"
+    ],
+    [
+      "E-0026",
+      "Óscar Ramírez",
+      "est0026@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000026",
+      "active"
+    ],
+    [
+      "E-0025",
+      "Diego Gutiérrez",
+      "est0025@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000025",
+      "active"
+    ],
+    [
+      "E-0024",
+      "Ricardo Vargas",
+      "est0024@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000024",
+      "active"
+    ],
+    [
+      "E-0023",
+      "Gabriela Martínez",
+      "est0023@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000023",
+      "active"
+    ],
+    [
+      "E-0022",
+      "Felipe Castillo",
+      "est0022@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000022",
+      "active"
+    ],
+    [
+      "E-0021",
+      "Camila Jiménez",
+      "est0021@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000021",
+      "active"
+    ],
+    [
+      "E-0020",
+      "Valentina Castillo",
+      "est0020@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000020",
+      "active"
+    ],
+    [
+      "E-0019",
+      "Miguel Gómez",
+      "est0019@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000019",
+      "active"
+    ],
+    [
+      "E-0018",
+      "Miguel Pérez",
+      "est0018@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000018",
+      "active"
+    ],
+    [
+      "E-0017",
+      "Gabriela Mendoza",
+      "est0017@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000017",
+      "active"
+    ],
+    [
+      "E-0016",
+      "Camila Morales",
+      "est0016@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000016",
+      "active"
+    ],
+    [
+      "E-0015",
+      "Carlos Díaz",
+      "est0015@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000015",
+      "active"
+    ],
+    [
+      "E-0014",
+      "Andrés Herrera",
+      "est0014@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000014",
+      "active"
+    ],
+    [
+      "E-0013",
+      "María Herrera",
+      "est0013@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000013",
+      "active"
+    ],
+    [
+      "E-0012",
+      "Patricia Flores",
+      "est0012@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000012",
+      "active"
+    ],
+    [
+      "E-0011",
+      "Héctor Ramírez",
+      "est0011@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000011",
+      "active"
+    ],
+    [
+      "E-0010",
+      "María Rodríguez",
+      "est0010@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000010",
+      "active"
+    ],
+    [
+      "E-0009",
+      "Valentina Jiménez",
+      "est0009@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000009",
+      "active"
+    ],
+    [
+      "E-0008",
+      "Miguel Chávez",
+      "est0008@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000008",
+      "active"
+    ],
+    [
+      "E-0007",
+      "Carolina Herrera",
+      "est0007@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000007",
+      "active"
+    ],
+    [
+      "E-0006",
+      "Gabriela Ramos",
+      "est0006@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000006",
+      "active"
+    ],
+    [
+      "E-0005",
+      "José Mendoza",
+      "est0005@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000005",
+      "active"
+    ],
+    [
+      "E-0004",
+      "María Gutiérrez",
+      "est0004@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000004",
+      "active"
+    ],
+    [
+      "E-0003",
+      "Carlos Díaz",
+      "est0003@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000003",
+      "active"
+    ],
+    [
+      "E-0002",
+      "Elena Gutiérrez",
+      "est0002@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000002",
+      "active"
+    ],
+    [
+      "E-0001",
+      "Luis Moreno",
+      "est0001@estudiante.edu",
+      "Desarrollo de Software",
+      "0920000001",
+      "active"
+    ]
+  ],
+  "count": 420
+}

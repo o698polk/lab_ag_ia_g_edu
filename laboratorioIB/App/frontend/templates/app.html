@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ system_name }}</title>
+  <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/static/img/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/static/img/favicon-32.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body data-page="app">
+  <div id="impersonationBanner" class="impersonation-banner">
+    <span id="impersonationText">Viendo como usuario</span>
+    <button class="btn-ghost" style="background:#fff;color:#111" onclick="returnToAdmin()">Regresar a mi cuenta</button>
+  </div>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <i class="bi bi-mortarboard-fill"></i>
+        <div>
+          <div class="brand-title" style="font-weight:700;font-size:.95rem;line-height:1.2">{{ system_name }}</div>
+          <small style="color:var(--muted)">Institucional</small>
+        </div>
+      </div>
+      <nav id="sidebarNav"></nav>
+    </aside>
+
+    <div class="main-wrap">
+      <header class="navbar-app">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <button class="btn-ghost" onclick="toggleSidebar()" title="Menú"><i class="bi bi-list"></i></button>
+          <strong id="pageTitle">Panel</strong>
+        </div>
+        <div style="display:flex;align-items:center;gap:.6rem">
+          <button class="btn-ghost" onclick="toggleTheme()" title="Tema"><i class="bi bi-moon-stars"></i></button>
+          <button class="btn-ghost" onclick="navigate('notifications')" title="Notificaciones"><i class="bi bi-bell"></i></button>
+          <span id="userLabel" style="font-size:.9rem"></span>
+          <button class="btn-ghost" onclick="logout()">Salir</button>
+        </div>
+      </header>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toasts"></div>
+
+  <!-- Modal CRUD -->
+  <div id="crudModal" class="modal-overlay hidden" onclick="if(event.target===this)closeModal()">
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3 id="crudModalTitle">Formulario</h3>
+        <button type="button" class="btn-ghost" onclick="closeModal()" aria-label="Cerrar">&times;</button>
+      </div>
+      <div id="crudModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Chatbot flotante DeepSeek -->
+  <div id="floatChat" class="float-chat">
+    <button type="button" class="float-chat-btn" id="floatChatToggle" title="Asistente IA" aria-label="Abrir chat">
+      <i class="bi bi-robot"></i>
+    </button>
+    <div class="float-chat-panel hidden" id="floatChatPanel">
+      <div class="float-chat-header">
+        <span><i class="bi bi-robot"></i> Asistente académico</span>
+        <button type="button" class="btn-ghost" id="floatChatClose" style="padding:.2rem .45rem">&times;</button>
+      </div>
+      <div class="float-chat-messages" id="floatChatMessages">
+        <div class="ai-bubble bot">Hola. Puedo ayudarte a consultar el estado del sistema, periodos habilitados, notas y más.</div>
+      </div>
+      <form class="float-chat-form" id="floatChatForm">
+        <input id="floatChatInput" placeholder="Escribe tu pregunta…" autocomplete="off" required>
+        <button class="btn-primary-app" type="submit">Enviar</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/crud.js"></script>
+  <script src="/static/js/ai-chat.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

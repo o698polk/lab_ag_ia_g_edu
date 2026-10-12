@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ system_name }} — Acceso</title>
+  <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/static/img/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/static/img/favicon-32.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-card">
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem">
+        <i class="bi bi-mortarboard-fill" style="font-size:1.8rem;color:var(--primary)"></i>
+        <span class="brand-title" style="font-weight:700">{{ system_name }}</span>
+      </div>
+      <h1>Iniciar sesión</h1>
+      <p>Gestión académica institucional con asistente IA</p>
+      <form id="loginForm">
+        <label style="display:block;margin-bottom:.85rem;font-size:.85rem;color:var(--muted)">
+          Usuario o email
+          <input name="username" autocomplete="username" required style="width:100%;margin-top:.35rem">
+        </label>
+        <label style="display:block;margin-bottom:1.1rem;font-size:.85rem;color:var(--muted)">
+          Contraseña
+          <input name="password" type="password" autocomplete="current-password" required style="width:100%;margin-top:.35rem">
+        </label>
+        <button class="btn-primary-app" type="submit" style="width:100%">Entrar</button>
+      </form>
+      <p id="loginError" style="color:var(--danger);margin-top:1rem;font-size:.9rem;display:none"></p>
+      <p style="margin-top:1.25rem;font-size:.8rem;color:var(--muted)">
+        Demo: <strong>admin</strong> / Admin123!
+      </p>
+    </div>
+  </div>
+  <script src="/static/js/api.js"></script>
+  <script>
+    /* SPEC-010 — tema institucional en login */
+    function applyTheme(t) {
+      const theme = t === "dark" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme);
+    }
+    function resolveTheme(defaultTheme) {
+      if (localStorage.getItem("theme_override") === "1") {
+        const stored = localStorage.getItem("theme");
+        if (stored === "dark" || stored === "light") return stored;
+      }
+      if (defaultTheme === "dark" || defaultTheme === "light") return defaultTheme;
+      return "light";
+    }
+    applyTheme(resolveTheme(null));
+    (async () => {
+      try {
+        const cfg = await API.get("/config/brand");
+        const root = document.documentElement;
+        if (cfg.primary_color) root.style.setProperty("--primary", cfg.primary_color);
+        if (cfg.secondary_color) root.style.setProperty("--secondary", cfg.secondary_color);
+        if (cfg.accent_color) root.style.setProperty("--accent", cfg.accent_color);
+        if (cfg.system_name) {
+          const brand = document.querySelector(".brand-title");
+          if (brand) brand.textContent = cfg.system_name;
+          document.title = cfg.system_name + " — Acceso";
+        }
+        localStorage.setItem("brand_colors", JSON.stringify(cfg));
+        applyTheme(resolveTheme(cfg.default_theme));
+      } catch (_) { /* ignore */ }
+    })();
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const err = document.getElementById("loginError");
+      err.style.display = "none";
+      const fd = new FormData(e.target);
+      try {
+        const data = await API.post("/auth/login", {
+          username: fd.get("username"),
+          password: fd.get("password"),
+        });
+        API.setTokens(data.access_token, data.refresh_token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        location.href = "/app/";
+      } catch (ex) {
+        err.textContent = ex.message;
+        err.style.display = "block";
+      }
+    });
+  </script>
+</body>
+</html>
