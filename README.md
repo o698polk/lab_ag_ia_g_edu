@@ -180,6 +180,7 @@ Requisitos: Python 3.11+, MySQL (XAMPP) o SQLite.
 
 ### Escenario A
 
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```powershell
 cd escenarioA\App\backend
 python -m venv .venv

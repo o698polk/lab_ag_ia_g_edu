@@ -1,0 +1,5 @@
+word_count_all_tokens=14083
+word_count_excluding_fences=13859
+path=D:\PROYECTOS\lab_ag_ia_g_edu\documentacion_investigacion\proyecto_investigacion_lab_ag_ia_g_edu.md
+exists=True
+bytes=103693
