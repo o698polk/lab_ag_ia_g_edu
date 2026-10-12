@@ -1,0 +1,3878 @@
+{
+  "title": "Reporte de Usuarios del Sistema",
+  "generated_at": "2026-10-12T03:19:34.881201",
+  "filters": {},
+  "headers": [
+    "ID",
+    "Usuario",
+    "Nombre",
+    "Email",
+    "Roles",
+    "Estado",
+    "Creado"
+  ],
+  "rows": [
+    [
+      431,
+      "est0400",
+      "Patricia Ramírez",
+      "est0400@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      430,
+      "est0399",
+      "Elena Torres",
+      "est0399@estudiante.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      429,
+      "est0398",
+      "Sebastián Reyes",
+      "est0398@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      428,
+      "est0397",
+      "Diego Moreno",
+      "est0397@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      427,
+      "est0396",
+      "Elena Medina",
+      "est0396@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      426,
+      "est0395",
+      "Felipe Gutiérrez",
+      "est0395@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      425,
+      "est0394",
+      "Pedro Mendoza",
+      "est0394@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      424,
+      "est0393",
+      "Carolina Ortiz",
+      "est0393@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      423,
+      "est0392",
+      "Andrea Moreno",
+      "est0392@estudiante.edu",
+      "ADMIN",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      422,
+      "est0391",
+      "Elena Ramos",
+      "est0391@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      421,
+      "est0390",
+      "Patricia Medina",
+      "est0390@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      420,
+      "est0389",
+      "Ricardo Rivera",
+      "est0389@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      419,
+      "est0388",
+      "Daniela Gutiérrez",
+      "est0388@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      418,
+      "est0387",
+      "Elena Castillo",
+      "est0387@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      417,
+      "est0386",
+      "Sofía Alvarez",
+      "est0386@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      416,
+      "est0385",
+      "Carlos Morales",
+      "est0385@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      415,
+      "est0384",
+      "Andrés Herrera",
+      "est0384@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      414,
+      "est0383",
+      "Luis Gutiérrez",
+      "est0383@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      413,
+      "est0382",
+      "Daniela Morales",
+      "est0382@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      412,
+      "est0381",
+      "Roberto Jiménez",
+      "est0381@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      411,
+      "est0380",
+      "Andrés Pérez",
+      "est0380@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      410,
+      "est0379",
+      "Patricia Cruz",
+      "est0379@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      409,
+      "est0378",
+      "Carolina López",
+      "est0378@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      408,
+      "est0377",
+      "Sebastián Romero",
+      "est0377@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      407,
+      "est0376",
+      "Carolina Romero",
+      "est0376@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      406,
+      "est0375",
+      "Natalia García",
+      "est0375@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      405,
+      "est0374",
+      "Sofía Vargas",
+      "est0374@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      404,
+      "est0373",
+      "Lucía Ramírez",
+      "est0373@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      403,
+      "est0372",
+      "Lucía Reyes",
+      "est0372@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      402,
+      "est0371",
+      "Natalia Jiménez",
+      "est0371@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      401,
+      "est0370",
+      "Isabel Sánchez",
+      "est0370@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      400,
+      "est0369",
+      "Carolina Vargas",
+      "est0369@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      399,
+      "est0368",
+      "Elena Cruz",
+      "est0368@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      398,
+      "est0367",
+      "Patricia Martínez",
+      "est0367@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      397,
+      "est0366",
+      "Ricardo Herrera",
+      "est0366@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      396,
+      "est0365",
+      "Andrés Reyes",
+      "est0365@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      395,
+      "est0364",
+      "Ana Rodríguez",
+      "est0364@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      394,
+      "est0363",
+      "Valentina González",
+      "est0363@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      393,
+      "est0362",
+      "Andrés Alvarez",
+      "est0362@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      392,
+      "est0361",
+      "Héctor Flores",
+      "est0361@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      391,
+      "est0360",
+      "Patricia Ramírez",
+      "est0360@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      390,
+      "est0359",
+      "María Mendoza",
+      "est0359@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      389,
+      "est0358",
+      "Ricardo Rivera",
+      "est0358@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      388,
+      "est0357",
+      "Héctor Vargas",
+      "est0357@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      387,
+      "est0356",
+      "José Ortiz",
+      "est0356@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      386,
+      "est0355",
+      "Héctor Martínez",
+      "est0355@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      385,
+      "est0354",
+      "Óscar Pérez",
+      "est0354@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      384,
+      "est0353",
+      "Carolina Alvarez",
+      "est0353@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      383,
+      "est0352",
+      "Jorge Alvarez",
+      "est0352@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      382,
+      "est0351",
+      "Valentina Ortiz",
+      "est0351@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      381,
+      "est0350",
+      "Elena Castillo",
+      "est0350@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      380,
+      "est0349",
+      "Elena Morales",
+      "est0349@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      379,
+      "est0348",
+      "Gabriela Rivera",
+      "est0348@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      378,
+      "est0347",
+      "Isabel Ramos",
+      "est0347@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      377,
+      "est0346",
+      "Pedro Alvarez",
+      "est0346@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      376,
+      "est0345",
+      "José Sánchez",
+      "est0345@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      375,
+      "est0344",
+      "Ana Flores",
+      "est0344@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      374,
+      "est0343",
+      "Fernando Mendoza",
+      "est0343@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      373,
+      "est0342",
+      "José Díaz",
+      "est0342@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      372,
+      "est0341",
+      "Ricardo Chávez",
+      "est0341@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      371,
+      "est0340",
+      "Carolina Pérez",
+      "est0340@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      370,
+      "est0339",
+      "Héctor Moreno",
+      "est0339@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      369,
+      "est0338",
+      "Héctor Díaz",
+      "est0338@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      368,
+      "est0337",
+      "Valentina Cruz",
+      "est0337@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      367,
+      "est0336",
+      "Fernando González",
+      "est0336@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      366,
+      "est0335",
+      "Natalia Flores",
+      "est0335@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      365,
+      "est0334",
+      "Paula Díaz",
+      "est0334@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      364,
+      "est0333",
+      "Héctor Cruz",
+      "est0333@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      363,
+      "est0332",
+      "Daniela Flores",
+      "est0332@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      362,
+      "est0331",
+      "Carolina Flores",
+      "est0331@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      361,
+      "est0330",
+      "Carlos Moreno",
+      "est0330@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      360,
+      "est0329",
+      "Héctor Herrera",
+      "est0329@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      359,
+      "est0328",
+      "Ricardo Rivera",
+      "est0328@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      358,
+      "est0327",
+      "Héctor Rivera",
+      "est0327@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      357,
+      "est0326",
+      "Pedro Martínez",
+      "est0326@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      356,
+      "est0325",
+      "Valentina Gómez",
+      "est0325@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      355,
+      "est0324",
+      "Óscar Castillo",
+      "est0324@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      354,
+      "est0323",
+      "Óscar Moreno",
+      "est0323@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      353,
+      "est0322",
+      "Fernando Castillo",
+      "est0322@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      352,
+      "est0321",
+      "Felipe Alvarez",
+      "est0321@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      351,
+      "est0320",
+      "Ana Ortiz",
+      "est0320@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      350,
+      "est0319",
+      "Natalia Cruz",
+      "est0319@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      349,
+      "est0318",
+      "Camila Rodríguez",
+      "est0318@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      348,
+      "est0317",
+      "Isabel Sánchez",
+      "est0317@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      347,
+      "est0316",
+      "Lucía Medina",
+      "est0316@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      346,
+      "est0315",
+      "Daniela López",
+      "est0315@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      345,
+      "est0314",
+      "Pedro Ramos",
+      "est0314@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      344,
+      "est0313",
+      "Roberto Rivera",
+      "est0313@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      343,
+      "est0312",
+      "Miguel Moreno",
+      "est0312@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      342,
+      "est0311",
+      "Ricardo Cruz",
+      "est0311@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      341,
+      "est0310",
+      "Luis López",
+      "est0310@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      340,
+      "est0309",
+      "Isabel Torres",
+      "est0309@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      339,
+      "est0308",
+      "Camila Pérez",
+      "est0308@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      338,
+      "est0307",
+      "Carlos Medina",
+      "est0307@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      337,
+      "est0306",
+      "Paula García",
+      "est0306@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      336,
+      "est0305",
+      "Andrea Gutiérrez",
+      "est0305@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      335,
+      "est0304",
+      "Lucía Castillo",
+      "est0304@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      334,
+      "est0303",
+      "Gabriela Ortiz",
+      "est0303@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      333,
+      "est0302",
+      "Camila Gómez",
+      "est0302@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      332,
+      "est0301",
+      "María Romero",
+      "est0301@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      331,
+      "est0300",
+      "Camila Herrera",
+      "est0300@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      330,
+      "est0299",
+      "Lucía Rivera",
+      "est0299@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      329,
+      "est0298",
+      "Héctor Sánchez",
+      "est0298@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      328,
+      "est0297",
+      "Andrés García",
+      "est0297@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      327,
+      "est0296",
+      "Sebastián Ramírez",
+      "est0296@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      326,
+      "est0295",
+      "Andrea Alvarez",
+      "est0295@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      325,
+      "est0294",
+      "Miguel Flores",
+      "est0294@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      324,
+      "est0293",
+      "Andrea Morales",
+      "est0293@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      323,
+      "est0292",
+      "Andrés Sánchez",
+      "est0292@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      322,
+      "est0291",
+      "Sebastián Reyes",
+      "est0291@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      321,
+      "est0290",
+      "Sebastián Rodríguez",
+      "est0290@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      320,
+      "est0289",
+      "Carlos Díaz",
+      "est0289@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      319,
+      "est0288",
+      "Roberto Jiménez",
+      "est0288@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      318,
+      "est0287",
+      "Camila Pérez",
+      "est0287@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      317,
+      "est0286",
+      "Roberto Ramírez",
+      "est0286@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      316,
+      "est0285",
+      "Sebastián Moreno",
+      "est0285@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      315,
+      "est0284",
+      "Roberto Castillo",
+      "est0284@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      314,
+      "est0283",
+      "Roberto Cruz",
+      "est0283@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      313,
+      "est0282",
+      "Felipe Rivera",
+      "est0282@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      312,
+      "est0281",
+      "Diego Moreno",
+      "est0281@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      311,
+      "est0280",
+      "Pedro García",
+      "est0280@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      310,
+      "est0279",
+      "Diego Medina",
+      "est0279@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      309,
+      "est0278",
+      "Roberto Alvarez",
+      "est0278@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      308,
+      "est0277",
+      "Sebastián Pérez",
+      "est0277@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      307,
+      "est0276",
+      "Felipe Ramírez",
+      "est0276@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      306,
+      "est0275",
+      "Óscar González",
+      "est0275@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      305,
+      "est0274",
+      "Pedro Ramos",
+      "est0274@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      304,
+      "est0273",
+      "Carolina Herrera",
+      "est0273@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      303,
+      "est0272",
+      "Patricia Gutiérrez",
+      "est0272@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      302,
+      "est0271",
+      "Carlos Gómez",
+      "est0271@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      301,
+      "est0270",
+      "Andrés Castillo",
+      "est0270@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      300,
+      "est0269",
+      "Valentina Castillo",
+      "est0269@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      299,
+      "est0268",
+      "Carolina Gómez",
+      "est0268@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      298,
+      "est0267",
+      "Sebastián Rodríguez",
+      "est0267@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      297,
+      "est0266",
+      "Felipe Alvarez",
+      "est0266@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      296,
+      "est0265",
+      "Miguel Medina",
+      "est0265@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      295,
+      "est0264",
+      "Luis Flores",
+      "est0264@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      294,
+      "est0263",
+      "Pedro González",
+      "est0263@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      293,
+      "est0262",
+      "Fernando González",
+      "est0262@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      292,
+      "est0261",
+      "Miguel Chávez",
+      "est0261@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      291,
+      "est0260",
+      "Luis Mendoza",
+      "est0260@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      290,
+      "est0259",
+      "Sofía Gutiérrez",
+      "est0259@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      289,
+      "est0258",
+      "Natalia Medina",
+      "est0258@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      288,
+      "est0257",
+      "María Medina",
+      "est0257@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      287,
+      "est0256",
+      "Ana López",
+      "est0256@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      286,
+      "est0255",
+      "Pedro Gutiérrez",
+      "est0255@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      285,
+      "est0254",
+      "Fernando Jiménez",
+      "est0254@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      284,
+      "est0253",
+      "Óscar Morales",
+      "est0253@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      283,
+      "est0252",
+      "Camila Pérez",
+      "est0252@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      282,
+      "est0251",
+      "Sofía Vargas",
+      "est0251@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      281,
+      "est0250",
+      "Paula Romero",
+      "est0250@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      280,
+      "est0249",
+      "Luis García",
+      "est0249@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      279,
+      "est0248",
+      "Andrea Torres",
+      "est0248@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      278,
+      "est0247",
+      "Gabriela Cruz",
+      "est0247@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      277,
+      "est0246",
+      "Luis Martínez",
+      "est0246@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      276,
+      "est0245",
+      "Carolina Herrera",
+      "est0245@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      275,
+      "est0244",
+      "Jorge Torres",
+      "est0244@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      274,
+      "est0243",
+      "Camila Ortiz",
+      "est0243@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      273,
+      "est0242",
+      "Gabriela Herrera",
+      "est0242@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      272,
+      "est0241",
+      "Valentina Castillo",
+      "est0241@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      271,
+      "est0240",
+      "Natalia Rivera",
+      "est0240@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      270,
+      "est0239",
+      "Ricardo Sánchez",
+      "est0239@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      269,
+      "est0238",
+      "Camila Flores",
+      "est0238@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      268,
+      "est0237",
+      "Fernando González",
+      "est0237@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      267,
+      "est0236",
+      "Carlos Moreno",
+      "est0236@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      266,
+      "est0235",
+      "Carlos Medina",
+      "est0235@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      265,
+      "est0234",
+      "Sofía Torres",
+      "est0234@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      264,
+      "est0233",
+      "Carlos Medina",
+      "est0233@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      263,
+      "est0232",
+      "José Castillo",
+      "est0232@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      262,
+      "est0231",
+      "Andrea Gutiérrez",
+      "est0231@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      261,
+      "est0230",
+      "Ana Castillo",
+      "est0230@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      260,
+      "est0229",
+      "Gabriela Ortiz",
+      "est0229@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      259,
+      "est0228",
+      "Ricardo Alvarez",
+      "est0228@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      258,
+      "est0227",
+      "Natalia Flores",
+      "est0227@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      257,
+      "est0226",
+      "Andrea Gutiérrez",
+      "est0226@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      256,
+      "est0225",
+      "Diego Morales",
+      "est0225@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      255,
+      "est0224",
+      "Miguel Flores",
+      "est0224@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      254,
+      "est0223",
+      "Carolina Ramírez",
+      "est0223@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      253,
+      "est0222",
+      "Carolina Martínez",
+      "est0222@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      252,
+      "est0221",
+      "Sofía Gómez",
+      "est0221@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      251,
+      "est0220",
+      "Daniela Torres",
+      "est0220@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      250,
+      "est0219",
+      "Fernando Sánchez",
+      "est0219@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      249,
+      "est0218",
+      "Carlos Martínez",
+      "est0218@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      248,
+      "est0217",
+      "Ricardo Chávez",
+      "est0217@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      247,
+      "est0216",
+      "Ana Morales",
+      "est0216@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      246,
+      "est0215",
+      "Felipe Martínez",
+      "est0215@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      245,
+      "est0214",
+      "Paula Romero",
+      "est0214@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      244,
+      "est0213",
+      "José Morales",
+      "est0213@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      243,
+      "est0212",
+      "Héctor Vargas",
+      "est0212@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      242,
+      "est0211",
+      "Lucía González",
+      "est0211@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      241,
+      "est0210",
+      "Andrés Torres",
+      "est0210@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      240,
+      "est0209",
+      "Natalia Rivera",
+      "est0209@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      239,
+      "est0208",
+      "Valentina Castillo",
+      "est0208@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      238,
+      "est0207",
+      "Paula Torres",
+      "est0207@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      237,
+      "est0206",
+      "Isabel Ortiz",
+      "est0206@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      236,
+      "est0205",
+      "Héctor Chávez",
+      "est0205@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      235,
+      "est0204",
+      "María Cruz",
+      "est0204@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      234,
+      "est0203",
+      "Luis Ramos",
+      "est0203@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      233,
+      "est0202",
+      "Isabel Ramos",
+      "est0202@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      232,
+      "est0201",
+      "Isabel Ramírez",
+      "est0201@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      231,
+      "est0200",
+      "Carlos Medina",
+      "est0200@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      230,
+      "est0199",
+      "Andrés Díaz",
+      "est0199@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      229,
+      "est0198",
+      "Héctor Herrera",
+      "est0198@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      228,
+      "est0197",
+      "Ricardo Martínez",
+      "est0197@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      227,
+      "est0196",
+      "Diego Martínez",
+      "est0196@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      226,
+      "est0195",
+      "María Herrera",
+      "est0195@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      225,
+      "est0194",
+      "Luis Ortiz",
+      "est0194@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      224,
+      "est0193",
+      "Daniela Pérez",
+      "est0193@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      223,
+      "est0192",
+      "Daniela Herrera",
+      "est0192@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      222,
+      "est0191",
+      "Isabel Reyes",
+      "est0191@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      221,
+      "est0190",
+      "Luis Rodríguez",
+      "est0190@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      220,
+      "est0189",
+      "Óscar Rivera",
+      "est0189@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      219,
+      "est0188",
+      "Fernando Rodríguez",
+      "est0188@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      218,
+      "est0187",
+      "Isabel Moreno",
+      "est0187@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      217,
+      "est0186",
+      "Valentina Rodríguez",
+      "est0186@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      216,
+      "est0185",
+      "Valentina Flores",
+      "est0185@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      215,
+      "est0184",
+      "Jorge González",
+      "est0184@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      214,
+      "est0183",
+      "Héctor Jiménez",
+      "est0183@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      213,
+      "est0182",
+      "Roberto Gutiérrez",
+      "est0182@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      212,
+      "est0181",
+      "Natalia Moreno",
+      "est0181@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      211,
+      "est0180",
+      "José Cruz",
+      "est0180@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      210,
+      "est0179",
+      "Roberto Morales",
+      "est0179@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      209,
+      "est0178",
+      "Felipe Alvarez",
+      "est0178@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      208,
+      "est0177",
+      "Lucía Torres",
+      "est0177@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      207,
+      "est0176",
+      "Lucía García",
+      "est0176@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      206,
+      "est0175",
+      "Luis Pérez",
+      "est0175@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      205,
+      "est0174",
+      "Lucía Medina",
+      "est0174@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      204,
+      "est0173",
+      "Valentina Herrera",
+      "est0173@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      203,
+      "est0172",
+      "Jorge Reyes",
+      "est0172@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      202,
+      "est0171",
+      "Diego Cruz",
+      "est0171@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      201,
+      "est0170",
+      "Sebastián Ramírez",
+      "est0170@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      200,
+      "est0169",
+      "Felipe Romero",
+      "est0169@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      199,
+      "est0168",
+      "Ana Martínez",
+      "est0168@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      198,
+      "est0167",
+      "Fernando Mendoza",
+      "est0167@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      197,
+      "est0166",
+      "Luis Vargas",
+      "est0166@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      196,
+      "est0165",
+      "Fernando López",
+      "est0165@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      195,
+      "est0164",
+      "Sebastián Herrera",
+      "est0164@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      194,
+      "est0163",
+      "Elena Alvarez",
+      "est0163@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      193,
+      "est0162",
+      "Sebastián Martínez",
+      "est0162@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      192,
+      "est0161",
+      "Elena Ramírez",
+      "est0161@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      191,
+      "est0160",
+      "Diego Torres",
+      "est0160@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      190,
+      "est0159",
+      "Sofía Cruz",
+      "est0159@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      189,
+      "est0158",
+      "Fernando Morales",
+      "est0158@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      188,
+      "est0157",
+      "Valentina Sánchez",
+      "est0157@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      187,
+      "est0156",
+      "Carlos Ramírez",
+      "est0156@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      186,
+      "est0155",
+      "Roberto Herrera",
+      "est0155@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      185,
+      "est0154",
+      "Óscar Rivera",
+      "est0154@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      184,
+      "est0153",
+      "Luis Díaz",
+      "est0153@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      183,
+      "est0152",
+      "Gabriela López",
+      "est0152@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      182,
+      "est0151",
+      "Héctor Vargas",
+      "est0151@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      181,
+      "est0150",
+      "Óscar Rodríguez",
+      "est0150@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      180,
+      "est0149",
+      "Elena Herrera",
+      "est0149@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      179,
+      "est0148",
+      "Pedro Cruz",
+      "est0148@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      178,
+      "est0147",
+      "Pedro Gómez",
+      "est0147@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      177,
+      "est0146",
+      "Carlos Castillo",
+      "est0146@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      176,
+      "est0145",
+      "Valentina López",
+      "est0145@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      175,
+      "est0144",
+      "Roberto Cruz",
+      "est0144@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      174,
+      "est0143",
+      "Roberto Reyes",
+      "est0143@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      173,
+      "est0142",
+      "Jorge Ramírez",
+      "est0142@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      172,
+      "est0141",
+      "Isabel Chávez",
+      "est0141@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      171,
+      "est0140",
+      "Felipe Medina",
+      "est0140@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      170,
+      "est0139",
+      "Sofía Moreno",
+      "est0139@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      169,
+      "est0138",
+      "Valentina Gutiérrez",
+      "est0138@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      168,
+      "est0137",
+      "Héctor Reyes",
+      "est0137@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      167,
+      "est0136",
+      "Andrés Torres",
+      "est0136@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      166,
+      "est0135",
+      "María Ortiz",
+      "est0135@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      165,
+      "est0134",
+      "Sebastián Rivera",
+      "est0134@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      164,
+      "est0133",
+      "Carolina Rodríguez",
+      "est0133@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      163,
+      "est0132",
+      "Andrés Martínez",
+      "est0132@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      162,
+      "est0131",
+      "Gabriela Rodríguez",
+      "est0131@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      161,
+      "est0130",
+      "María Jiménez",
+      "est0130@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      160,
+      "est0129",
+      "Andrés García",
+      "est0129@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      159,
+      "est0128",
+      "Andrés Chávez",
+      "est0128@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      158,
+      "est0127",
+      "Isabel Gutiérrez",
+      "est0127@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      157,
+      "est0126",
+      "Paula García",
+      "est0126@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      156,
+      "est0125",
+      "Andrés Martínez",
+      "est0125@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      155,
+      "est0124",
+      "Carlos Ramírez",
+      "est0124@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      154,
+      "est0123",
+      "Daniela Morales",
+      "est0123@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      153,
+      "est0122",
+      "Elena Medina",
+      "est0122@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      152,
+      "est0121",
+      "Gabriela Gómez",
+      "est0121@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      151,
+      "est0120",
+      "Lucía Castillo",
+      "est0120@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      150,
+      "est0119",
+      "Natalia Flores",
+      "est0119@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      149,
+      "est0118",
+      "Natalia Sánchez",
+      "est0118@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      148,
+      "est0117",
+      "Patricia Moreno",
+      "est0117@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      147,
+      "est0116",
+      "Felipe Gutiérrez",
+      "est0116@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      146,
+      "est0115",
+      "Pedro Sánchez",
+      "est0115@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      145,
+      "est0114",
+      "Sebastián Ramos",
+      "est0114@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      144,
+      "est0113",
+      "Camila Ortiz",
+      "est0113@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      143,
+      "est0112",
+      "Fernando Pérez",
+      "est0112@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      142,
+      "est0111",
+      "Héctor Reyes",
+      "est0111@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      141,
+      "est0110",
+      "Sofía González",
+      "est0110@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      140,
+      "est0109",
+      "Fernando Romero",
+      "est0109@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      139,
+      "est0108",
+      "María Romero",
+      "est0108@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      138,
+      "est0107",
+      "Jorge Mendoza",
+      "est0107@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      137,
+      "est0106",
+      "María Moreno",
+      "est0106@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      136,
+      "est0105",
+      "Isabel Martínez",
+      "est0105@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      135,
+      "est0104",
+      "Andrés Medina",
+      "est0104@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      134,
+      "est0103",
+      "Andrés Rodríguez",
+      "est0103@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      133,
+      "est0102",
+      "Roberto Flores",
+      "est0102@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      132,
+      "est0101",
+      "Carolina Mendoza",
+      "est0101@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      131,
+      "est0100",
+      "Carlos Gómez",
+      "est0100@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      130,
+      "est0099",
+      "Jorge García",
+      "est0099@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      129,
+      "est0098",
+      "Ricardo Rivera",
+      "est0098@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      128,
+      "est0097",
+      "Felipe García",
+      "est0097@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      127,
+      "est0096",
+      "Felipe Ortiz",
+      "est0096@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      126,
+      "est0095",
+      "Fernando Romero",
+      "est0095@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      125,
+      "est0094",
+      "Patricia Pérez",
+      "est0094@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      124,
+      "est0093",
+      "Sofía Gómez",
+      "est0093@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      123,
+      "est0092",
+      "Ricardo Sánchez",
+      "est0092@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      122,
+      "est0091",
+      "Gabriela Ortiz",
+      "est0091@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      121,
+      "est0090",
+      "José Mendoza",
+      "est0090@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      120,
+      "est0089",
+      "Sebastián Vargas",
+      "est0089@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      119,
+      "est0088",
+      "Daniela López",
+      "est0088@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      118,
+      "est0087",
+      "Patricia Pérez",
+      "est0087@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      117,
+      "est0086",
+      "Camila Ortiz",
+      "est0086@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      116,
+      "est0085",
+      "Carolina Moreno",
+      "est0085@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      115,
+      "est0084",
+      "Ana Moreno",
+      "est0084@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      114,
+      "est0083",
+      "Diego Morales",
+      "est0083@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      113,
+      "est0082",
+      "José Cruz",
+      "est0082@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      112,
+      "est0081",
+      "Paula López",
+      "est0081@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      111,
+      "est0080",
+      "Patricia Vargas",
+      "est0080@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      110,
+      "est0079",
+      "Patricia Torres",
+      "est0079@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      109,
+      "est0078",
+      "Carolina Gutiérrez",
+      "est0078@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      108,
+      "est0077",
+      "Carlos Castillo",
+      "est0077@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      107,
+      "est0076",
+      "Héctor Moreno",
+      "est0076@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      106,
+      "est0075",
+      "Sebastián García",
+      "est0075@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      105,
+      "est0074",
+      "Camila Gutiérrez",
+      "est0074@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      104,
+      "est0073",
+      "Elena Ortiz",
+      "est0073@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      103,
+      "est0072",
+      "Lucía Ramos",
+      "est0072@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      102,
+      "est0071",
+      "María Díaz",
+      "est0071@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      101,
+      "est0070",
+      "Pedro Ramos",
+      "est0070@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      100,
+      "est0069",
+      "Roberto Castillo",
+      "est0069@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      99,
+      "est0068",
+      "Gabriela Pérez",
+      "est0068@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      98,
+      "est0067",
+      "Carlos González",
+      "est0067@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      97,
+      "est0066",
+      "Luis Herrera",
+      "est0066@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      96,
+      "est0065",
+      "María Romero",
+      "est0065@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      95,
+      "est0064",
+      "Daniela Reyes",
+      "est0064@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      94,
+      "est0063",
+      "Andrés González",
+      "est0063@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      93,
+      "est0062",
+      "Lucía Gómez",
+      "est0062@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      92,
+      "est0061",
+      "Carolina Chávez",
+      "est0061@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      91,
+      "est0060",
+      "Isabel Cruz",
+      "est0060@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      90,
+      "est0059",
+      "Camila Moreno",
+      "est0059@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      89,
+      "est0058",
+      "Fernando Gutiérrez",
+      "est0058@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      88,
+      "est0057",
+      "Andrés Moreno",
+      "est0057@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      87,
+      "est0056",
+      "Camila González",
+      "est0056@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      86,
+      "est0055",
+      "Elena González",
+      "est0055@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      85,
+      "est0054",
+      "Felipe Vargas",
+      "est0054@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      84,
+      "est0053",
+      "Lucía Medina",
+      "est0053@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      83,
+      "est0052",
+      "Gabriela Reyes",
+      "est0052@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      82,
+      "est0051",
+      "Paula Sánchez",
+      "est0051@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      81,
+      "est0050",
+      "Carolina Jiménez",
+      "est0050@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      80,
+      "est0049",
+      "Felipe Chávez",
+      "est0049@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      79,
+      "est0048",
+      "María Sánchez",
+      "est0048@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      78,
+      "est0047",
+      "Lucía Torres",
+      "est0047@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      77,
+      "est0046",
+      "Roberto Rivera",
+      "est0046@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      76,
+      "est0045",
+      "Andrea Rodríguez",
+      "est0045@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      75,
+      "est0044",
+      "Luis Ramírez",
+      "est0044@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      74,
+      "est0043",
+      "Patricia Romero",
+      "est0043@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      73,
+      "est0042",
+      "Paula Mendoza",
+      "est0042@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      72,
+      "est0041",
+      "Andrés Castillo",
+      "est0041@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      71,
+      "est0040",
+      "Natalia Gutiérrez",
+      "est0040@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      70,
+      "est0039",
+      "Felipe Vargas",
+      "est0039@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      69,
+      "est0038",
+      "Lucía Torres",
+      "est0038@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      68,
+      "est0037",
+      "Diego Morales",
+      "est0037@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      67,
+      "est0036",
+      "Óscar Ramírez",
+      "est0036@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      66,
+      "est0035",
+      "Diego Gutiérrez",
+      "est0035@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      65,
+      "est0034",
+      "Ricardo Vargas",
+      "est0034@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      64,
+      "est0033",
+      "Gabriela Martínez",
+      "est0033@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      63,
+      "est0032",
+      "Felipe Castillo",
+      "est0032@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      62,
+      "est0031",
+      "Camila Jiménez",
+      "est0031@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      61,
+      "est0030",
+      "Valentina Castillo",
+      "est0030@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      60,
+      "est0029",
+      "Miguel Gómez",
+      "est0029@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      59,
+      "est0028",
+      "Miguel Pérez",
+      "est0028@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      58,
+      "est0027",
+      "Gabriela Mendoza",
+      "est0027@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      57,
+      "est0026",
+      "Camila Morales",
+      "est0026@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      56,
+      "est0025",
+      "Carlos Díaz",
+      "est0025@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      55,
+      "est0024",
+      "Andrés Herrera",
+      "est0024@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      54,
+      "est0023",
+      "María Herrera",
+      "est0023@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      53,
+      "est0022",
+      "Patricia Flores",
+      "est0022@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      52,
+      "est0021",
+      "Héctor Ramírez",
+      "est0021@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      51,
+      "est0020",
+      "María Rodríguez",
+      "est0020@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      50,
+      "est0019",
+      "Valentina Jiménez",
+      "est0019@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      49,
+      "est0018",
+      "Miguel Chávez",
+      "est0018@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      48,
+      "est0017",
+      "Carolina Herrera",
+      "est0017@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      47,
+      "est0016",
+      "Gabriela Ramos",
+      "est0016@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      46,
+      "est0015",
+      "José Mendoza",
+      "est0015@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      45,
+      "est0014",
+      "María Gutiérrez",
+      "est0014@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      44,
+      "est0013",
+      "Carlos Díaz",
+      "est0013@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      43,
+      "est0012",
+      "Elena Gutiérrez",
+      "est0012@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      42,
+      "est0011",
+      "Luis Moreno",
+      "est0011@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      41,
+      "est0010",
+      "Camila Alvarez",
+      "est0010@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      40,
+      "est0009",
+      "Miguel Ramos",
+      "est0009@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      39,
+      "est0008",
+      "Miguel Herrera",
+      "est0008@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      38,
+      "est0007",
+      "Lucía López",
+      "est0007@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      37,
+      "est0006",
+      "Carlos Martínez",
+      "est0006@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      36,
+      "est0005",
+      "Patricia Rivera",
+      "est0005@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      35,
+      "est0004",
+      "Sofía Sánchez",
+      "est0004@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      34,
+      "est0003",
+      "Paula Torres",
+      "est0003@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      33,
+      "est0002",
+      "Natalia Cruz",
+      "est0002@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      32,
+      "est0001",
+      "Roberto Pérez",
+      "est0001@estudiante.edu",
+      "STUDENT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      31,
+      "docente20",
+      "Ana Romero",
+      "docente20@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      30,
+      "docente19",
+      "Roberto Herrera",
+      "docente19@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      29,
+      "docente18",
+      "Isabel Torres",
+      "docente18@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      28,
+      "docente17",
+      "Andrés Morales",
+      "docente17@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      27,
+      "docente16",
+      "Fernando Cruz",
+      "docente16@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      26,
+      "docente15",
+      "Gabriela Jiménez",
+      "docente15@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      25,
+      "docente14",
+      "Valentina Jiménez",
+      "docente14@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      24,
+      "docente13",
+      "Ana Gutiérrez",
+      "docente13@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      23,
+      "docente12",
+      "Daniela Ramos",
+      "docente12@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      22,
+      "docente11",
+      "Valentina Ramírez",
+      "docente11@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      21,
+      "docente10",
+      "Ana Martínez",
+      "docente10@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      20,
+      "docente09",
+      "Pedro Rodríguez",
+      "docente09@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      19,
+      "docente08",
+      "María Chávez",
+      "docente08@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      18,
+      "docente07",
+      "Carolina Gutiérrez",
+      "docente07@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      17,
+      "docente06",
+      "Héctor Moreno",
+      "docente06@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      16,
+      "docente05",
+      "Óscar López",
+      "docente05@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      15,
+      "docente04",
+      "Andrés González",
+      "docente04@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      14,
+      "docente03",
+      "Camila Ramírez",
+      "docente03@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      13,
+      "docente02",
+      "Ana Moreno",
+      "docente02@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      12,
+      "docente01",
+      "Gabriela López",
+      "docente01@institucion.edu",
+      "TEACHER",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      11,
+      "itsupport",
+      "Diego Soporte",
+      "itsupport@institucion.edu",
+      "IT_SUPPORT",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      10,
+      "tutor1",
+      "Pedro Tutor",
+      "tutor1@institucion.edu",
+      "GUARDIAN",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      9,
+      "secretaria",
+      "Elena Secretaría",
+      "secretaria@institucion.edu",
+      "SECRETARY",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      8,
+      "coord03",
+      "Sofía Coordinadora MAG",
+      "coord03@institucion.edu",
+      "COORDINATOR",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      7,
+      "coord02",
+      "Carlos Coordinador MAU",
+      "coord02@institucion.edu",
+      "COORDINATOR",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      6,
+      "coord01",
+      "María Coordinadora DSW",
+      "coord01@institucion.edu",
+      "COORDINATOR",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      5,
+      "auditor",
+      "Luis Auditor",
+      "auditor@institucion.edu",
+      "AUDITOR",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      4,
+      "rector",
+      "Ana Rectora",
+      "rector@institucion.edu",
+      "RECTOR",
+      "Activo",
+      "2026-10-12"
+    ],
+    [
+      1,
+      "admin",
+      "Administrador General",
+      "admin@institucion.edu",
+      "ADMIN",
+      "Activo",
+      "2026-10-12"
+    ]
+  ],
+  "count": 429
+}
