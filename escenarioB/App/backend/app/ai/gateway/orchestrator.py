@@ -231,8 +231,13 @@ def _tool_result_brief(tool_name: str, result: dict) -> str:
                         "student_code",
                         "parallel",
                         "enrolled_count",
+                        "student_id",
+                        "student_name",
+                        "course_id",
                         "course_name",
                         "subject_name",
+                        "partial1",
+                        "partial2",
                         "status",
                     )
                     if k in row and row.get(k) is not None
@@ -431,74 +436,86 @@ def run_agent_chat(
         )
         return _response(conv, reply, artifacts, tool_calls_log, None, tokens_total)
 
-    # Ejecutar tools
+    # Ejecutar tools (encadenado: el modelo puede consultar ids y luego mutar, hasta 4 rondas;
+    # cada llamada pasa por el mismo executor: permisos y confirmación se evalúan en cada ronda)
+    chain = list(llm_messages)
+    cur_msg, cur_calls = msg, tool_calls
     tool_results = []
-    for tc in tool_calls[:8]:
-        result = execute_tool(
-            user,
-            tc["name"],
-            tc["args"],
-            confirm=False,
-            conversation_id=conv.id,
-            user_question=message,
-        )
-        tool_calls_log.append({"tool": tc["name"], "args": tc["args"], "result": result})
-
-        if result.get("needs_confirm"):
-            conv.pending_action = {"tool": tc["name"], "args": tc["args"], "summary": result.get("summary")}
-            db.session.commit()
-            reply = _compose_user_reply(tool_calls_log, artifacts)
-            add_message(conv, "assistant", reply, channel=channel)
-            log_legacy(user.id, message, reply, tokens_total)
-            log_agent_event(
+    for _round in range(4):
+        tool_results = []
+        for tc in cur_calls[:8]:
+            result = execute_tool(
                 user,
-                event_type="tool_call",
-                severity="warn",
-                summary=f"Pendiente confirmación: {tc['name']}",
+                tc["name"],
+                tc["args"],
+                confirm=False,
                 conversation_id=conv.id,
-                detail={"tool": tc["name"], "args": tc["args"]},
-                keywords=message[:300],
-                channel=channel,
                 user_question=message,
             )
-            return _response(conv, reply, artifacts, tool_calls_log, conv.pending_action, tokens_total)
+            tool_calls_log.append({"tool": tc["name"], "args": tc["args"], "result": result})
 
-        if result.get("artifact"):
-            artifacts.append(result["artifact"])
+            if result.get("needs_confirm"):
+                conv.pending_action = {"tool": tc["name"], "args": tc["args"], "summary": result.get("summary")}
+                db.session.commit()
+                reply = _compose_user_reply(tool_calls_log, artifacts)
+                add_message(conv, "assistant", reply, channel=channel)
+                log_legacy(user.id, message, reply, tokens_total)
+                log_agent_event(
+                    user,
+                    event_type="tool_call",
+                    severity="warn",
+                    summary=f"Pendiente confirmación: {tc['name']}",
+                    conversation_id=conv.id,
+                    detail={"tool": tc["name"], "args": tc["args"]},
+                    keywords=message[:300],
+                    channel=channel,
+                    user_question=message,
+                )
+                return _response(conv, reply, artifacts, tool_calls_log, conv.pending_action, tokens_total)
 
-        brief = _tool_result_brief(tc["name"], result)
-        tool_results.append(
-            {
-                "role": "tool",
-                "tool_call_id": tc.get("id") or tc["name"],
-                "name": tc["name"],
-                "content": brief,
-            }
+            if result.get("artifact"):
+                artifacts.append(result["artifact"])
+
+            brief = _tool_result_brief(tc["name"], result)
+            tool_results.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tc.get("id") or tc["name"],
+                    "name": tc["name"],
+                    "content": brief,
+                }
+            )
+            add_message(
+                conv,
+                "tool",
+                brief,
+                channel=channel,
+                tool_name=tc["name"],
+                tool_payload=result,
+                artifact_id=(result.get("artifact") or {}).get("id"),
+            )
+
+        chain.append(
+            {"role": "assistant", "content": cur_msg.get("content") or "", "tool_calls": cur_msg.get("tool_calls")}
         )
-        add_message(
-            conv,
-            "tool",
-            brief,
-            channel=channel,
-            tool_name=tc["name"],
-            tool_payload=result,
-            artifact_id=(result.get("artifact") or {}).get("id"),
-        )
+        chain.extend(tool_results)
+        if artifacts or _round == 3:
+            break
+        nxt = call_llm(user, chain, use_tools=True)
+        if nxt.get("fallback") or nxt.get("error"):
+            break
+        tokens_total += nxt.get("tokens_used") or 0
+        cur_msg = nxt.get("message") or {}
+        cur_calls = parse_tool_calls(cur_msg)
+        if not cur_calls:
+            break
 
     # Preferir composición fluida; LLM2 solo aporta redacción natural (sin artifacts)
     composed = _compose_user_reply(tool_calls_log, artifacts)
     reply = composed
 
     if not artifacts:
-        follow_messages = llm_messages + [
-            {
-                "role": "assistant",
-                "content": msg.get("content") or "",
-                "tool_calls": msg.get("tool_calls"),
-            }
-        ]
-        for tr in tool_results:
-            follow_messages.append(tr)
+        follow_messages = list(chain)
         follow_messages.append(
             {
                 "role": "system",

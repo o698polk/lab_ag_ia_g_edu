@@ -118,7 +118,7 @@ TOOL_SCHEMAS = [
         "function": {
             "name": "courses_list",
             "description": "Lista cursos/paralelos del ámbito del usuario.",
-            "parameters": {"type": "object", "properties": {"page": {"type": "integer"}}},
+            "parameters": {"type": "object", "properties": {"search": {"type": "string", "description": "texto del nombre o código del curso"}, "page": {"type": "integer"}}},
         },
     },
     {
@@ -128,7 +128,7 @@ TOOL_SCHEMAS = [
             "description": "Lista estudiantes visibles.",
             "parameters": {
                 "type": "object",
-                "properties": {"career_id": {"type": "integer"}, "page": {"type": "integer"}},
+                "properties": {"search": {"type": "string", "description": "nombre, apellido, usuario (est0400) o código del estudiante"}, "career_id": {"type": "integer"}, "page": {"type": "integer"}},
             },
         },
     },

@@ -2,6 +2,7 @@
 
 import json
 import re
+import time
 from urllib.parse import urlparse
 
 import requests
@@ -125,7 +126,16 @@ def call_llm(user: User, messages: list[dict], *, use_tools: bool = True) -> dic
     headers = {"Authorization": f"Bearer {cfg['api_key']}", "Content-Type": "application/json"}
 
     try:
-        resp = requests.post(cfg["api_url"], json=payload, headers=headers, timeout=60)
+        # Reintentos ante fallos transitorios de red/DNS (p. ej. getaddrinfo failed)
+        resp = None
+        for attempt in range(4):
+            try:
+                resp = requests.post(cfg["api_url"], json=payload, headers=headers, timeout=60)
+                break
+            except (requests.ConnectionError, requests.Timeout):
+                if attempt == 3:
+                    raise
+                time.sleep(1.5 * (attempt + 1))
         resp.raise_for_status()
         data = resp.json()
         choice = data["choices"][0]

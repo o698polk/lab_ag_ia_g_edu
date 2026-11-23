@@ -294,6 +294,10 @@ def update_ai_config():
         cfg.system_prompt = data["system_prompt"]
     if "is_enabled" in data:
         cfg.is_enabled = bool(data["is_enabled"])
+    # Guardar una API Key nueva implica habilitar el proveedor (evita clave guardada e inútil)
+    if data.get("api_key"):
+        cfg.api_key_encrypted = encrypt_value(data["api_key"])
+        cfg.is_enabled = True
     db.session.commit()
     log_event(get_current_user().id, "AI_CONFIG_UPDATE", "ai", "")
     return jsonify(cfg.to_dict())

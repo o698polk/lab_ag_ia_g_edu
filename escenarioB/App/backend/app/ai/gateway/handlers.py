@@ -129,6 +129,11 @@ def courses_list(user, args):
     if not user.has_permission("courses.view"):
         return _deny("Sin permiso courses.view", "courses.view")
     q = apply_course_scope(Course.query, user).order_by(Course.name)
+    search = (args.get("search") or "").strip()
+    if search:
+        for tok in search.split():
+            like = f"%{tok}%"
+            q = q.filter(db.or_(Course.name.ilike(like), Course.code.ilike(like)))
     p = _paginate(q, args.get("page"), args.get("per_page"))
     data = []
     for c in p["items"]:
@@ -157,6 +162,21 @@ def students_list(user, args):
         q = Student.query
     if args.get("career_id"):
         q = q.filter_by(career_id=int(args["career_id"]))
+    search = (args.get("search") or "").strip().lstrip("@")
+    if search:
+        from app.models.iam import User as _U
+
+        q = q.join(_U, _U.id == Student.user_id)
+        for tok in search.split():
+            like = f"%{tok}%"
+            q = q.filter(
+                db.or_(
+                    _U.first_name.ilike(like),
+                    _U.last_name.ilike(like),
+                    _U.username.ilike(like),
+                    Student.student_code.ilike(like),
+                )
+            )
     p = _paginate(q.order_by(Student.id), args.get("page"), args.get("per_page"))
     return _ok([s.to_dict() for s in p["items"]], **_page_meta(p))
 

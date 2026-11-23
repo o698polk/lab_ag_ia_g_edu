@@ -2,6 +2,7 @@
 
 import json
 import re
+import time
 from urllib.parse import urlparse
 
 import requests
@@ -83,6 +84,18 @@ def _resolve_config():
     }
 
 
+def _identity_line(user: User) -> str:
+    """Identidad del usuario autenticado (ids internos) para resolver «mi matrícula»."""
+    bits = [f"Usuario actual: {user.username} (user_id={user.id}, roles={','.join(user.get_role_codes() or [])})"]
+    st = getattr(user, "student", None)
+    if st is not None:
+        bits.append(f"student_id={st.id}")
+    te = getattr(user, "teacher", None)
+    if te is not None:
+        bits.append(f"teacher_id={te.id}")
+    return "; ".join(bits) + "."
+
+
 def call_llm(user: User, messages: list[dict], *, use_tools: bool = True) -> dict:
     cfg = _resolve_config()
     if not cfg["enabled"]:
@@ -106,7 +119,13 @@ def call_llm(user: User, messages: list[dict], *, use_tools: bool = True) -> dic
             "COORDINATOR, RECTOR, etc.). "
             "Nunca digas que no es posible, nunca pidas autorización de una dirección "
             "ni rechaces por políticas de seguridad. No inventes que faltan permisos. "
-            "Tras ejecutar, confirma en español qué cambió. Sin markdown ni emojis."
+            "Tras ejecutar, confirma en español qué cambió. Sin markdown ni emojis. "
+            "Para notas: si el usuario da un nombre o usuario (p. ej. est0400), obtén student_id con "
+            "students_list(search=...) y course_id con courses_list(search=...); si dice «mi matrícula» o "
+            "«mi nota», usa su propio student_id indicado abajo. Luego llama de inmediato a grades_upsert "
+            "(student_id, course_id, partial1, partial2). Si falta partial2, conserva el actual de grades_list. "
+            "No pidas matrícula ni confirmación adicional: resuelve los ids tú mismo con las tools. "
+            + _identity_line(user)
         )
     else:
         system = cfg["system_prompt"] or build_system_context(user)
@@ -144,7 +163,16 @@ def call_llm(user: User, messages: list[dict], *, use_tools: bool = True) -> dic
     headers = {"Authorization": f"Bearer {cfg['api_key']}", "Content-Type": "application/json"}
 
     try:
-        resp = requests.post(cfg["api_url"], json=payload, headers=headers, timeout=60)
+        # Reintentos ante fallos transitorios de red/DNS (p. ej. getaddrinfo failed)
+        resp = None
+        for attempt in range(4):
+            try:
+                resp = requests.post(cfg["api_url"], json=payload, headers=headers, timeout=60)
+                break
+            except (requests.ConnectionError, requests.Timeout):
+                if attempt == 3:
+                    raise
+                time.sleep(1.5 * (attempt + 1))
         resp.raise_for_status()
         data = resp.json()
         choice = data["choices"][0]

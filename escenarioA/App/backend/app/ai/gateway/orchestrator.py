@@ -190,7 +190,15 @@ def _tool_result_brief(tool_name: str, result: dict) -> str:
         )
     data = result.get("data")
     if isinstance(data, list):
-        return json.dumps({"ok": True, "count": len(data)}, ensure_ascii=False)
+        # Vista previa con ids/nombres para que el modelo pueda encadenar tools (p. ej. grades_upsert)
+        keys = ("id", "user_id", "student_id", "student_name", "course_id", "course_name", "code", "name",
+                "full_name", "username", "student_code", "parallel", "partial1", "partial2", "status")
+        preview = [
+            {k: _json_safe(row[k]) for k in keys if k in row}
+            for row in data[:15]
+            if isinstance(row, dict)
+        ]
+        return json.dumps({"ok": True, "count": len(data), "items": preview}, ensure_ascii=False)[:3500]
     if isinstance(data, dict):
         slim = {k: _json_safe(data[k]) for k in list(data)[:12]}
         return json.dumps({"ok": True, "data": slim}, ensure_ascii=False)[:1500]
@@ -377,67 +385,78 @@ def run_agent_chat(
         )
         return _response(conv, reply, artifacts, tool_calls_log, None, tokens_total)
 
-    # Ejecutar tools
+    # Ejecutar tools (encadenado: el modelo puede consultar ids y luego mutar, hasta 4 rondas)
+    chain = list(llm_messages)
+    cur_msg, cur_calls = msg, tool_calls
     tool_results = []
-    for tc in tool_calls[:8]:
-        result = execute_tool(user, tc["name"], tc["args"], confirm=False, conversation_id=conv.id)
-        tool_calls_log.append({"tool": tc["name"], "args": tc["args"], "result": result})
+    for _round in range(4):
+        tool_results = []
+        for tc in cur_calls[:8]:
+            result = execute_tool(user, tc["name"], tc["args"], confirm=False, conversation_id=conv.id)
+            tool_calls_log.append({"tool": tc["name"], "args": tc["args"], "result": result})
 
-        if result.get("needs_confirm"):
-            conv.pending_action = {"tool": tc["name"], "args": tc["args"], "summary": result.get("summary")}
-            db.session.commit()
-            reply = _compose_user_reply(tool_calls_log, artifacts)
-            add_message(conv, "assistant", reply, channel=channel)
-            log_legacy(user.id, message, reply, tokens_total)
-            log_agent_event(
-                user,
-                event_type="tool_call",
-                severity="warn",
-                summary=f"Pendiente confirmación: {tc['name']}",
-                conversation_id=conv.id,
-                detail={"tool": tc["name"], "args": tc["args"]},
-                keywords=message[:300],
-                channel=channel,
-                user_question=message,
+            if result.get("needs_confirm"):
+                conv.pending_action = {"tool": tc["name"], "args": tc["args"], "summary": result.get("summary")}
+                db.session.commit()
+                reply = _compose_user_reply(tool_calls_log, artifacts)
+                add_message(conv, "assistant", reply, channel=channel)
+                log_legacy(user.id, message, reply, tokens_total)
+                log_agent_event(
+                    user,
+                    event_type="tool_call",
+                    severity="warn",
+                    summary=f"Pendiente confirmación: {tc['name']}",
+                    conversation_id=conv.id,
+                    detail={"tool": tc["name"], "args": tc["args"]},
+                    keywords=message[:300],
+                    channel=channel,
+                    user_question=message,
+                )
+                return _response(conv, reply, artifacts, tool_calls_log, conv.pending_action, tokens_total)
+
+            if result.get("artifact"):
+                artifacts.append(result["artifact"])
+
+            brief = _tool_result_brief(tc["name"], result)
+            tool_results.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tc.get("id") or tc["name"],
+                    "name": tc["name"],
+                    "content": brief,
+                }
             )
-            return _response(conv, reply, artifacts, tool_calls_log, conv.pending_action, tokens_total)
+            add_message(
+                conv,
+                "tool",
+                brief,
+                channel=channel,
+                tool_name=tc["name"],
+                tool_payload=result,
+                artifact_id=(result.get("artifact") or {}).get("id"),
+            )
 
-        if result.get("artifact"):
-            artifacts.append(result["artifact"])
-
-        brief = _tool_result_brief(tc["name"], result)
-        tool_results.append(
-            {
-                "role": "tool",
-                "tool_call_id": tc.get("id") or tc["name"],
-                "name": tc["name"],
-                "content": brief,
-            }
+        chain.append(
+            {"role": "assistant", "content": cur_msg.get("content") or "", "tool_calls": cur_msg.get("tool_calls")}
         )
-        add_message(
-            conv,
-            "tool",
-            brief,
-            channel=channel,
-            tool_name=tc["name"],
-            tool_payload=result,
-            artifact_id=(result.get("artifact") or {}).get("id"),
-        )
+        chain.extend(tool_results)
+        if artifacts or _round == 3:
+            break
+        nxt = call_llm(user, chain, use_tools=True)
+        if nxt.get("fallback") or nxt.get("error"):
+            break
+        tokens_total += nxt.get("tokens_used") or 0
+        cur_msg = nxt.get("message") or {}
+        cur_calls = parse_tool_calls(cur_msg)
+        if not cur_calls:
+            break
 
     # Preferir composición fluida; LLM2 solo aporta redacción natural (sin artifacts)
     composed = _compose_user_reply(tool_calls_log, artifacts)
     reply = composed
 
     if not artifacts:
-        follow_messages = llm_messages + [
-            {
-                "role": "assistant",
-                "content": msg.get("content") or "",
-                "tool_calls": msg.get("tool_calls"),
-            }
-        ]
-        for tr in tool_results:
-            follow_messages.append(tr)
+        follow_messages = list(chain)
         follow_messages.append(
             {
                 "role": "system",
