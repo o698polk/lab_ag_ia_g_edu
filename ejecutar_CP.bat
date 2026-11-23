@@ -10,7 +10,7 @@ if errorlevel 1 goto ERR
 "%VENV%\Scripts\python.exe" -m pip install -q -r "%ROOT%escenarioA\App\backend\requirements.txt"
 if errorlevel 1 goto ERR
 :RUN
-"%VENV%\Scripts\python.exe" "%ROOT%documentacion_investigacion\COMPLETAR\protocolo_cp_demostrativo.py" --db-backend auto --md "%ROOT%RESULTADOS_CP.md"
+"%VENV%\Scripts\python.exe" "%ROOT%cp_demostrativo\protocolo_cp_demostrativo.py" --db-backend auto --md "%ROOT%RESULTADOS_CP.md"
 set RC=%ERRORLEVEL%
 echo Informe: %ROOT%RESULTADOS_CP.md  codigo=%RC%
 goto END
